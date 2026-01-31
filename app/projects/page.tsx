@@ -1,8 +1,9 @@
+import { WindowShell } from "@/components/WindowShell";
+
 export default function ProjectsPage() {
   return (
-    <main>
-      <h1>Projects</h1>
+    <WindowShell title="Projects">
       <p>Active work and case studies.</p>
-    </main>
+    </WindowShell>
   );
 }

@@ -1,8 +1,9 @@
+import { WindowShell } from "@/components/WindowShell";
+
 export default function ArchivePage() {
   return (
-    <main>
-      <h1>Archive</h1>
+    <WindowShell title="Archive">
       <p>Past projects and experiments.</p>
-    </main>
+    </WindowShell>
   );
 }

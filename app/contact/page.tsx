@@ -1,8 +1,9 @@
+import { WindowShell } from "@/components/WindowShell";
+
 export default function ContactPage() {
   return (
-    <main>
-      <h1>Contact</h1>
+    <WindowShell title="Contact">
       <p>Transmit a message.</p>
-    </main>
+    </WindowShell>
   );
 }
