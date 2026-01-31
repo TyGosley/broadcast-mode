@@ -3,7 +3,7 @@ import { LauncherGrid } from "@/components/LauncherGrid";
 export default function HomePage() {
   return (
     <main className="min-h-dvh px-5 py-8">
-      <header className="mx-auto mb-6 max-w-5xl">
+      <header className="mx-auto mb-7 max-w-5xl">
         <p className="text-xs tracking-[0.25em] text-white/60">
           BE AWESOME PRODUCTIONS
         </p>

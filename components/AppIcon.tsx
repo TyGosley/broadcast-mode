@@ -16,22 +16,26 @@ export function AppIcon({ app }: AppIconProps) {
         className={[
           "relative aspect-square w-full rounded-2xl",
           "bg-white/5 backdrop-blur",
-          "border border-white/10",
-          "shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_12px_30px_rgba(0,0,0,0.35)]",
+          "border border-white/5",
+          "shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_12px_30px_rgba(0,0,0,0.35)]",
           "transition-transform duration-200",
           "md:group-hover:-translate-y-1",
         ].join(" ")}
       >
         {/* Neon glow */}
-        <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/25 via-fuchsia-500/20 to-purple-500/25 blur-md opacity-70" />
+        <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/15 via-fuchsia-500/10 to-purple-500/15 blur-md opacity-60" />
 
-        {/* Icon body */}
+        {/* Icon body (temporary glyph until real icons) */}
         <div className="relative flex h-full items-center justify-center">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-300/80 via-fuchsia-400/80 to-purple-400/80" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
+            <span className="text-xl font-bold tracking-wide text-white/80">
+              {app.label.charAt(0)}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="mt-2 text-center">
+      <div className="mt-3 text-center">
         <div className="text-sm font-semibold tracking-wide text-white">
           {app.label}
         </div>

@@ -3,13 +3,10 @@ import { AppIcon } from "@/components/AppIcon";
 
 export function LauncherGrid() {
   return (
-    <section
-      aria-label="Application Launcher"
-      className="w-full"
-    >
+    <section aria-label="Application Launcher" className="w-full">
       <div
         className={[
-          "grid grid-cols-2 gap-4",
+          "grid grid-cols-2 gap-5",
           "sm:grid-cols-2",
           "md:grid-cols-4",
         ].join(" ")}
