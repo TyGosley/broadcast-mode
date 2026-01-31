@@ -1,5 +1,5 @@
-import { APPS } from "@/lib/apps";
-import { AppIcon } from "@/components/AppIcon";
+import { APPS } from "../lib/apps";
+import { AppIcon } from "./AppIcon";
 
 export function LauncherGrid() {
   return (
@@ -7,8 +7,7 @@ export function LauncherGrid() {
       <div
         className={[
           "grid grid-cols-2 gap-5",
-          "sm:grid-cols-2",
-          "md:grid-cols-4",
+          "md:grid-cols-4 md:gap-6",
         ].join(" ")}
       >
         {APPS.map((app) => (
