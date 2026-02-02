@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Dock } from "../components/Dock";
 import { BroadcastOverlay } from "../components/BroadcastOverlay";
+import { MobileMiniDock } from "../components/MobileMiniDock";
 
 export default function RootLayout({
   children,
@@ -18,6 +19,9 @@ export default function RootLayout({
             <Dock />
           </div>
         </div>
+
+        {/* Mobile mini dock */}
+        <MobileMiniDock />
 
         {/* VHS overlay */}
         <BroadcastOverlay enabled allowEasterEgg />

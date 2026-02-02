@@ -1,35 +1,39 @@
-export type AppId = "projects" | "studio" | "archive" | "contact";
-
 export type AppDefinition = {
-  id: AppId;
+  id: string;
   label: string;
-  href: `/${string}` | "/";
   subtitle?: string;
+  href: string;
 };
 
 export const APPS: AppDefinition[] = [
   {
+    id: "home",
+    label: "Home",
+    subtitle: "Launcher",
+    href: "/",
+  },
+  {
     id: "projects",
     label: "Projects",
+    subtitle: "Work Library",
     href: "/projects",
-    subtitle: "Active work",
   },
   {
     id: "studio",
     label: "Studio",
+    subtitle: "About + Process",
     href: "/studio",
-    subtitle: "How I work",
   },
   {
     id: "archive",
     label: "Archive",
+    subtitle: "Experiments",
     href: "/archive",
-    subtitle: "Past work",
   },
   {
     id: "contact",
     label: "Contact",
-    href: "/contact",
     subtitle: "Transmit",
+    href: "/contact",
   },
 ];

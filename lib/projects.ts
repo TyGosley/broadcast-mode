@@ -61,4 +61,5 @@ export const PROJECTS: Project[] = [
     summary:
       "Visual system, typography, palette, and social templates with a neon retro vibe.",
   },
+//   TODO: TFF APP, TF WEB, FULLTIME, CPG COming soon, EFC, In progress, 3D portfolio
 ];

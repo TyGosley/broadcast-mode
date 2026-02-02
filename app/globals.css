@@ -117,3 +117,10 @@ body {
     filter: none;
   }
 }
+
+/* Mobile mini-dock breathing room */
+@media (max-width: 767px) {
+  main {
+    padding-bottom: 6.5rem;
+  }
+}
