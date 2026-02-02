@@ -5,6 +5,7 @@ import {
   DEFAULT_SETTINGS,
   SETTINGS_STORAGE_KEY,
   type Settings,
+  type VhsIntensity,
 } from "../lib/settings";
 
 type SettingsContextValue = {
@@ -15,19 +16,19 @@ type SettingsContextValue = {
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
 
+function isVhsIntensity(v: any): v is VhsIntensity {
+  return v === "low" || v === "medium" || v === "high";
+}
+
 function readStoredSettings(): Settings | null {
   try {
     const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
 
-    // Guard shape
-    if (
-      typeof parsed?.vhsEnabled !== "boolean" ||
-      typeof parsed?.reducedMotion !== "boolean"
-    ) {
-      return null;
-    }
+    if (typeof parsed?.vhsEnabled !== "boolean") return null;
+    if (typeof parsed?.reducedMotion !== "boolean") return null;
+    if (!isVhsIntensity(parsed?.vhsIntensity)) return null;
 
     return parsed as Settings;
   } catch {
@@ -45,15 +46,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    // Load from localStorage on mount
     const stored = readStoredSettings();
     const prm = prefersReducedMotion();
 
-    // If user prefers reduced motion, default it ON (but allow them to override later)
-    const base: Settings = stored ?? {
-      ...DEFAULT_SETTINGS,
-      reducedMotion: prm ? true : DEFAULT_SETTINGS.reducedMotion,
-    };
+    // Default reduced motion ON if user prefers it, but allow later override via settings
+    const base: Settings =
+      stored ?? {
+        ...DEFAULT_SETTINGS,
+        reducedMotion: prm ? true : DEFAULT_SETTINGS.reducedMotion,
+      };
 
     setSettingsState(base);
     setHydrated(true);
@@ -84,8 +85,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
 export function useSettings() {
   const ctx = useContext(SettingsContext);
-  if (!ctx) {
-    throw new Error("useSettings must be used within SettingsProvider");
-  }
+  if (!ctx) throw new Error("useSettings must be used within SettingsProvider");
   return ctx;
 }
