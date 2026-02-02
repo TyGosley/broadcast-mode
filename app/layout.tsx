@@ -2,6 +2,8 @@ import "./globals.css";
 import { Dock } from "../components/Dock";
 import { BroadcastOverlay } from "../components/BroadcastOverlay";
 import { MobileMiniDock } from "../components/MobileMiniDock";
+import { SettingsProvider } from "../components/SettingsProvider";
+import { SettingsGate } from "../components/SettingsGate";
 
 export default function RootLayout({
   children,
@@ -11,20 +13,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="h-dvh">
-        <div className="grid h-dvh grid-rows-[1fr_auto]">
-          <div className="overflow-y-auto">{children}</div>
+        <SettingsProvider>
+          <div className="grid h-dvh grid-rows-[1fr_auto]">
+            <div className="overflow-y-auto">{children}</div>
 
-          {/* Dock row (desktop only) */}
-          <div className="hidden md:block px-4 pb-4 pt-2">
-            <Dock />
+            {/* Dock row (desktop only) */}
+            <div className="hidden md:block px-4 pb-4 pt-2">
+              <Dock />
+            </div>
           </div>
-        </div>
 
-        {/* Mobile mini dock */}
-        <MobileMiniDock />
+          {/* Mobile mini dock */}
+          <MobileMiniDock />
 
-        {/* VHS overlay */}
-        <BroadcastOverlay enabled allowEasterEgg />
+          {/* Gate reads settings and renders overlay accordingly */}
+          <SettingsGate />
+        </SettingsProvider>
       </body>
     </html>
   );

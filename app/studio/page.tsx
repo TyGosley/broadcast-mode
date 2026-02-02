@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { StudioSection } from "../../components/StudioSection";
 import { StudioToggle } from "../../components/StudioToggle";
 import { STUDIO_PROCESS, STUDIO_STACK } from "../../lib/studioConfig";
+import { useSettings } from "../../components/SettingsProvider";
 
 export default function StudioPage() {
-  const [vhsEnabled, setVhsEnabled] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const { settings, updateSettings } = useSettings();
 
   return (
     <main className="min-h-dvh px-5 py-8 pb-12">
@@ -40,17 +39,21 @@ export default function StudioPage() {
             <StudioToggle
               label="VHS Overlay"
               description="CRT noise, scanlines, broadcast artifacts"
-              enabled={vhsEnabled}
-              onChange={setVhsEnabled}
+              enabled={settings.vhsEnabled}
+              onChange={(v) => updateSettings({ vhsEnabled: v })}
             />
 
             <StudioToggle
               label="Reduced Motion"
               description="Limit animation and flicker effects"
-              enabled={reducedMotion}
-              onChange={setReducedMotion}
+              enabled={settings.reducedMotion}
+              onChange={(v) => updateSettings({ reducedMotion: v })}
             />
           </div>
+
+          <p className="mt-3 text-xs text-white/50">
+            Tip: Reduced Motion also disables flicker easter eggs.
+          </p>
         </StudioSection>
 
         {/* Process */}
