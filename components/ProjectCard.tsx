@@ -1,7 +1,7 @@
 "use client";
 
 import type { Project } from "../lib/projects";
-
+// TODO: replace shipped and active with more web design appropriate terms
 function StatusPill({ status }: { status: Project["status"] }) {
   const cls =
     status === "active"

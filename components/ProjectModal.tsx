@@ -1,7 +1,53 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Project } from "../lib/projects";
+
+function StatusLed({ status }: { status: Project["status"] }) {
+  const cls =
+    status === "active"
+      ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
+      : status === "shipped"
+      ? "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.55)]"
+      : "bg-purple-300 shadow-[0_0_18px_rgba(216,180,254,0.55)]";
+
+  return <span className={["h-2.5 w-2.5 rounded-full", cls].join(" ")} />;
+}
+
+function WindowControl({
+  tone,
+  label,
+  onClick,
+  disabled,
+}: {
+  tone: "close" | "min" | "max";
+  label: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
+  const base =
+    "h-3 w-3 rounded-full border border-white/12 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60";
+  const color =
+    tone === "close"
+      ? "bg-red-400/70 hover:bg-red-400/85"
+      : tone === "min"
+      ? "bg-amber-300/70 hover:bg-amber-300/85"
+      : "bg-emerald-300/70 hover:bg-emerald-300/85";
+
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      disabled={disabled}
+      className={[
+        base,
+        color,
+        disabled ? "opacity-50 cursor-not-allowed" : "",
+      ].join(" ")}
+    />
+  );
+}
 
 export function ProjectModal({
   project,
@@ -10,6 +56,33 @@ export function ProjectModal({
   project: Project;
   onClose: () => void;
 }) {
+  const headerRef = useRef<HTMLDivElement | null>(null);
+
+  const [maximized, setMaximized] = useState(false);
+
+  // Draggable window position (desktop only, disabled when maximized)
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const dragState = useRef<{
+    dragging: boolean;
+    pointerId: number | null;
+    startX: number;
+    startY: number;
+    originX: number;
+    originY: number;
+  }>({
+    dragging: false,
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    originX: 0,
+    originY: 0,
+  });
+
+  const clamp = (v: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, v));
+
+  const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -17,7 +90,6 @@ export function ProjectModal({
 
     window.addEventListener("keydown", onKey);
 
-    // lock scroll
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -26,6 +98,102 @@ export function ProjectModal({
       document.body.style.overflow = prev;
     };
   }, [onClose]);
+
+  // Reset position + maximize state when a new project opens
+  useEffect(() => {
+    setPos({ x: 0, y: 0 });
+    setMaximized(false);
+  }, [project.id]);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const isMobile = () => window.matchMedia("(max-width: 767px)").matches;
+
+    const isInteractiveTarget = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+      return Boolean(el.closest("button, a, input, textarea, select, label"));
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (maximized) return;
+      if (isMobile()) return;
+
+      // ✅ IMPORTANT: don't start drag when clicking controls or other interactives
+      if (isInteractiveTarget(e.target)) return;
+
+      // Only left-click for mouse pointers (touch/pen okay)
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+
+      dragState.current.dragging = true;
+      dragState.current.pointerId = e.pointerId;
+      dragState.current.startX = e.clientX;
+      dragState.current.startY = e.clientY;
+      dragState.current.originX = pos.x;
+      dragState.current.originY = pos.y;
+
+      header.setPointerCapture(e.pointerId);
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!dragState.current.dragging) return;
+      if (dragState.current.pointerId !== e.pointerId) return;
+
+      const dx = e.clientX - dragState.current.startX;
+      const dy = e.clientY - dragState.current.startY;
+
+      const nextX = clamp(
+        dragState.current.originX + dx,
+        -maxBounds.x,
+        maxBounds.x
+      );
+      const nextY = clamp(
+        dragState.current.originY + dy,
+        -maxBounds.y,
+        maxBounds.y
+      );
+
+      setPos({ x: nextX, y: nextY });
+    };
+
+    const onPointerUp = (e: PointerEvent) => {
+      if (!dragState.current.dragging) return;
+      if (dragState.current.pointerId !== e.pointerId) return;
+
+      dragState.current.dragging = false;
+      dragState.current.pointerId = null;
+
+      try {
+        header.releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    };
+
+    header.addEventListener("pointerdown", onPointerDown);
+    header.addEventListener("pointermove", onPointerMove);
+    header.addEventListener("pointerup", onPointerUp);
+    header.addEventListener("pointercancel", onPointerUp);
+
+    return () => {
+      header.removeEventListener("pointerdown", onPointerDown);
+      header.removeEventListener("pointermove", onPointerMove);
+      header.removeEventListener("pointerup", onPointerUp);
+      header.removeEventListener("pointercancel", onPointerUp);
+    };
+  }, [pos.x, pos.y, maximized, maxBounds.x, maxBounds.y]);
+
+  const handleMinimize = () => {
+    setMaximized(false);
+    setPos({ x: 0, y: 0 });
+  };
+
+  const handleMaximize = () => {
+    setMaximized((v) => !v);
+    setPos({ x: 0, y: 0 });
+  };
 
   return (
     <div
@@ -42,17 +210,77 @@ export function ProjectModal({
         className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
       />
 
-      {/* Window */}
-      <div className="absolute left-1/2 top-1/2 w-[min(920px,calc(100%-1.5rem))] -translate-x-1/2 -translate-y-1/2">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/60 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_26px_90px_rgba(0,0,0,0.75)] backdrop-blur">
+      {/* Window wrapper */}
+      <div
+        className={[
+          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
+          maximized
+            ? "w-[min(1100px,calc(100%-1rem))]"
+            : "w-[min(920px,calc(100%-1.5rem))]",
+        ].join(" ")}
+      >
+        <div
+          className={[
+            "relative overflow-hidden rounded-2xl border border-white/10 bg-black/60",
+            "shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_26px_90px_rgba(0,0,0,0.75)]",
+            "backdrop-blur",
+            "transition-[transform,width,height] duration-200 ease-out",
+          ].join(" ")}
+          style={{
+            transform: maximized
+              ? "translate(0px, 0px)"
+              : `translate(${pos.x}px, ${pos.y}px)`,
+          }}
+        >
+          {/* Neon rim */}
+          <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
+
           {/* Header bar */}
-          <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-black/40 px-4 py-3">
-            <div className="min-w-0">
+          <div
+            ref={headerRef}
+            className={[
+              "relative flex items-center justify-between gap-3",
+              "border-b border-white/10 bg-black/45 px-4 py-3",
+              maximized
+                ? "cursor-default"
+                : "md:cursor-grab active:md:cursor-grabbing",
+              "select-none",
+            ].join(" ")}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <WindowControl
+                  tone="close"
+                  label="Close window"
+                  onClick={onClose}
+                />
+                <WindowControl
+                  tone="min"
+                  label="Minimize / center window"
+                  onClick={handleMinimize}
+                />
+                <WindowControl
+                  tone="max"
+                  label={maximized ? "Restore window" : "Maximize window"}
+                  onClick={handleMaximize}
+                />
+              </div>
+
+              <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+                <StatusLed status={project.status} />
+                <span className="text-xs font-semibold text-white/75">
+                  {project.status}
+                </span>
+              </div>
+            </div>
+
+            <div className="min-w-0 flex-1 px-2">
               <div className="truncate text-sm font-semibold text-white">
                 {project.title}
               </div>
               <div className="truncate text-xs text-white/55">
-                {(project.client ?? "Internal") + (project.year ? ` • ${project.year}` : "")}
+                {(project.client ?? "Internal") +
+                  (project.year ? ` • ${project.year}` : "")}
               </div>
             </div>
 
@@ -66,14 +294,24 @@ export function ProjectModal({
           </div>
 
           {/* Content */}
-          <div className="max-h-[72vh] overflow-y-auto p-5">
+          <div
+            className={[
+              "relative overflow-y-auto p-5",
+              maximized ? "max-h-[84vh]" : "max-h-[72vh]",
+            ].join(" ")}
+          >
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
-              {/* Left */}
               <div>
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-xs tracking-[0.25em] text-white/60">
-                    CASE STUDY LITE
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-xs tracking-[0.25em] text-white/60">
+                      CASE STUDY LITE
+                    </div>
+                    <div className="text-xs text-white/55 hidden md:block">
+                      {maximized ? "Maximized" : "Drag the window header"}
+                    </div>
                   </div>
+
                   <p className="mt-3 text-sm leading-relaxed text-white/75">
                     {project.summary}
                   </p>
@@ -85,7 +323,10 @@ export function ProjectModal({
                       </div>
                       <ul className="mt-2 grid gap-2 text-sm text-white/75">
                         {project.highlights.map((h) => (
-                          <li key={h} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                          <li
+                            key={h}
+                            className="rounded-lg border border-white/10 bg-black/25 px-3 py-2"
+                          >
                             {h}
                           </li>
                         ))}
@@ -100,7 +341,10 @@ export function ProjectModal({
                       </div>
                       <ul className="mt-2 grid gap-2 text-sm text-white/75">
                         {project.outcomes.map((o) => (
-                          <li key={o} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                          <li
+                            key={o}
+                            className="rounded-lg border border-white/10 bg-black/25 px-3 py-2"
+                          >
                             {o}
                           </li>
                         ))}
@@ -110,7 +354,6 @@ export function ProjectModal({
                 </div>
               </div>
 
-              {/* Right */}
               <aside className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-black/30 p-4">
                   <div className="text-xs tracking-[0.25em] text-white/60">
@@ -179,9 +422,13 @@ export function ProjectModal({
             </div>
           </div>
 
-          {/* Footer hint */}
-          <div className="border-t border-white/10 bg-black/40 px-4 py-3 text-xs text-white/55">
-            Tip: Press <span className="text-white/80">ESC</span> to close.
+          <div className="relative border-t border-white/10 bg-black/45 px-4 py-3 text-xs text-white/55">
+            Tip: Press <span className="text-white/80">ESC</span> to close.{" "}
+            <span className="hidden md:inline">
+              {maximized
+                ? "Click the green button to restore."
+                : "Drag the header. Click green to maximize."}
+            </span>
           </div>
         </div>
       </div>
