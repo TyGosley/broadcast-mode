@@ -8,10 +8,16 @@ export type Project = {
   year?: string;
   status: ProjectStatus;
   format: ProjectFormat;
-  type: string[]; // tags like ["web", "branding"]
+  type: string[];
   summary: string;
+
+  // Case-study-lite fields
+  role?: string;
+  stack?: string[];
+  highlights?: string[];
+  outcomes?: string[];
+
   href?: string; // optional live link
-  caseStudyHref?: string; // optional internal case study route
 };
 
 export const PROJECTS: Project[] = [
@@ -25,19 +31,36 @@ export const PROJECTS: Project[] = [
     type: ["web", "app", "dashboard"],
     summary:
       "Admin + client experience with calendar-driven content, movement library, and scalable UI patterns.",
-    href: "",
-    caseStudyHref: "",
+    role: "Product + UI Engineering",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind", "Supabase"],
+    highlights: [
+      "Calendar admin view with consistent styling and workout states",
+      "Movement library filtering patterns for scale",
+      "Component-driven UI for future content expansion",
+    ],
+    outcomes: [
+      "Faster admin workflow via unified calendar controls",
+      "Cleaner UI system for future data integration",
+    ],
   },
   {
-    id: "be-awesome",
-    title: "Be Awesome Productions",
+    id: "broadcast-mode",
+    title: "Be Awesome Productions: Broadcast Mode",
     client: "Internal",
     year: "2026",
     status: "active",
     format: "cd",
     type: ["web", "brand", "interactive"],
     summary:
-      "Neon OS / Broadcast Mode portfolio with VHS overlay, easter eggs, and a project library.",
+      "Neon OS portfolio with VHS overlay, OS-style navigation, and hidden easter eggs.",
+    role: "Design + Frontend",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind"],
+    highlights: [
+      "Mobile mini-dock for fast navigation",
+      "Studio page as Settings hub with persisted toggles",
+      "VHS overlay with intensity levels",
+    ],
+    outcomes: ["Distinct brand experience that feels like a product"],
   },
   {
     id: "squarespace-build",
@@ -49,6 +72,14 @@ export const PROJECTS: Project[] = [
     type: ["web", "squarespace"],
     summary:
       "Mobile-first marketing site with custom code blocks, performance tuning, and SEO foundations.",
+    role: "Web Design + Build",
+    stack: ["Squarespace", "Custom CSS", "Light JS"],
+    highlights: [
+      "Custom sections via code injection",
+      "Performance pass (images, fonts, layout stability)",
+      "SEO essentials: metadata, structure, internal linking",
+    ],
+    outcomes: ["Better speed + clearer conversion path"],
   },
   {
     id: "brand-kit",
@@ -60,6 +91,13 @@ export const PROJECTS: Project[] = [
     type: ["branding", "design"],
     summary:
       "Visual system, typography, palette, and social templates with a neon retro vibe.",
+    role: "Brand + Visual Design",
+    stack: ["Figma"],
+    highlights: [
+      "Color system designed for dark-mode neon palettes",
+      "Typography pairing for retro-future tone",
+      "Reusable social components",
+    ],
+    outcomes: ["Consistent brand system across channels"],
   },
-//   TODO: TFF APP, TF WEB, FULLTIME, CPG COming soon, EFC, In progress, 3D portfolio
 ];

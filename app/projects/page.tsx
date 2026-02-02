@@ -1,14 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PROJECTS, ProjectStatus } from "../../lib/projects";
 import { ProjectFilters } from "../../components/ProjectFilters";
 import { ProjectCard } from "../../components/ProjectCard";
+import { ProjectModal } from "../../components/ProjectModal";
 
 export default function ProjectsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<ProjectStatus | "all">("all");
   const [tag, setTag] = useState<string>("all");
+  const [openId, setOpenId] = useState<string | null>(null);
 
   const allTags = useMemo(() => {
     const set = new Set<string>();
@@ -32,6 +38,29 @@ export default function ProjectsPage() {
       return matchesQuery && matchesStatus && matchesTag;
     });
   }, [query, status, tag]);
+
+  // Deep-link: /projects?p=project-id
+  useEffect(() => {
+    const p = searchParams.get("p");
+    if (p && PROJECTS.some((x) => x.id === p)) setOpenId(p);
+  }, [searchParams]);
+
+  function openProject(id: string) {
+    setOpenId(id);
+    const sp = new URLSearchParams(searchParams.toString());
+    sp.set("p", id);
+    router.replace(`/projects?${sp.toString()}`);
+  }
+
+  function closeProject() {
+    setOpenId(null);
+    const sp = new URLSearchParams(searchParams.toString());
+    sp.delete("p");
+    const qs = sp.toString();
+    router.replace(qs ? `/projects?${qs}` : "/projects");
+  }
+
+  const activeProject = openId ? PROJECTS.find((p) => p.id === openId) : null;
 
   return (
     <main className="min-h-dvh px-5 py-8 pb-10">
@@ -67,11 +96,15 @@ export default function ProjectsPage() {
         ) : (
           <div className="grid gap-5 md:grid-cols-2">
             {filtered.map((p) => (
-              <ProjectCard key={p.id} project={p} />
+              <ProjectCard key={p.id} project={p} onOpen={openProject} />
             ))}
           </div>
         )}
       </section>
+
+      {activeProject ? (
+        <ProjectModal project={activeProject} onClose={closeProject} />
+      ) : null}
     </main>
   );
 }

@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client";
+
 import type { Project } from "../lib/projects";
 
 function StatusPill({ status }: { status: Project["status"] }) {
@@ -16,15 +17,25 @@ function StatusPill({ status }: { status: Project["status"] }) {
   );
 }
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({
+  project,
+  onOpen,
+}: {
+  project: Project;
+  onOpen: (id: string) => void;
+}) {
   const isCassette = project.format === "cassette";
 
   return (
-    <article
+    <button
+      type="button"
+      onClick={() => onOpen(project.id)}
       className={[
-        "group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur",
+        "group relative w-full text-left",
+        "overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur",
         "shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_18px_44px_rgba(0,0,0,0.45)]",
         "transition-transform duration-200 md:hover:-translate-y-1",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
       ].join(" ")}
     >
       {/* glow */}
@@ -76,29 +87,10 @@ export function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-3">
-          {project.href ? (
-            <Link
-              href={project.href}
-              target="_blank"
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/10"
-            >
-              Live
-            </Link>
-          ) : null}
-
-          {project.caseStudyHref ? (
-            <Link
-              href={project.caseStudyHref}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/10"
-            >
-              Case study
-            </Link>
-          ) : (
-            <span className="text-xs text-white/40">Case study soon</span>
-          )}
+        <div className="mt-5 text-xs text-white/55">
+          Tap to open window
         </div>
       </div>
-    </article>
+    </button>
   );
 }
