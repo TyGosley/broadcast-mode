@@ -6,11 +6,13 @@ type FormState = {
   name: string;
   email: string;
   message: string;
+  company: string; // honeypot
 };
 
 type Status = "idle" | "sending" | "success" | "error";
 
-const DEFAULT_EMAIL = "hello@beawesomeproductions.com"; // change to your real email
+// ✅ Replace this with your real Formspree endpoint
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/maqbaoey";
 
 function isValidEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -21,11 +23,11 @@ export function TransmitForm() {
     name: "",
     email: "",
     message: "",
+    company: "",
   });
 
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const canSubmit = useMemo(() => {
     if (!form.name.trim()) return false;
@@ -38,19 +40,15 @@ export function TransmitForm() {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  async function copyEmail() {
-    try {
-      await navigator.clipboard.writeText(DEFAULT_EMAIL);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1200);
-    } catch {
-      // no-op, clipboard can fail in some browsers/contexts
-    }
-  }
-
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    // Honeypot: bots often fill hidden fields
+    if (form.company) {
+      setStatus("success");
+      return;
+    }
 
     if (!canSubmit) {
       setError("Check your inputs and try again.");
@@ -59,37 +57,50 @@ export function TransmitForm() {
 
     setStatus("sending");
 
-    // Backend-free "works now" approach:
-    // open mailto with a structured message.
-    // Later you can swap this to a real API route (Resend, SendGrid, etc.).
     try {
-      const subject = encodeURIComponent("Broadcast Mode Transmission");
-      const body = encodeURIComponent(
-        `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}\n`
-      );
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          source: "Be Awesome Productions - Broadcast Mode",
+        }),
+      });
 
-      // Simulate a short "transmitting..." moment for delight
-      await new Promise((r) => setTimeout(r, 650));
+      if (!res.ok) {
+        // Try to surface a helpful message when Formspree returns JSON
+        let msg = "Transmission failed. Please try again.";
+        try {
+          const data = await res.json();
+          if (data?.errors?.[0]?.message) msg = data.errors[0].message;
+        } catch {
+          // ignore
+        }
+        throw new Error(msg);
+      }
 
-      window.location.href = `mailto:${DEFAULT_EMAIL}?subject=${subject}&body=${body}`;
-
-      // Show success state anyway (user action confirms intent)
       setStatus("success");
-    } catch (err) {
+      setForm({ name: "", email: "", message: "", company: "" });
+    } catch (err: any) {
       setStatus("error");
-      setError("Transmission failed. Try again or use the email fallback.");
+      setError(err?.message || "Transmission failed. Please try again.");
     }
   }
 
   function reset() {
     setStatus("idle");
     setError(null);
-    setForm({ name: "", email: "", message: "" });
+    setForm({ name: "", email: "", message: "", company: "" });
   }
 
   return (
     <div className="grid gap-5">
-      {/* Top status panel */}
+      {/* Status panel */}
       <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -99,7 +110,7 @@ export function TransmitForm() {
             </h2>
             <p className="mt-2 text-sm text-white/70">
               {status === "success"
-                ? "Your message is queued. If your mail app didn’t open, use the email fallback below."
+                ? "Message delivered. I’ll reply soon."
                 : "Send a message through the neon ether. Fast reply, no spam."}
             </p>
           </div>
@@ -120,7 +131,7 @@ export function TransmitForm() {
           </div>
         </div>
 
-        {/* "Signal meter" */}
+        {/* Signal meter */}
         <div className="mt-4">
           <div className="flex items-center justify-between text-xs text-white/55">
             <span>Signal strength</span>
@@ -157,6 +168,16 @@ export function TransmitForm() {
         onSubmit={onSubmit}
         className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"
       >
+        {/* Honeypot */}
+        <input
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.company}
+          onChange={(e) => update("company", e.target.value)}
+          className="hidden"
+        />
+
         <div className="grid gap-4 md:grid-cols-2">
           <label className="grid gap-2">
             <span className="text-xs tracking-wide text-white/70">Your name</span>
@@ -166,6 +187,7 @@ export function TransmitForm() {
               autoComplete="name"
               className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
               placeholder="Ty"
+              disabled={status === "sending"}
             />
           </label>
 
@@ -178,6 +200,7 @@ export function TransmitForm() {
               inputMode="email"
               className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60"
               placeholder="you@domain.com"
+              disabled={status === "sending"}
             />
           </label>
         </div>
@@ -190,6 +213,7 @@ export function TransmitForm() {
             rows={6}
             className="resize-none rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus-visible:ring-2 focus-visible:ring-purple-300/60"
             placeholder="Tell me what you’re building, the vibe, scope, timeline…"
+            disabled={status === "sending"}
           />
           <span className="text-xs text-white/45">
             Minimum 10 characters. {form.message.trim().length}/10
@@ -202,21 +226,19 @@ export function TransmitForm() {
           </div>
         )}
 
+        {status === "success" && (
+          <div className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-50">
+            Signal received. I’ll reply soon.
+          </div>
+        )}
+
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <button
             type="submit"
             disabled={!canSubmit || status === "sending"}
-            className={[
-              "rounded-xl px-5 py-3 text-sm font-semibold",
-              "border border-white/10",
-              "bg-gradient-to-r from-cyan-400/25 via-fuchsia-500/20 to-purple-500/20",
-              "text-white hover:from-cyan-400/30 hover:via-fuchsia-500/25 hover:to-purple-500/25",
-              "transition",
-              "disabled:cursor-not-allowed disabled:opacity-50",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70",
-            ].join(" ")}
+            className="rounded-xl border border-white/10 bg-gradient-to-r from-cyan-400/25 via-fuchsia-500/20 to-purple-500/20 px-5 py-3 text-sm font-semibold text-white transition hover:from-cyan-400/30 hover:via-fuchsia-500/25 hover:to-purple-500/25 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70"
           >
-            {status === "sending" ? "Transmitting…" : status === "success" ? "Sent" : "Transmit"}
+            {status === "sending" ? "Transmitting…" : "Transmit"}
           </button>
 
           <button
@@ -226,36 +248,8 @@ export function TransmitForm() {
           >
             Reset
           </button>
-
-          <div className="ml-auto flex items-center gap-2">
-            <button
-              type="button"
-              onClick={copyEmail}
-              className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-black/40 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
-            >
-              {copied ? "Copied" : "Copy email"}
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-4 text-xs text-white/55">
-          Fallback: email{" "}
-          <a
-            className="text-white/80 underline decoration-white/30 hover:text-white"
-            href={`mailto:${DEFAULT_EMAIL}`}
-          >
-            {DEFAULT_EMAIL}
-          </a>
         </div>
       </form>
-
-      {/* Post-success helper */}
-      {status === "success" && (
-        <div className="rounded-2xl border border-emerald-400/15 bg-emerald-500/10 p-4 text-sm text-emerald-50">
-          If your mail client didn’t open automatically, use the copy email button
-          above or tap the email fallback link.
-        </div>
-      )}
     </div>
   );
 }
