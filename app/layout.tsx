@@ -1,9 +1,9 @@
 import "./globals.css";
 import { Dock } from "../components/Dock";
-import { BroadcastOverlay } from "../components/BroadcastOverlay";
 import { MobileMiniDock } from "../components/MobileMiniDock";
 import { SettingsProvider } from "../components/SettingsProvider";
 import { SettingsGate } from "../components/SettingsGate";
+import { EasterEggGate } from "../components/EasterEggGate";
 
 export default function RootLayout({
   children,
@@ -26,8 +26,11 @@ export default function RootLayout({
           {/* Mobile mini dock */}
           <MobileMiniDock />
 
-          {/* Gate reads settings and renders overlay accordingly */}
+          {/* VHS overlay + settings */}
           <SettingsGate />
+
+          {/* Easter eggs */}
+          <EasterEggGate />
         </SettingsProvider>
       </body>
     </html>

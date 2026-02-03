@@ -40,11 +40,7 @@ function WindowControl({
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className={[
-        base,
-        color,
-        disabled ? "opacity-50 cursor-not-allowed" : "",
-      ].join(" ")}
+      className={[base, color, disabled ? "opacity-50 cursor-not-allowed" : ""].join(" ")}
     />
   );
 }
@@ -60,7 +56,13 @@ export function ProjectModal({
 
   const [maximized, setMaximized] = useState(false);
 
-  // Draggable window position (desktop only, disabled when maximized)
+  // Easter egg: triple-click maximize (reliable)
+  const [secretUnlocked, setSecretUnlocked] = useState(false);
+  const tapCountRef = useRef(0);
+  const tapResetTimerRef = useRef<number | null>(null);
+  const finalizeTapTimerRef = useRef<number | null>(null);
+
+  // Draggable position (desktop only, disabled when maximized)
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const dragState = useRef<{
     dragging: boolean;
@@ -78,9 +80,7 @@ export function ProjectModal({
     originY: 0,
   });
 
-  const clamp = (v: number, min: number, max: number) =>
-    Math.min(max, Math.max(min, v));
-
+  const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
 
   useEffect(() => {
@@ -99,12 +99,20 @@ export function ProjectModal({
     };
   }, [onClose]);
 
-  // Reset position + maximize state when a new project opens
+  // Reset per project
   useEffect(() => {
     setPos({ x: 0, y: 0 });
     setMaximized(false);
+    setSecretUnlocked(false);
+
+    tapCountRef.current = 0;
+    if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
+    if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
+    tapResetTimerRef.current = null;
+    finalizeTapTimerRef.current = null;
   }, [project.id]);
 
+  // Draggable header (click-safe)
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
@@ -120,11 +128,7 @@ export function ProjectModal({
     const onPointerDown = (e: PointerEvent) => {
       if (maximized) return;
       if (isMobile()) return;
-
-      // ✅ IMPORTANT: don't start drag when clicking controls or other interactives
       if (isInteractiveTarget(e.target)) return;
-
-      // Only left-click for mouse pointers (touch/pen okay)
       if (e.pointerType === "mouse" && e.button !== 0) return;
 
       dragState.current.dragging = true;
@@ -144,18 +148,10 @@ export function ProjectModal({
       const dx = e.clientX - dragState.current.startX;
       const dy = e.clientY - dragState.current.startY;
 
-      const nextX = clamp(
-        dragState.current.originX + dx,
-        -maxBounds.x,
-        maxBounds.x
-      );
-      const nextY = clamp(
-        dragState.current.originY + dy,
-        -maxBounds.y,
-        maxBounds.y
-      );
-
-      setPos({ x: nextX, y: nextY });
+      setPos({
+        x: clamp(dragState.current.originX + dx, -maxBounds.x, maxBounds.x),
+        y: clamp(dragState.current.originY + dy, -maxBounds.y, maxBounds.y),
+      });
     };
 
     const onPointerUp = (e: PointerEvent) => {
@@ -185,14 +181,57 @@ export function ProjectModal({
     };
   }, [pos.x, pos.y, maximized, maxBounds.x, maxBounds.y]);
 
+  const resetTapWindow = () => {
+    tapCountRef.current = 0;
+    if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
+    if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
+    tapResetTimerRef.current = null;
+    finalizeTapTimerRef.current = null;
+  };
+
   const handleMinimize = () => {
+    resetTapWindow();
     setMaximized(false);
     setPos({ x: 0, y: 0 });
   };
 
   const handleMaximize = () => {
-    setMaximized((v) => !v);
-    setPos({ x: 0, y: 0 });
+    // We delay the actual resize toggle until the click burst is done.
+    // This prevents the button from moving between rapid clicks.
+
+    if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
+    if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
+
+    tapCountRef.current += 1;
+
+    // hard reset if the user pauses too long between clicks
+    tapResetTimerRef.current = window.setTimeout(() => {
+      tapCountRef.current = 0;
+    }, 1200);
+
+    // finalize burst quickly (keeps UI feeling instant)
+    finalizeTapTimerRef.current = window.setTimeout(() => {
+      const clicks = tapCountRef.current;
+
+      // Unlock on 3+ clicks in the burst
+      if (!secretUnlocked && clicks >= 3) {
+        setSecretUnlocked(true);
+        window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "high" } }));
+        (navigator as any).vibrate?.(35);
+      } else {
+        window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "low" } }));
+      }
+
+      // One toggle after the burst (so the button doesn't move mid-burst)
+      setMaximized((v) => !v);
+      setPos({ x: 0, y: 0 });
+
+      // clear
+      tapCountRef.current = 0;
+      if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
+      tapResetTimerRef.current = null;
+      finalizeTapTimerRef.current = null;
+    }, 260);
   };
 
   return (
@@ -223,13 +262,10 @@ export function ProjectModal({
           className={[
             "relative overflow-hidden rounded-2xl border border-white/10 bg-black/60",
             "shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_26px_90px_rgba(0,0,0,0.75)]",
-            "backdrop-blur",
-            "transition-[transform,width,height] duration-200 ease-out",
+            "backdrop-blur transition-[transform,width,height] duration-200 ease-out",
           ].join(" ")}
           style={{
-            transform: maximized
-              ? "translate(0px, 0px)"
-              : `translate(${pos.x}px, ${pos.y}px)`,
+            transform: maximized ? "translate(0px, 0px)" : `translate(${pos.x}px, ${pos.y}px)`,
           }}
         >
           {/* Neon rim */}
@@ -239,26 +275,14 @@ export function ProjectModal({
           <div
             ref={headerRef}
             className={[
-              "relative flex items-center justify-between gap-3",
-              "border-b border-white/10 bg-black/45 px-4 py-3",
-              maximized
-                ? "cursor-default"
-                : "md:cursor-grab active:md:cursor-grabbing",
-              "select-none",
+              "relative flex items-center justify-between gap-3 border-b border-white/10 bg-black/45 px-4 py-3 select-none",
+              maximized ? "cursor-default" : "md:cursor-grab active:md:cursor-grabbing",
             ].join(" ")}
           >
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <WindowControl
-                  tone="close"
-                  label="Close window"
-                  onClick={onClose}
-                />
-                <WindowControl
-                  tone="min"
-                  label="Minimize / center window"
-                  onClick={handleMinimize}
-                />
+                <WindowControl tone="close" label="Close window" onClick={onClose} />
+                <WindowControl tone="min" label="Minimize / center window" onClick={handleMinimize} />
                 <WindowControl
                   tone="max"
                   label={maximized ? "Restore window" : "Maximize window"}
@@ -268,19 +292,14 @@ export function ProjectModal({
 
               <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
                 <StatusLed status={project.status} />
-                <span className="text-xs font-semibold text-white/75">
-                  {project.status}
-                </span>
+                <span className="text-xs font-semibold text-white/75">{project.status}</span>
               </div>
             </div>
 
             <div className="min-w-0 flex-1 px-2">
-              <div className="truncate text-sm font-semibold text-white">
-                {project.title}
-              </div>
+              <div className="truncate text-sm font-semibold text-white">{project.title}</div>
               <div className="truncate text-xs text-white/55">
-                {(project.client ?? "Internal") +
-                  (project.year ? ` • ${project.year}` : "")}
+                {(project.client ?? "Internal") + (project.year ? ` • ${project.year}` : "")}
               </div>
             </div>
 
@@ -294,39 +313,25 @@ export function ProjectModal({
           </div>
 
           {/* Content */}
-          <div
-            className={[
-              "relative overflow-y-auto p-5",
-              maximized ? "max-h-[84vh]" : "max-h-[72vh]",
-            ].join(" ")}
-          >
+          <div className={["relative overflow-y-auto p-5", maximized ? "max-h-[84vh]" : "max-h-[72vh]"].join(" ")}>
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
-              <div>
+              <div className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-xs tracking-[0.25em] text-white/60">
-                      CASE STUDY LITE
-                    </div>
+                    <div className="text-xs tracking-[0.25em] text-white/60">CASE STUDY LITE</div>
                     <div className="text-xs text-white/55 hidden md:block">
                       {maximized ? "Maximized" : "Drag the window header"}
                     </div>
                   </div>
 
-                  <p className="mt-3 text-sm leading-relaxed text-white/75">
-                    {project.summary}
-                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-white/75">{project.summary}</p>
 
                   {project.highlights?.length ? (
                     <>
-                      <div className="mt-4 text-sm font-semibold text-white">
-                        Highlights
-                      </div>
+                      <div className="mt-4 text-sm font-semibold text-white">Highlights</div>
                       <ul className="mt-2 grid gap-2 text-sm text-white/75">
                         {project.highlights.map((h) => (
-                          <li
-                            key={h}
-                            className="rounded-lg border border-white/10 bg-black/25 px-3 py-2"
-                          >
+                          <li key={h} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
                             {h}
                           </li>
                         ))}
@@ -336,15 +341,10 @@ export function ProjectModal({
 
                   {project.outcomes?.length ? (
                     <>
-                      <div className="mt-4 text-sm font-semibold text-white">
-                        Outcomes
-                      </div>
+                      <div className="mt-4 text-sm font-semibold text-white">Outcomes</div>
                       <ul className="mt-2 grid gap-2 text-sm text-white/75">
                         {project.outcomes.map((o) => (
-                          <li
-                            key={o}
-                            className="rounded-lg border border-white/10 bg-black/25 px-3 py-2"
-                          >
+                          <li key={o} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
                             {o}
                           </li>
                         ))}
@@ -352,13 +352,23 @@ export function ProjectModal({
                     </>
                   ) : null}
                 </div>
+
+                {/* SECRET: Behind the Build */}
+                {secretUnlocked ? (
+                  <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+                    <div className="text-xs tracking-[0.25em] text-white/60">BEHIND THE BUILD</div>
+                    <p className="mt-3 text-sm text-white/75">
+                      This project was tuned like a product: modular UI, mobile-first navigation, and deliberate motion
+                      controls. The goal is clarity first, personality second, and performance always.
+                    </p>
+                    <p className="mt-2 text-xs text-white/55">You unlocked this by triple-clicking maximize.</p>
+                  </div>
+                ) : null}
               </div>
 
               <aside className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-                  <div className="text-xs tracking-[0.25em] text-white/60">
-                    DETAILS
-                  </div>
+                  <div className="text-xs tracking-[0.25em] text-white/60">DETAILS</div>
 
                   <div className="mt-3 grid gap-3 text-sm text-white/80">
                     <div>
@@ -423,12 +433,7 @@ export function ProjectModal({
           </div>
 
           <div className="relative border-t border-white/10 bg-black/45 px-4 py-3 text-xs text-white/55">
-            Tip: Press <span className="text-white/80">ESC</span> to close.{" "}
-            <span className="hidden md:inline">
-              {maximized
-                ? "Click the green button to restore."
-                : "Drag the header. Click green to maximize."}
-            </span>
+            Tip: Press <span className="text-white/80">ESC</span> to close.
           </div>
         </div>
       </div>

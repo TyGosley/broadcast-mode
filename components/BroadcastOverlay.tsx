@@ -17,7 +17,6 @@ export function BroadcastOverlay({
   const [mounted, setMounted] = useState(false);
   const [flicker, setFlicker] = useState(false);
 
-  // no randomness needed for visual; keep deterministic
   const config = useMemo(() => {
     if (intensity === "low") {
       return {
@@ -39,7 +38,6 @@ export function BroadcastOverlay({
         noiseMs: 140,
       };
     }
-    // medium
     return {
       noiseOpacity: "0.12",
       scanOpacity: "0.18",
@@ -50,17 +48,33 @@ export function BroadcastOverlay({
     };
   }, [intensity]);
 
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!enabled) return;
+
+    const burst = (ms: number) => {
+      setFlicker(true);
+      window.setTimeout(() => setFlicker(false), ms);
+    };
+
+    const onBurst = (e: Event) => {
+      // optional strength tuning
+      const detail = (e as CustomEvent)?.detail as { strength?: "low" | "medium" | "high" } | undefined;
+      const strength = detail?.strength ?? "medium";
+      burst(strength === "high" ? 380 : strength === "low" ? 180 : 260);
+    };
+
+    window.addEventListener("broadcast:burst", onBurst as EventListener);
+    return () => window.removeEventListener("broadcast:burst", onBurst as EventListener);
+  }, [enabled]);
 
   useEffect(() => {
     if (!enabled || !allowEasterEgg) return;
 
     const onKey = (e: KeyboardEvent) => {
       if (e.shiftKey && e.key.toLowerCase() === "b") {
-        setFlicker(true);
-        window.setTimeout(() => setFlicker(false), 250);
+        window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "medium" } }));
       }
     };
 
@@ -88,7 +102,6 @@ export function BroadcastOverlay({
         } as any
       }
     >
-      {/* Noise */}
       <div
         className="absolute inset-0 mix-blend-overlay"
         style={{
@@ -99,7 +112,6 @@ export function BroadcastOverlay({
         }}
       />
 
-      {/* Scanlines */}
       <div
         className="absolute inset-0"
         style={{
@@ -111,7 +123,6 @@ export function BroadcastOverlay({
         }}
       />
 
-      {/* Color bleed */}
       <div
         className="absolute inset-0 mix-blend-screen"
         style={{
@@ -122,7 +133,6 @@ export function BroadcastOverlay({
         }}
       />
 
-      {/* Micro jitter (disabled when allowEasterEgg is false) */}
       {allowEasterEgg ? (
         <div
           className="absolute inset-0"
