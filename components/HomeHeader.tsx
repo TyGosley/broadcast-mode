@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { BroadcastTicker } from "./BroadcastTicker";
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -18,7 +19,6 @@ function usePrefersReducedMotion() {
 }
 
 function SignalBars({ active }: { active: boolean }) {
-  // Random-ish but stable enough per mount: we keep it subtle
   const [levels, setLevels] = useState([0.35, 0.55, 0.75, 0.5]);
 
   useEffect(() => {
@@ -102,15 +102,11 @@ export function HomeHeader() {
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="mt-5 grid gap-2 sm:grid-cols-2">
-          <div className="rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-white/65">
-            Tip: Open <span className="text-white/80">Projects</span> to browse current work.
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-white/65">
-            Tip: Use the dock to jump between pages fast.
-          </div>
-        </div>
+      {/* Broadcast ticker */}
+      <div className="mt-3">
+        <BroadcastTicker includeEggHints />
       </div>
     </header>
   );
