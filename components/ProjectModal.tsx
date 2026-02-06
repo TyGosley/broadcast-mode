@@ -3,6 +3,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Project } from "../lib/projects";
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  return reduced;
+}
+
 function StatusLed({ status }: { status: Project["status"] }) {
   const cls =
     status === "active"
@@ -52,11 +67,17 @@ export function ProjectModal({
   project: Project;
   onClose: () => void;
 }) {
+  const reducedMotion = usePrefersReducedMotion();
+
   const headerRef = useRef<HTMLDivElement | null>(null);
+
+  // open/close animation state
+  const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   const [maximized, setMaximized] = useState(false);
 
-  // Easter egg: triple-click maximize (reliable)
+  // Easter egg: triple-click maximize (resize delayed so button doesn’t move mid-burst)
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const tapCountRef = useRef(0);
   const tapResetTimerRef = useRef<number | null>(null);
@@ -83,9 +104,26 @@ export function ProjectModal({
   const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
 
+  // open on next tick
+  useEffect(() => {
+    const t = window.setTimeout(() => setMounted(true), 0);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const close = () => {
+    if (closing) return;
+    if (reducedMotion) {
+      onClose();
+      return;
+    }
+
+    setClosing(true);
+    window.setTimeout(() => onClose(), 180);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") close();
     };
 
     window.addEventListener("keydown", onKey);
@@ -97,9 +135,9 @@ export function ProjectModal({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, [onClose]);
+  }, [closing]); // avoid rebind churn
 
-  // Reset per project
+  // Reset per project open
   useEffect(() => {
     setPos({ x: 0, y: 0 });
     setMaximized(false);
@@ -196,24 +234,19 @@ export function ProjectModal({
   };
 
   const handleMaximize = () => {
-    // We delay the actual resize toggle until the click burst is done.
-    // This prevents the button from moving between rapid clicks.
-
+    // Delay actual resize toggle until click burst ends (keeps button stable).
     if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
     if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
 
     tapCountRef.current += 1;
 
-    // hard reset if the user pauses too long between clicks
     tapResetTimerRef.current = window.setTimeout(() => {
       tapCountRef.current = 0;
     }, 1200);
 
-    // finalize burst quickly (keeps UI feeling instant)
     finalizeTapTimerRef.current = window.setTimeout(() => {
       const clicks = tapCountRef.current;
 
-      // Unlock on 3+ clicks in the burst
       if (!secretUnlocked && clicks >= 3) {
         setSecretUnlocked(true);
         window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "high" } }));
@@ -222,11 +255,9 @@ export function ProjectModal({
         window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "low" } }));
       }
 
-      // One toggle after the burst (so the button doesn't move mid-burst)
       setMaximized((v) => !v);
       setPos({ x: 0, y: 0 });
 
-      // clear
       tapCountRef.current = 0;
       if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
       tapResetTimerRef.current = null;
@@ -234,44 +265,41 @@ export function ProjectModal({
     }, 260);
   };
 
+  const behind = project.behindTheBuild;
+
   return (
-    <div
-      className="fixed inset-0 z-50"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Project details: ${project.title}`}
-    >
+    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={`Project details: ${project.title}`}>
       {/* Backdrop */}
       <button
         type="button"
-        onClick={onClose}
+        onClick={close}
         aria-label="Close project details"
-        className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
+        className={[
+          "absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm transition-opacity duration-200",
+          mounted && !closing ? "opacity-100" : "opacity-0",
+        ].join(" ")}
       />
 
       {/* Window wrapper */}
       <div
         className={[
           "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-          maximized
-            ? "w-[min(1100px,calc(100%-1rem))]"
-            : "w-[min(920px,calc(100%-1.5rem))]",
+          maximized ? "w-[min(1100px,calc(100%-1rem))]" : "w-[min(920px,calc(100%-1.5rem))]",
         ].join(" ")}
       >
         <div
           className={[
             "relative overflow-hidden rounded-2xl border border-white/10 bg-black/60",
             "shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_26px_90px_rgba(0,0,0,0.75)]",
-            "backdrop-blur transition-[transform,width,height] duration-200 ease-out",
+            "backdrop-blur transition-[opacity,transform,width,height] duration-200 ease-out will-change-transform",
+            mounted && !closing ? "opacity-100 scale-100" : "opacity-0 scale-[0.985]",
           ].join(" ")}
           style={{
             transform: maximized ? "translate(0px, 0px)" : `translate(${pos.x}px, ${pos.y}px)`,
           }}
         >
-          {/* Neon rim */}
           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
 
-          {/* Header bar */}
           <div
             ref={headerRef}
             className={[
@@ -281,7 +309,7 @@ export function ProjectModal({
           >
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <WindowControl tone="close" label="Close window" onClick={onClose} />
+                <WindowControl tone="close" label="Close window" onClick={close} />
                 <WindowControl tone="min" label="Minimize / center window" onClick={handleMinimize} />
                 <WindowControl
                   tone="max"
@@ -305,14 +333,13 @@ export function ProjectModal({
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={close}
               className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
             >
               Close
             </button>
           </div>
 
-          {/* Content */}
           <div className={["relative overflow-y-auto p-5", maximized ? "max-h-[84vh]" : "max-h-[72vh]"].join(" ")}>
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
               <div className="grid gap-4">
@@ -353,15 +380,23 @@ export function ProjectModal({
                   ) : null}
                 </div>
 
-                {/* SECRET: Behind the Build */}
-                {secretUnlocked ? (
+                {secretUnlocked && behind ? (
                   <div className="rounded-xl border border-white/10 bg-black/35 p-4">
-                    <div className="text-xs tracking-[0.25em] text-white/60">BEHIND THE BUILD</div>
-                    <p className="mt-3 text-sm text-white/75">
-                      This project was tuned like a product: modular UI, mobile-first navigation, and deliberate motion
-                      controls. The goal is clarity first, personality second, and performance always.
-                    </p>
-                    <p className="mt-2 text-xs text-white/55">You unlocked this by triple-clicking maximize.</p>
+                    <div className="text-xs tracking-[0.25em] text-white/60">
+                      {behind.title ?? "BEHIND THE BUILD"}
+                    </div>
+
+                    <p className="mt-3 text-sm text-white/75">{behind.body}</p>
+
+                    {behind.notes?.length ? (
+                      <ul className="mt-3 space-y-1 text-xs text-white/65 list-disc pl-4">
+                        {behind.notes.map((n) => (
+                          <li key={n}>{n}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+
+                    <p className="mt-3 text-xs text-white/55">Unlocked by triple-clicking maximize.</p>
                   </div>
                 ) : null}
               </div>

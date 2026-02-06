@@ -1,11 +1,47 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  return reduced;
+}
 
 export function DiagnosticsModal({ onClose }: { onClose: () => void }) {
+  const reducedMotion = usePrefersReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
+
+  // open animation on next tick
+  useEffect(() => {
+    const t = window.setTimeout(() => setMounted(true), 0);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const close = () => {
+    if (closing) return;
+    if (reducedMotion) {
+      onClose();
+      return;
+    }
+
+    setClosing(true);
+    window.setTimeout(() => onClose(), 180);
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") close();
     };
 
     window.addEventListener("keydown", onKey);
@@ -17,21 +53,31 @@ export function DiagnosticsModal({ onClose }: { onClose: () => void }) {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, [onClose]);
+  }, [closing]); // intentionally not including `close` to avoid rebind churn
 
   return (
     <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Broadcast Diagnostics">
       {/* Backdrop */}
       <button
         type="button"
-        onClick={onClose}
+        onClick={close}
         aria-label="Close diagnostics"
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className={[
+          "absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-200",
+          mounted && !closing ? "opacity-100" : "opacity-0",
+        ].join(" ")}
       />
 
       {/* Window */}
       <div className="absolute left-1/2 top-1/2 w-[min(860px,calc(100%-1.5rem))] -translate-x-1/2 -translate-y-1/2">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/60 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_26px_90px_rgba(0,0,0,0.75)] backdrop-blur">
+        <div
+          className={[
+            "relative overflow-hidden rounded-2xl border border-white/10 bg-black/60",
+            "shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_26px_90px_rgba(0,0,0,0.75)] backdrop-blur",
+            "transition-[opacity,transform] duration-200 ease-out will-change-transform",
+            mounted && !closing ? "opacity-100 scale-100" : "opacity-0 scale-[0.985]",
+          ].join(" ")}
+        >
           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
 
           <div className="relative flex items-center justify-between border-b border-white/10 bg-black/45 px-4 py-3">
@@ -42,7 +88,7 @@ export function DiagnosticsModal({ onClose }: { onClose: () => void }) {
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={close}
               className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
             >
               Close
