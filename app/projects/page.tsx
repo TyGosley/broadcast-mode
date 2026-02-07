@@ -69,10 +69,10 @@ export default function ProjectsPage() {
           PROJECTS LIBRARY
         </p>
         <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
-          Active + Past Work
+          Live + In Progress + Archive
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-white/70">
-          A Broadcast Mode collection of builds, experiments, and shipped work.
+          A Broadcast Mode collection of live builds, works-in-progress, and legacy experiments.
         </p>
 
         <div className="mt-6">

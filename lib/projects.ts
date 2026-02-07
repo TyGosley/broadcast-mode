@@ -1,103 +1,152 @@
-export type ProjectStatus = "active" | "shipped" | "archived";
+export type ProjectStatus = "active" | "in-progress" | "archived";
 export type ProjectFormat = "cassette" | "cd";
+
+export type BehindTheBuild = {
+  title?: string;
+  body: string;
+  notes?: string[];
+};
 
 export type Project = {
   id: string;
   title: string;
-  client?: string;
-  year?: string;
-  status: ProjectStatus;
-  format: ProjectFormat;
-  type: string[];
   summary: string;
 
-  // Case-study-lite fields
+  client?: string;
+  year?: string;
+
+  // ✅ Status model
+  status: ProjectStatus;
+
+  // visual format you’re using for cards
+  format: ProjectFormat;
+
+  // tags shown on cards / modal
+  type: string[];
+
+  // optional metadata shown in modal
   role?: string;
   stack?: string[];
   highlights?: string[];
   outcomes?: string[];
 
-  href?: string; // optional live link
+  // credibility pass fields
+  context?: string;
+  constraints?: string[];
+
+  // link (usually only for Live)
+  href?: string;
+
+  // easter egg content (per project)
+  behindTheBuild?: BehindTheBuild;
 };
 
-export const PROJECTS: Project[] = [
-  {
-    id: "tf-web",
-    title: "Tactic Fitness Web App",
-    client: "Tactic Fitness",
-    year: "2025",
-    status: "active",
-    format: "cassette",
-    type: ["web", "app", "dashboard"],
-    summary:
-      "Admin + client experience with calendar-driven content, movement library, and scalable UI patterns.",
-    role: "Product + UI Engineering",
-    stack: ["Next.js", "React", "TypeScript", "Tailwind", "Supabase"],
-    highlights: [
-      "Calendar admin view with consistent styling and workout states",
-      "Movement library filtering patterns for scale",
-      "Component-driven UI for future content expansion",
-    ],
-    outcomes: [
-      "Faster admin workflow via unified calendar controls",
-      "Cleaner UI system for future data integration",
-    ],
-  },
+export const projects: Project[] = [
+  // Replace these with your real projects
   {
     id: "broadcast-mode",
-    title: "Be Awesome Productions: Broadcast Mode",
-    client: "Internal",
+    title: "Broadcast Mode",
+    summary:
+      "An OS-inspired portfolio experience with VHS overlays, docks, and interactive project windows built mobile-first.",
+    client: "Be Awesome Productions",
     year: "2026",
+    status: "in-progress",
+    format: "cassette",
+    type: ["Portfolio", "UI System", "Interactive"],
+
+    role: "Design + Frontend Engineering",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind"],
+
+    context:
+      "I wanted a portfolio that demonstrates system thinking and interaction design instead of static pages.",
+    constraints: [
+      "Mobile-first from day one",
+      "Keep effects lightweight and readable",
+      "Avoid hydration mismatches from dynamic visuals",
+    ],
+    outcomes: [
+      "Consistent OS metaphor across navigation",
+      "Discoverable interaction patterns and easter eggs",
+      "Modular structure for future pages and content growth",
+    ],
+
+    behindTheBuild: {
+      title: "Design Intent",
+      body:
+        "This is an interface, not a page. The OS metaphor reduces friction for browsing work and lets personality show up through subtle effects instead of heavy animation.",
+      notes: [
+        "Session-based boot sequence",
+        "Dock + mini dock navigation",
+        "Reduced-motion support for accessibility",
+      ],
+    },
+
+    href: "",
+  },
+
+  {
+    id: "client-site-1",
+    title: "Client Website Refresh",
+    summary:
+      "A modern, responsive marketing site refresh focused on clarity, speed, and conversion-friendly layout.",
+    client: "Client Name",
+    year: "2025",
     status: "active",
     format: "cd",
-    type: ["web", "brand", "interactive"],
-    summary:
-      "Neon OS portfolio with VHS overlay, OS-style navigation, and hidden easter eggs.",
-    role: "Design + Frontend",
-    stack: ["Next.js", "React", "TypeScript", "Tailwind"],
-    highlights: [
-      "Mobile mini-dock for fast navigation",
-      "Studio page as Settings hub with persisted toggles",
-      "VHS overlay with intensity levels",
-    ],
-    outcomes: ["Distinct brand experience that feels like a product"],
-  },
-  {
-    id: "squarespace-build",
-    title: "Squarespace Build: Restaurant",
-    client: "Client Example",
-    year: "2024",
-    status: "shipped",
-    format: "cassette",
-    type: ["web", "squarespace"],
-    summary:
-      "Mobile-first marketing site with custom code blocks, performance tuning, and SEO foundations.",
+    type: ["Marketing Site", "Brand", "Responsive UI"],
+
     role: "Web Design + Build",
-    stack: ["Squarespace", "Custom CSS", "Light JS"],
-    highlights: [
-      "Custom sections via code injection",
-      "Performance pass (images, fonts, layout stability)",
-      "SEO essentials: metadata, structure, internal linking",
+    stack: ["Next.js", "React", "Tailwind"],
+
+    context:
+      "Client needed a cleaner visual system and a structure that made services and next steps obvious.",
+    constraints: [
+      "Tight timeline",
+      "Existing brand palette had to remain recognizable",
+      "Content provided was inconsistent and needed hierarchy",
     ],
-    outcomes: ["Better speed + clearer conversion path"],
+    outcomes: [
+      "Clearer navigation and page structure",
+      "Improved mobile layout and readability",
+      "Reusable components for future updates",
+    ],
+
+    behindTheBuild: {
+      body:
+        "I prioritized hierarchy and scanning: strong section rhythm, predictable spacing, and interactions that support navigation instead of distracting from content.",
+      notes: ["Typography and spacing first", "Animations used only as feedback"],
+    },
+
+    href: "https://example.com",
   },
+
   {
-    id: "brand-kit",
-    title: "Retro Brand Kit",
-    client: "Client Example",
-    year: "2024",
-    status: "archived",
-    format: "cd",
-    type: ["branding", "design"],
+    id: "school-project-1",
+    title: "School Project Archive",
     summary:
-      "Visual system, typography, palette, and social templates with a neon retro vibe.",
-    role: "Brand + Visual Design",
-    stack: ["Figma"],
-    highlights: [
-      "Color system designed for dark-mode neon palettes",
-      "Typography pairing for retro-future tone",
-      "Reusable social components",
-    ],
-    outcomes: ["Consistent brand system across channels"],
+      "A legacy project that shows early experimentation with layout systems and component structure.",
+    client: "School / Personal",
+    year: "2022",
+    status: "archived",
+    format: "cassette",
+    type: ["Archive", "Learning", "UI"],
+
+    role: "Student Project",
+    stack: ["HTML", "CSS", "JavaScript"],
+
+    context:
+      "Built during school as an early exploration of responsive layout and basic UI states.",
+    constraints: ["Limited time", "Early-stage skills", "Basic tooling"],
+    outcomes: ["Learned responsive layout fundamentals", "Improved component thinking"],
+
+    behindTheBuild: {
+      body:
+        "This one is here to show the trajectory. The approach is simpler, but it highlights growth in structure and consistency over time.",
+    },
+
+    href: "",
   },
 ];
+
+// ✅ Backwards-compatible alias for existing imports
+export const PROJECTS = projects;

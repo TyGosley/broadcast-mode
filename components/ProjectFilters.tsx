@@ -23,6 +23,7 @@ export function ProjectFilters({
 }: Props) {
   return (
     <div className="grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center">
+      {/* Search */}
       <label className="block">
         <span className="sr-only">Search projects</span>
         <input
@@ -33,20 +34,22 @@ export function ProjectFilters({
         />
       </label>
 
+      {/* Status filter */}
       <label className="block">
         <span className="sr-only">Filter by status</span>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value as any)}
+          onChange={(e) => setStatus(e.target.value as ProjectStatus | "all")}
           className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
         >
-          <option value="all">All status</option>
-          <option value="active">Active</option>
-          <option value="shipped">Shipped</option>
+          <option value="all">All projects</option>
+          <option value="active">Live</option>
+          <option value="in-progress">In Progress</option>
           <option value="archived">Archived</option>
         </select>
       </label>
 
+      {/* Tag filter */}
       <label className="block">
         <span className="sr-only">Filter by tag</span>
         <select

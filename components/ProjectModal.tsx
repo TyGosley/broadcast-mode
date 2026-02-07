@@ -18,12 +18,19 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+function statusLabel(status: Project["status"]) {
+  if (status === "active") return "Live";
+  if (status === "in-progress") return "In Progress";
+  return "Archived";
+}
+
 function StatusLed({ status }: { status: Project["status"] }) {
+  // Live = emerald, In Progress = cyan, Archived = purple
   const cls =
     status === "active"
-      ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
-      : status === "shipped"
       ? "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.55)]"
+      : status === "in-progress"
+      ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
       : "bg-purple-300 shadow-[0_0_18px_rgba(216,180,254,0.55)]";
 
   return <span className={["h-2.5 w-2.5 rounded-full", cls].join(" ")} />;
@@ -135,7 +142,7 @@ export function ProjectModal({
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
     };
-  }, [closing]); // avoid rebind churn
+  }, [closing]);
 
   // Reset per project open
   useEffect(() => {
@@ -266,6 +273,11 @@ export function ProjectModal({
   };
 
   const behind = project.behindTheBuild;
+  const label = statusLabel(project.status);
+
+  const showLiveCta = project.status === "active" && Boolean(project.href);
+  const showInProgressCta = project.status === "in-progress";
+  const showArchivedNote = project.status === "archived";
 
   return (
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={`Project details: ${project.title}`}>
@@ -320,7 +332,7 @@ export function ProjectModal({
 
               <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
                 <StatusLed status={project.status} />
-                <span className="text-xs font-semibold text-white/75">{project.status}</span>
+                <span className="text-xs font-semibold text-white/75">{label}</span>
               </div>
             </div>
 
@@ -352,6 +364,26 @@ export function ProjectModal({
                   </div>
 
                   <p className="mt-3 text-sm leading-relaxed text-white/75">{project.summary}</p>
+
+                  {project.context ? (
+                    <>
+                      <div className="mt-4 text-sm font-semibold text-white">Context</div>
+                      <p className="mt-2 text-sm text-white/75">{project.context}</p>
+                    </>
+                  ) : null}
+
+                  {project.constraints?.length ? (
+                    <>
+                      <div className="mt-4 text-sm font-semibold text-white">Constraints</div>
+                      <ul className="mt-2 grid gap-2 text-sm text-white/75">
+                        {project.constraints.map((c) => (
+                          <li key={c} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                            {c}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
 
                   {project.highlights?.length ? (
                     <>
@@ -408,7 +440,7 @@ export function ProjectModal({
                   <div className="mt-3 grid gap-3 text-sm text-white/80">
                     <div>
                       <div className="text-xs text-white/55">Status</div>
-                      <div className="font-semibold">{project.status}</div>
+                      <div className="font-semibold">{label}</div>
                     </div>
 
                     {project.role ? (
@@ -450,14 +482,28 @@ export function ProjectModal({
                   </div>
                 </div>
 
-                {project.href ? (
+                {showLiveCta ? (
                   <a
                     href={project.href}
                     target="_blank"
-                    className="rounded-xl border border-white/10 bg-gradient-to-r from-cyan-400/25 via-fuchsia-500/20 to-purple-500/20 px-4 py-3 text-center text-sm font-semibold text-white hover:from-cyan-400/30 hover:via-fuchsia-500/25 hover:to-purple-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+                    className="rounded-xl border border-white/10 bg-gradient-to-r from-emerald-400/25 via-cyan-400/20 to-fuchsia-500/20 px-4 py-3 text-center text-sm font-semibold text-white hover:from-emerald-400/30 hover:via-cyan-400/25 hover:to-fuchsia-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
                   >
                     Open Live Project
                   </a>
+                ) : showInProgressCta ? (
+                  <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+                    <div className="text-xs tracking-[0.25em] text-white/60">LAUNCHING SOON</div>
+                    <p className="mt-2 text-sm text-white/70">
+                      This build is currently in progress. Check back soon or reach out if you want something similar.
+                    </p>
+                  </div>
+                ) : showArchivedNote ? (
+                  <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+                    <div className="text-xs tracking-[0.25em] text-white/60">ARCHIVED</div>
+                    <p className="mt-2 text-sm text-white/70">
+                      This is older work kept for context and growth. The current standard is reflected in Live projects.
+                    </p>
+                  </div>
                 ) : (
                   <div className="rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/60">
                     Live link: coming soon
