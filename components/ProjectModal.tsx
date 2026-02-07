@@ -2,32 +2,17 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Project } from "../lib/projects";
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(mq.matches);
-    update();
-
-    mq.addEventListener?.("change", update);
-    return () => mq.removeEventListener?.("change", update);
-  }, []);
-
-  return reduced;
-}
+import { trapTabKey, usePrefersReducedMotion } from "../lib/a11y";
 
 function statusLabel(status: Project["status"]) {
-  if (status === "live") return "Live";
+  if (status === "active") return "Live";
   if (status === "in-progress") return "In Progress";
   return "Archived";
 }
 
 function StatusLed({ status }: { status: Project["status"] }) {
-  // Live = emerald, In Progress = cyan, Archived = purple
   const cls =
-    status === "live"
+    status === "active"
       ? "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.55)]"
       : status === "in-progress"
       ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
@@ -76,15 +61,16 @@ export function ProjectModal({
 }) {
   const reducedMotion = usePrefersReducedMotion();
 
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
-  // open/close animation state
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
-
   const [maximized, setMaximized] = useState(false);
 
-  // Easter egg: triple-click maximize (resize delayed so button doesn’t move mid-burst)
+  // Easter egg + maximize batching
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const tapCountRef = useRef(0);
   const tapResetTimerRef = useRef<number | null>(null);
@@ -110,15 +96,35 @@ export function ProjectModal({
 
   const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
+  const label = statusLabel(project.status);
 
-  // open on next tick
+  const showLiveCta = project.status === "active" && Boolean(project.href);
+  const showInProgressCta = project.status === "in-progress";
+  const showArchivedNote = project.status === "archived";
+
   useEffect(() => {
-    const t = window.setTimeout(() => setMounted(true), 0);
-    return () => window.clearTimeout(t);
-  }, []);
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+
+    const t = window.setTimeout(() => {
+      setMounted(true);
+      closeBtnRef.current?.focus();
+    }, 0);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.clearTimeout(t);
+      document.body.style.overflow = prevOverflow;
+
+      // restore focus to opener
+      previouslyFocusedRef.current?.focus?.();
+    };
+  }, [project.id]);
 
   const close = () => {
     if (closing) return;
+
     if (reducedMotion) {
       onClose();
       return;
@@ -128,21 +134,25 @@ export function ProjectModal({
     window.setTimeout(() => onClose(), 180);
   };
 
+  // Focus trap + ESC close
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        return;
+      }
+
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+
+      // Trap tab navigation
+      trapTabKey(e, dialog);
     };
 
-    window.addEventListener("keydown", onKey);
-
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [closing]);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [closing, reducedMotion]);
 
   // Reset per project open
   useEffect(() => {
@@ -157,7 +167,7 @@ export function ProjectModal({
     finalizeTapTimerRef.current = null;
   }, [project.id]);
 
-  // Draggable header (click-safe)
+  // Draggable header (desktop only)
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
@@ -241,7 +251,6 @@ export function ProjectModal({
   };
 
   const handleMaximize = () => {
-    // Delay actual resize toggle until click burst ends (keeps button stable).
     if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
     if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
 
@@ -254,12 +263,14 @@ export function ProjectModal({
     finalizeTapTimerRef.current = window.setTimeout(() => {
       const clicks = tapCountRef.current;
 
-      if (!secretUnlocked && clicks >= 3) {
-        setSecretUnlocked(true);
-        window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "high" } }));
-        (navigator as any).vibrate?.(35);
-      } else {
-        window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "low" } }));
+      if (!reducedMotion) {
+        if (!secretUnlocked && clicks >= 3) {
+          setSecretUnlocked(true);
+          window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "high" } }));
+          (navigator as any).vibrate?.(35);
+        } else {
+          window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "low" } }));
+        }
       }
 
       setMaximized((v) => !v);
@@ -273,14 +284,12 @@ export function ProjectModal({
   };
 
   const behind = project.behindTheBuild;
-  const label = statusLabel(project.status);
 
-  const showLiveCta = project.status === "live" && Boolean(project.href);
-  const showInProgressCta = project.status === "in-progress";
-  const showArchivedNote = project.status === "archived";
+  const titleId = `proj-title-${project.id}`;
+  const descId = `proj-desc-${project.id}`;
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={`Project details: ${project.title}`}>
+    <div className="fixed inset-0 z-50">
       {/* Backdrop */}
       <button
         type="button"
@@ -292,10 +301,16 @@ export function ProjectModal({
         ].join(" ")}
       />
 
-      {/* Window wrapper */}
+      {/* Dialog */}
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descId}
+        tabIndex={-1}
         className={[
-          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
+          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-none",
           maximized ? "w-[min(1100px,calc(100%-1rem))]" : "w-[min(920px,calc(100%-1.5rem))]",
         ].join(" ")}
       >
@@ -312,6 +327,7 @@ export function ProjectModal({
         >
           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
 
+          {/* Header */}
           <div
             ref={headerRef}
             className={[
@@ -337,13 +353,16 @@ export function ProjectModal({
             </div>
 
             <div className="min-w-0 flex-1 px-2">
-              <div className="truncate text-sm font-semibold text-white">{project.title}</div>
+              <div id={titleId} className="truncate text-sm font-semibold text-white">
+                {project.title}
+              </div>
               <div className="truncate text-xs text-white/55">
                 {(project.client ?? "Internal") + (project.year ? ` • ${project.year}` : "")}
               </div>
             </div>
 
             <button
+              ref={closeBtnRef}
               type="button"
               onClick={close}
               className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
@@ -352,18 +371,16 @@ export function ProjectModal({
             </button>
           </div>
 
+          {/* Body */}
           <div className={["relative overflow-y-auto p-5", maximized ? "max-h-[84vh]" : "max-h-[72vh]"].join(" ")}>
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
               <div className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-xs tracking-[0.25em] text-white/60">CASE STUDY LITE</div>
-                    <div className="text-xs text-white/55 hidden md:block">
-                      {maximized ? "Maximized" : "Drag the window header"}
-                    </div>
-                  </div>
+                  <div className="text-xs tracking-[0.25em] text-white/60">CASE STUDY LITE</div>
 
-                  <p className="mt-3 text-sm leading-relaxed text-white/75">{project.summary}</p>
+                  <p id={descId} className="mt-3 text-sm leading-relaxed text-white/75">
+                    {project.summary}
+                  </p>
 
                   {project.context ? (
                     <>
@@ -379,19 +396,6 @@ export function ProjectModal({
                         {project.constraints.map((c) => (
                           <li key={c} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
                             {c}
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-
-                  {project.highlights?.length ? (
-                    <>
-                      <div className="mt-4 text-sm font-semibold text-white">Highlights</div>
-                      <ul className="mt-2 grid gap-2 text-sm text-white/75">
-                        {project.highlights.map((h) => (
-                          <li key={h} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
-                            {h}
                           </li>
                         ))}
                       </ul>
@@ -433,6 +437,7 @@ export function ProjectModal({
                 ) : null}
               </div>
 
+              {/* Sidebar */}
               <aside className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-black/30 p-4">
                   <div className="text-xs tracking-[0.25em] text-white/60">DETAILS</div>
@@ -501,7 +506,7 @@ export function ProjectModal({
                   <div className="rounded-xl border border-white/10 bg-black/30 p-4">
                     <div className="text-xs tracking-[0.25em] text-white/60">ARCHIVED</div>
                     <p className="mt-2 text-sm text-white/70">
-                      This is older work kept for context and growth. The current standard is reflected in Live projects.
+                      Older work kept for context and growth. The current standard is reflected in Live projects.
                     </p>
                   </div>
                 ) : (

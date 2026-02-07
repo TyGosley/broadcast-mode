@@ -3,67 +3,42 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type DockItem = {
-  id: "home" | "projects" | "contact";
-  label: string;
-  href: string;
-  glyph: string; // keep it simple for now
-};
-
-const ITEMS: DockItem[] = [
-  { id: "home", label: "Home", href: "/", glyph: "⌂" },
-  { id: "projects", label: "Projects", href: "/projects", glyph: "P" },
-  { id: "contact", label: "Contact", href: "/contact", glyph: "C" },
+const ITEMS = [
+  { href: "/", label: "Home", short: "H" },
+  { href: "/projects", label: "Projects", short: "P" },
+  { href: "/contact", label: "Contact", short: "C" },
 ];
 
 export function MobileMiniDock() {
   const pathname = usePathname();
 
   return (
-    <nav
-      aria-label="Mobile Dock"
-      className={[
-        "fixed z-50 md:hidden",
-        "left-1/2 -translate-x-1/2",
-        "bottom-[calc(0.75rem+env(safe-area-inset-bottom))]",
-        "w-[min(420px,calc(100%-1.5rem))]",
-      ].join(" ")}
-    >
-      <div className="rounded-2xl border border-white/10 bg-black/60 p-2 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_60px_rgba(0,0,0,0.75)]">
+    <nav aria-label="Mobile mini dock" className="fixed inset-x-0 bottom-4 z-[2147483647] flex justify-center px-4 lg:hidden">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-black/55 p-2 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_60px_rgba(0,0,0,0.7)]">
         <ul className="flex items-center justify-between gap-2">
-          {ITEMS.map((item) => {
-            const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
-
+          {ITEMS.map((it) => {
+            const active = pathname === it.href;
             return (
-              <li key={item.id} className="flex-1">
+              <li key={it.href} className="flex-1">
                 <Link
-                  href={item.href}
-                  aria-current={isActive ? "page" : undefined}
+                  href={it.href}
                   className={[
-                    "group flex flex-col items-center justify-center rounded-xl px-3 py-2",
-                    "text-[11px] font-semibold tracking-wide transition",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70",
-                    isActive
-                      ? "bg-white/12 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white",
+                    "group flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold tracking-wide transition",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
+                    active ? "bg-white/10 text-white" : "text-white/80 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
+                  aria-current={active ? "page" : undefined}
                 >
                   <span
                     className={[
-                      "mb-1 flex h-8 w-8 items-center justify-center rounded-lg transition",
-                      isActive
-                        ? "bg-white/18"
-                        : "bg-white/10 group-hover:bg-white/15",
+                      "flex h-8 w-8 items-center justify-center rounded-lg transition",
+                      active ? "bg-white/15" : "bg-white/10 group-hover:bg-white/15",
                     ].join(" ")}
                     aria-hidden="true"
                   >
-                    <span className="text-sm font-bold text-white/90">
-                      {item.glyph}
-                    </span>
+                    <span className="text-sm font-bold text-white/85">{it.short}</span>
                   </span>
-
-                  <span>{item.label}</span>
+                  <span className="sr-only">{it.label}</span>
                 </Link>
               </li>
             );

@@ -13,7 +13,10 @@ export function AppIcon({ app }: AppIconProps) {
       href={app.href}
       aria-label={app.label}
       aria-describedby={app.subtitle ? subtitleId : undefined}
-      className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70"
+      className={[
+        "group block rounded-2xl",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70",
+      ].join(" ")}
     >
       <div
         className={[
@@ -25,8 +28,8 @@ export function AppIcon({ app }: AppIconProps) {
           "md:group-hover:-translate-y-1",
         ].join(" ")}
       >
-        {/* Neon glow */}
-        <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/15 via-fuchsia-500/10 to-purple-500/15 blur-md opacity-60" />
+        {/* Neon glow (accent, not focus) */}
+        <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/15 via-fuchsia-500/10 to-purple-500/15 blur-md opacity-60" />
 
         {/* Icon body */}
         <div className="relative flex h-full items-center justify-center">
