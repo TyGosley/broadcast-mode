@@ -1,4 +1,4 @@
-export type ProjectStatus = "active" | "in-progress" | "archived";
+export type ProjectStatus = "live" | "in-progress" | "archived";
 export type ProjectFormat = "cassette" | "cd";
 
 export type BehindTheBuild = {
@@ -85,39 +85,39 @@ export const projects: Project[] = [
   },
 
   {
-    id: "client-site-1",
-    title: "Client Website Refresh",
+    id: "tactic-app",
+    title: "Tactic Fitness App",
     summary:
-      "A modern, responsive marketing site refresh focused on clarity, speed, and conversion-friendly layout.",
-    client: "Client Name",
+      "An interactive fitness platform providing members with daily workouts, video instructions, and progress tracking through a streamlined dashboard.",
+    client: "Tactic Fitness",
     year: "2025",
-    status: "active",
+    status: "live",
     format: "cd",
-    type: ["Marketing Site", "Brand", "Responsive UI"],
+    type: ["Fitness Site", "Brand", "Responsive UI"],
 
-    role: "Web Design + Build",
-    stack: ["Next.js", "React", "Tailwind"],
+    role: "Project Manager, Web Design + Build",
+    stack: ["React", "Prisma","Tailwind"],
 
     context:
-      "Client needed a cleaner visual system and a structure that made services and next steps obvious.",
+      "Tactic needed a web presence that reflected their energetic brand and provided members with easy access to workouts and progress tracking.",
     constraints: [
-      "Tight timeline",
+      "Build a completely new and custom app that allowed for their unique content structure and fitness programming",
       "Existing brand palette had to remain recognizable",
-      "Content provided was inconsistent and needed hierarchy",
+      "Small team with limited bandwith for heavy assets or complex interactions",
     ],
     outcomes: [
       "Clearer navigation and page structure",
       "Improved mobile layout and readability",
-      "Reusable components for future updates",
+      "Unique backend system for managing workouts and member progress",
     ],
 
     behindTheBuild: {
       body:
-        "I prioritized hierarchy and scanning: strong section rhythm, predictable spacing, and interactions that support navigation instead of distracting from content.",
+        "As part of the small team on Boldly Fine, LLC, I wore a lot of hats on this one. I led the project management and helped withweb design. I also led daily and weekly updated to the client and coordinated with the backend developer to ensure the custom content structure worked seamlessly with the design.",
       notes: ["Typography and spacing first", "Animations used only as feedback"],
     },
 
-    href: "https://example.com",
+    href: "https://app.tacticworksout.com/login",
   },
 
   {

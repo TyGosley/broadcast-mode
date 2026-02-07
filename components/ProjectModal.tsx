@@ -19,7 +19,7 @@ function usePrefersReducedMotion() {
 }
 
 function statusLabel(status: Project["status"]) {
-  if (status === "active") return "Live";
+  if (status === "live") return "Live";
   if (status === "in-progress") return "In Progress";
   return "Archived";
 }
@@ -27,7 +27,7 @@ function statusLabel(status: Project["status"]) {
 function StatusLed({ status }: { status: Project["status"] }) {
   // Live = emerald, In Progress = cyan, Archived = purple
   const cls =
-    status === "active"
+    status === "live"
       ? "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.55)]"
       : status === "in-progress"
       ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
@@ -275,7 +275,7 @@ export function ProjectModal({
   const behind = project.behindTheBuild;
   const label = statusLabel(project.status);
 
-  const showLiveCta = project.status === "active" && Boolean(project.href);
+  const showLiveCta = project.status === "live" && Boolean(project.href);
   const showInProgressCta = project.status === "in-progress";
   const showArchivedNote = project.status === "archived";
 
