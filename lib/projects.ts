@@ -121,31 +121,58 @@ export const projects: Project[] = [
   },
 
   {
-    id: "school-project-1",
-    title: "School Project Archive",
+    id: "full-time-burgers",
+    title: "Full Time Burgers",
     summary:
-      "A legacy project that shows early experimentation with layout systems and component structure.",
-    client: "School / Personal",
-    year: "2022",
-    status: "archived",
+      "A vibrant restaurant website highlighting the Full Time Burgers brand, menu, and customer experience.",
+    client: "Full Time Burgers",
+    year: "2025",
+    status: "live",
     format: "cassette",
-    type: ["Archive", "Learning", "UI"],
+    type: ["Restaurant Site", "Brand", "Responsive UI"],
 
-    role: "Student Project",
-    stack: ["HTML", "CSS", "JavaScript"],
+    role: "Project Manager, Web Design + Build",
+    stack: ["Squarespace", "HTML", "CSS", "JavaScript", "SEO Optimization"],
 
     context:
-      "Built during school as an early exploration of responsive layout and basic UI states.",
-    constraints: ["Limited time", "Early-stage skills", "Basic tooling"],
-    outcomes: ["Learned responsive layout fundamentals", "Improved component thinking"],
+      "Full Time Burgers needed a website that captured their fun and vibrant brand while providing customers with easy access to their menu, locations, and online ordering.",
+    constraints: ["Brand consistency with existing materials",],
+    outcomes: ["Learned responsive layout fundamentals", "Improved component thinking", "Gained experience with SEO best practices"],
 
     behindTheBuild: {
       body:
-        "This one is here to show the trajectory. The approach is simpler, but it highlights growth in structure and consistency over time.",
+        "This was my first project as a freelance web designer, and I learned a ton about responsive design, component thinking, and SEO best practices. I built the site on Squarespace to allow for easy content updates by the client, but I also customized it with custom HTML, CSS, and JavaScript to achieve the unique look and functionality they wanted.",
+    },
+
+    href: "https://www.fulltimeburgers.com/",
+  },
+
+ {
+    id: "emergence-financial-corp",
+    title: "Emergence Financial Corpation",
+    summary:
+      "A landing page for a financial corporation, showcasing their services, team, and contact information with a clean and professional design.",
+    client: "Emergence Financial Corpation",
+    year: "2025",
+    status: "in-progress",
+    format: "cd",
+    type: ["Financial Site", "Brand", "Responsive UI"],
+
+    role: "Project Manager, Web Design + Build",
+    stack: ["Squarespace", "HTML", "CSS", "JavaScript", "SEO Optimization"],
+
+    context:
+      "Emergence Financial Corpation needed a website that captured their professional brand while providing customers with easy access to their services, team, and contact information.",
+    constraints: ["Branding was created from scratch", "Clean and professional design with a modern touch", "Small team with limited bandwith for heavy assets or complex interactions"],
+    outcomes: ["Learned responsive layout fundamentals", "Squarespace customization skills", "Gained experience with SEO best practices", "Experience working with a client with no existing branding"],
+
+    behindTheBuild: {
+      body:
+        "This project is still in progress, but so far I've been responsible for project management, web design, and build. I'm building the site on Squarespace to allow for easy content updates by the client, but I'm also customizing it with custom HTML, CSS, and JavaScript to achieve the unique look and functionality they want. Since this client had no existing branding, I also created a new visual identity for them that reflects their values and target audience.",
     },
 
     href: "",
-  },
+  }, 
 ];
 
 // ✅ Backwards-compatible alias for existing imports
