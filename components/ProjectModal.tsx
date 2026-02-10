@@ -10,6 +10,12 @@ function statusLabel(status: Project["status"]) {
   return "Archived";
 }
 
+function ctaLabel(status: Project["status"]) {
+  if (status === "active") return "Open Live Project";
+  if (status === "in-progress") return "Open Preview";
+  return "View Project";
+}
+
 function StatusLed({ status }: { status: Project["status"] }) {
   const cls =
     status === "active"
@@ -98,9 +104,13 @@ export function ProjectModal({
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
   const label = statusLabel(project.status);
 
-  const showLiveCta = project.status === "active" && Boolean(project.href);
-  const showInProgressCta = project.status === "in-progress";
-  const showArchivedNote = project.status === "archived";
+  // ✅ NEW: show CTA whenever href exists (and is not blank)
+  const href = (project.href ?? "").trim();
+  const hasHref = href.length > 0;
+
+  // still show messaging blocks for these statuses when no href exists
+  const showInProgressNote = project.status === "in-progress" && !hasHref;
+  const showArchivedNote = project.status === "archived" && !hasHref;
 
   useEffect(() => {
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
@@ -116,8 +126,6 @@ export function ProjectModal({
     return () => {
       window.clearTimeout(t);
       document.body.style.overflow = prevOverflow;
-
-      // restore focus to opener
       previouslyFocusedRef.current?.focus?.();
     };
   }, [project.id]);
@@ -146,7 +154,6 @@ export function ProjectModal({
       const dialog = dialogRef.current;
       if (!dialog) return;
 
-      // Trap tab navigation
       trapTabKey(e, dialog);
     };
 
@@ -290,7 +297,6 @@ export function ProjectModal({
 
   return (
     <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
       <button
         type="button"
         onClick={close}
@@ -301,7 +307,6 @@ export function ProjectModal({
         ].join(" ")}
       />
 
-      {/* Dialog */}
       <div
         ref={dialogRef}
         role="dialog"
@@ -327,7 +332,6 @@ export function ProjectModal({
         >
           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
 
-          {/* Header */}
           <div
             ref={headerRef}
             className={[
@@ -339,11 +343,7 @@ export function ProjectModal({
               <div className="flex items-center gap-2">
                 <WindowControl tone="close" label="Close window" onClick={close} />
                 <WindowControl tone="min" label="Minimize / center window" onClick={handleMinimize} />
-                <WindowControl
-                  tone="max"
-                  label={maximized ? "Restore window" : "Maximize window"}
-                  onClick={handleMaximize}
-                />
+                <WindowControl tone="max" label={maximized ? "Restore window" : "Maximize window"} onClick={handleMaximize} />
               </div>
 
               <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
@@ -371,7 +371,6 @@ export function ProjectModal({
             </button>
           </div>
 
-          {/* Body */}
           <div className={["relative overflow-y-auto p-5", maximized ? "max-h-[84vh]" : "max-h-[72vh]"].join(" ")}>
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
               <div className="grid gap-4">
@@ -437,7 +436,6 @@ export function ProjectModal({
                 ) : null}
               </div>
 
-              {/* Sidebar */}
               <aside className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-black/30 p-4">
                   <div className="text-xs tracking-[0.25em] text-white/60">DETAILS</div>
@@ -460,10 +458,7 @@ export function ProjectModal({
                         <div className="text-xs text-white/55">Stack</div>
                         <div className="mt-2 flex flex-wrap gap-2">
                           {project.stack.map((t) => (
-                            <span
-                              key={t}
-                              className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/80"
-                            >
+                            <span key={t} className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/80">
                               {t}
                             </span>
                           ))}
@@ -475,10 +470,7 @@ export function ProjectModal({
                       <div className="text-xs text-white/55">Tags</div>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {project.type.map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-xs text-white/80"
-                          >
+                          <span key={t} className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-xs text-white/80">
                             {t}
                           </span>
                         ))}
@@ -487,15 +479,25 @@ export function ProjectModal({
                   </div>
                 </div>
 
-                {showLiveCta ? (
+                {/* ✅ NEW CTA behavior */}
+                {hasHref ? (
                   <a
-                    href={project.href}
+                    href={href}
                     target="_blank"
-                    className="rounded-xl border border-white/10 bg-gradient-to-r from-emerald-400/25 via-cyan-400/20 to-fuchsia-500/20 px-4 py-3 text-center text-sm font-semibold text-white hover:from-emerald-400/30 hover:via-cyan-400/25 hover:to-fuchsia-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+                    rel="noreferrer"
+                    className={[
+                      "rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white",
+                      project.status === "active"
+                        ? "bg-gradient-to-r from-emerald-400/25 via-cyan-400/20 to-fuchsia-500/20 hover:from-emerald-400/30 hover:via-cyan-400/25 hover:to-fuchsia-500/25"
+                        : project.status === "in-progress"
+                        ? "bg-gradient-to-r from-cyan-400/20 via-fuchsia-500/18 to-purple-500/18 hover:from-cyan-400/26 hover:via-fuchsia-500/24 hover:to-purple-500/24"
+                        : "bg-white/10 hover:bg-white/15",
+                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
+                    ].join(" ")}
                   >
-                    Open Live Project
+                    {ctaLabel(project.status)}
                   </a>
-                ) : showInProgressCta ? (
+                ) : showInProgressNote ? (
                   <div className="rounded-xl border border-white/10 bg-black/30 p-4">
                     <div className="text-xs tracking-[0.25em] text-white/60">LAUNCHING SOON</div>
                     <p className="mt-2 text-sm text-white/70">
@@ -511,7 +513,7 @@ export function ProjectModal({
                   </div>
                 ) : (
                   <div className="rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/60">
-                    Live link: coming soon
+                    Link: coming soon
                   </div>
                 )}
               </aside>
