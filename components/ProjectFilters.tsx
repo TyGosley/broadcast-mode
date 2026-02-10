@@ -43,7 +43,7 @@ export function ProjectFilters({
           className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
         >
           <option value="all">All projects</option>
-          <option value="active">Live</option>
+          <option value="live">Live</option>
           <option value="in-progress">In Progress</option>
           <option value="archived">Archived</option>
         </select>
