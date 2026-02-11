@@ -17,11 +17,53 @@ function ctaLabel(status: Project["status"]) {
   return "View Project";
 }
 
+function statusTone(status: Project["status"]) {
+  if (status === "live") return "live";
+  if (status === "in-progress") return "progress";
+  return "archived";
+}
+
+function statusChipClass(status: Project["status"]) {
+  const tone = statusTone(status);
+
+  if (tone === "live") {
+    return "border-emerald-400/30 bg-emerald-400/15 text-emerald-200 shadow-[0_0_14px_rgba(16,185,129,0.30)]";
+  }
+  if (tone === "progress") {
+    return "border-cyan-400/30 bg-cyan-400/15 text-cyan-200 shadow-[0_0_14px_rgba(34,211,238,0.30)]";
+  }
+  return "border-purple-400/30 bg-purple-400/15 text-purple-200 shadow-[0_0_14px_rgba(168,85,247,0.30)]";
+}
+
+function ctaClass(status: Project["status"]) {
+  const tone = statusTone(status);
+
+  if (tone === "live") {
+    return [
+      "bg-gradient-to-r from-emerald-400/25 via-cyan-400/20 to-fuchsia-500/18",
+      "hover:from-emerald-400/32 hover:via-cyan-400/26 hover:to-fuchsia-500/24",
+      "shadow-[0_0_18px_rgba(16,185,129,0.20)]",
+    ].join(" ");
+  }
+
+  if (tone === "progress") {
+    return [
+      "bg-gradient-to-r from-cyan-400/22 via-fuchsia-500/18 to-purple-500/18",
+      "hover:from-cyan-400/30 hover:via-fuchsia-500/24 hover:to-purple-500/24",
+      "shadow-[0_0_18px_rgba(34,211,238,0.18)]",
+    ].join(" ");
+  }
+
+  return "bg-white/10 hover:bg-white/15";
+}
+
 function StatusLed({ status }: { status: Project["status"] }) {
+  const tone = statusTone(status);
+
   const cls =
-    status === "live"
+    tone === "live"
       ? "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.55)]"
-      : status === "in-progress"
+      : tone === "progress"
       ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
       : "bg-purple-300 shadow-[0_0_18px_rgba(216,180,254,0.55)]";
 
@@ -54,7 +96,11 @@ function WindowControl({
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className={[base, color, disabled ? "opacity-50 cursor-not-allowed" : ""].join(" ")}
+      className={[
+        base,
+        color,
+        disabled ? "opacity-50 cursor-not-allowed" : "",
+      ].join(" ")}
     />
   );
 }
@@ -99,7 +145,8 @@ export function ProjectModal({
     originY: 0,
   });
 
-  const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+  const clamp = (v: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, v));
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
   const label = statusLabel(project.status);
 
@@ -267,10 +314,14 @@ export function ProjectModal({
       if (!reducedMotion) {
         if (!secretUnlocked && clicks >= 3) {
           setSecretUnlocked(true);
-          window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "high" } }));
+          window.dispatchEvent(
+            new CustomEvent("broadcast:burst", { detail: { strength: "high" } })
+          );
           (navigator as any).vibrate?.(35);
         } else {
-          window.dispatchEvent(new CustomEvent("broadcast:burst", { detail: { strength: "low" } }));
+          window.dispatchEvent(
+            new CustomEvent("broadcast:burst", { detail: { strength: "low" } })
+          );
         }
       }
 
@@ -310,7 +361,9 @@ export function ProjectModal({
         tabIndex={-1}
         className={[
           "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-none",
-          maximized ? "w-[min(1100px,calc(100%-1rem))]" : "w-[min(920px,calc(100%-1.5rem))]",
+          maximized
+            ? "w-[min(1100px,calc(100%-1rem))]"
+            : "w-[min(920px,calc(100%-1.5rem))]",
         ].join(" ")}
       >
         <div
@@ -336,7 +389,11 @@ export function ProjectModal({
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
                 <WindowControl tone="close" label="Close window" onClick={close} />
-                <WindowControl tone="min" label="Minimize / center window" onClick={handleMinimize} />
+                <WindowControl
+                  tone="min"
+                  label="Minimize / center window"
+                  onClick={handleMinimize}
+                />
                 <WindowControl
                   tone="max"
                   label={maximized ? "Restore window" : "Maximize window"}
@@ -344,9 +401,15 @@ export function ProjectModal({
                 />
               </div>
 
-              <div className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+              {/* ✅ Status chip now uses the new color tones */}
+              <div
+                className={[
+                  "hidden sm:flex items-center gap-2 rounded-full border px-2.5 py-1",
+                  statusChipClass(project.status),
+                ].join(" ")}
+              >
                 <StatusLed status={project.status} />
-                <span className="text-xs font-semibold text-white/75">{label}</span>
+                <span className="text-xs font-semibold">{label}</span>
               </div>
             </div>
 
@@ -369,7 +432,12 @@ export function ProjectModal({
             </button>
           </div>
 
-          <div className={["relative overflow-y-auto p-5", maximized ? "max-h-[84vh]" : "max-h-[72vh]"].join(" ")}>
+          <div
+            className={[
+              "relative overflow-y-auto p-5",
+              maximized ? "max-h-[84vh]" : "max-h-[72vh]",
+            ].join(" ")}
+          >
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
               <div className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
@@ -428,14 +496,16 @@ export function ProjectModal({
                         </ul>
                       ) : null}
 
-                      <p className="mt-3 text-xs text-white/55">Unlocked by triple-clicking maximize.</p>
+                      <p className="mt-3 text-xs text-white/55">
+                        Unlocked by triple-clicking maximize.
+                      </p>
                     </div>
                   ) : null}
                 </div>
               </div>
 
               <aside className="grid gap-4">
-                {/* ✅ Preview panel appears here */}
+                {/* Preview panel */}
                 {preview ? (
                   <div className="overflow-hidden rounded-xl border border-white/10 bg-black/30">
                     <div className="px-4 py-3 text-xs tracking-[0.25em] text-white/60 border-b border-white/10 bg-black/35">
@@ -461,7 +531,13 @@ export function ProjectModal({
                   <div className="mt-3 grid gap-3 text-sm text-white/80">
                     <div>
                       <div className="text-xs text-white/55">Status</div>
-                      <div className="font-semibold">{label}</div>
+                      <div className="mt-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold">
+                        <span className={statusChipClass(project.status)} />
+                        <span className="inline-flex items-center gap-2">
+                          <StatusLed status={project.status} />
+                          <span className="text-white/85">{label}</span>
+                        </span>
+                      </div>
                     </div>
 
                     {project.role ? (
@@ -503,6 +579,7 @@ export function ProjectModal({
                   </div>
                 </div>
 
+                {/* CTA */}
                 {hasHref ? (
                   <a
                     href={href}
@@ -510,26 +587,26 @@ export function ProjectModal({
                     rel="noreferrer"
                     className={[
                       "rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white",
-                      project.status === "live"
-                        ? "bg-gradient-to-r from-emerald-400/25 via-cyan-400/20 to-fuchsia-500/20 hover:from-emerald-400/30 hover:via-cyan-400/25 hover:to-fuchsia-500/25"
-                        : project.status === "in-progress"
-                        ? "bg-gradient-to-r from-cyan-400/20 via-fuchsia-500/18 to-purple-500/18 hover:from-cyan-400/26 hover:via-fuchsia-500/24 hover:to-purple-500/24"
-                        : "bg-white/10 hover:bg-white/15",
+                      ctaClass(project.status),
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
                     ].join(" ")}
                   >
                     {ctaLabel(project.status)}
                   </a>
                 ) : showInProgressNote ? (
-                  <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-                    <div className="text-xs tracking-[0.25em] text-white/60">LAUNCHING SOON</div>
+                  <div className="rounded-xl border border-cyan-400/25 bg-cyan-400/8 p-4">
+                    <div className="text-xs tracking-[0.25em] text-cyan-200/80">
+                      LAUNCHING SOON
+                    </div>
                     <p className="mt-2 text-sm text-white/70">
                       This build is currently in progress. Check back soon or reach out if you want something similar.
                     </p>
                   </div>
                 ) : showArchivedNote ? (
-                  <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-                    <div className="text-xs tracking-[0.25em] text-white/60">ARCHIVED</div>
+                  <div className="rounded-xl border border-purple-400/25 bg-purple-400/8 p-4">
+                    <div className="text-xs tracking-[0.25em] text-purple-200/80">
+                      ARCHIVED
+                    </div>
                     <p className="mt-2 text-sm text-white/70">
                       Older work kept for context and growth. The current standard is reflected in Live projects.
                     </p>

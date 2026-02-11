@@ -12,6 +12,19 @@ type Props = {
   allTags: string[];
 };
 
+function statusClass(value: string) {
+  switch (value) {
+    case "live":
+      return "text-emerald-300";
+    case "in-progress":
+      return "text-cyan-300";
+    case "archived":
+      return "text-purple-300";
+    default:
+      return "text-white/80";
+  }
+}
+
 export function ProjectFilters({
   query,
   setQuery,
@@ -39,8 +52,14 @@ export function ProjectFilters({
         <span className="sr-only">Filter by status</span>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value as ProjectStatus | "all")}
-          className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+          onChange={(e) =>
+            setStatus(e.target.value as ProjectStatus | "all")
+          }
+          className={[
+            "w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm outline-none",
+            "focus-visible:ring-2 focus-visible:ring-cyan-300/60",
+            statusClass(status),
+          ].join(" ")}
         >
           <option value="all">All projects</option>
           <option value="live">Live</option>
