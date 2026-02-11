@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Project } from "../lib/projects";
 import { trapTabKey, usePrefersReducedMotion } from "../lib/a11y";
@@ -76,13 +77,11 @@ export function ProjectModal({
   const [closing, setClosing] = useState(false);
   const [maximized, setMaximized] = useState(false);
 
-  // Easter egg + maximize batching
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const tapCountRef = useRef(0);
   const tapResetTimerRef = useRef<number | null>(null);
   const finalizeTapTimerRef = useRef<number | null>(null);
 
-  // Draggable position (desktop only, disabled when maximized)
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const dragState = useRef<{
     dragging: boolean;
@@ -104,12 +103,13 @@ export function ProjectModal({
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
   const label = statusLabel(project.status);
 
-  // ✅ Show CTA whenever href exists
   const href = (project.href ?? "").trim();
   const hasHref = href.length > 0;
 
   const showInProgressNote = project.status === "in-progress" && !hasHref;
   const showArchivedNote = project.status === "archived" && !hasHref;
+
+  const preview = project.coverImage?.src ? project.coverImage : null;
 
   useEffect(() => {
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
@@ -141,7 +141,6 @@ export function ProjectModal({
     window.setTimeout(() => onClose(), 180);
   };
 
-  // Focus trap + ESC close
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -160,7 +159,6 @@ export function ProjectModal({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [closing, reducedMotion]);
 
-  // Reset per project open
   useEffect(() => {
     setPos({ x: 0, y: 0 });
     setMaximized(false);
@@ -173,7 +171,6 @@ export function ProjectModal({
     finalizeTapTimerRef.current = null;
   }, [project.id]);
 
-  // Draggable header (desktop only)
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
@@ -224,9 +221,7 @@ export function ProjectModal({
 
       try {
         header.releasePointerCapture(e.pointerId);
-      } catch {
-        // ignore
-      }
+      } catch {}
     };
 
     header.addEventListener("pointerdown", onPointerDown);
@@ -416,30 +411,50 @@ export function ProjectModal({
                       </ul>
                     </>
                   ) : null}
-                </div>
 
-                {secretUnlocked && behind ? (
-                  <div className="rounded-xl border border-white/10 bg-black/35 p-4">
-                    <div className="text-xs tracking-[0.25em] text-white/60">
-                      {behind.title ?? "BEHIND THE BUILD"}
+                  {secretUnlocked && behind ? (
+                    <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
+                      <div className="text-xs tracking-[0.25em] text-white/60">
+                        {behind.title ?? "BEHIND THE BUILD"}
+                      </div>
+
+                      <p className="mt-3 text-sm text-white/75">{behind.body}</p>
+
+                      {behind.notes?.length ? (
+                        <ul className="mt-3 space-y-1 text-xs text-white/65 list-disc pl-4">
+                          {behind.notes.map((n) => (
+                            <li key={n}>{n}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+
+                      <p className="mt-3 text-xs text-white/55">Unlocked by triple-clicking maximize.</p>
                     </div>
-
-                    <p className="mt-3 text-sm text-white/75">{behind.body}</p>
-
-                    {behind.notes?.length ? (
-                      <ul className="mt-3 space-y-1 text-xs text-white/65 list-disc pl-4">
-                        {behind.notes.map((n) => (
-                          <li key={n}>{n}</li>
-                        ))}
-                      </ul>
-                    ) : null}
-
-                    <p className="mt-3 text-xs text-white/55">Unlocked by triple-clicking maximize.</p>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
               </div>
 
               <aside className="grid gap-4">
+                {/* ✅ Preview panel appears here */}
+                {preview ? (
+                  <div className="overflow-hidden rounded-xl border border-white/10 bg-black/30">
+                    <div className="px-4 py-3 text-xs tracking-[0.25em] text-white/60 border-b border-white/10 bg-black/35">
+                      PREVIEW
+                    </div>
+                    <div className="relative aspect-[16/10] w-full">
+                      <Image
+                        src={preview.src}
+                        alt={preview.alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 420px"
+                        className="object-cover"
+                        priority={false}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/10" />
+                    </div>
+                  </div>
+                ) : null}
+
                 <div className="rounded-xl border border-white/10 bg-black/30 p-4">
                   <div className="text-xs tracking-[0.25em] text-white/60">DETAILS</div>
 
