@@ -2,19 +2,73 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Project } from "../lib/projects";
-import { trapTabKey, usePrefersReducedMotion } from "../lib/a11y";
+import type { Project, ProjectCoverImage } from "../lib/projects";
+
+/* -------------------------
+   Local helpers (copy/paste safe)
+-------------------------- */
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(!!mq.matches);
+    update();
+
+    if (mq.addEventListener) mq.addEventListener("change", update);
+    else mq.addListener(update);
+
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", update);
+      else mq.removeListener(update);
+    };
+  }, []);
+
+  return reduced;
+}
+
+function trapTabKey(e: KeyboardEvent, container: HTMLElement) {
+  if (e.key !== "Tab") return;
+
+  const focusables = Array.from(
+    container.querySelectorAll<HTMLElement>(
+      [
+        "a[href]",
+        "button:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "textarea:not([disabled])",
+        "[tabindex]:not([tabindex='-1'])",
+      ].join(",")
+    )
+  ).filter((el) => !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden"));
+
+  if (focusables.length === 0) return;
+
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement as HTMLElement | null;
+
+  if (!e.shiftKey && active === last) {
+    e.preventDefault();
+    first.focus();
+  }
+
+  if (e.shiftKey && active === first) {
+    e.preventDefault();
+    last.focus();
+  }
+}
+
+function normalizeUrl(url?: string) {
+  return (url ?? "").trim();
+}
 
 function statusLabel(status: Project["status"]) {
   if (status === "live") return "Live";
   if (status === "in-progress") return "In Progress";
   return "Archived";
-}
-
-function ctaLabel(status: Project["status"]) {
-  if (status === "live") return "Open Live Project";
-  if (status === "in-progress") return "Open Preview";
-  return "View Project";
 }
 
 function statusTone(status: Project["status"]) {
@@ -27,12 +81,12 @@ function statusChipClass(status: Project["status"]) {
   const tone = statusTone(status);
 
   if (tone === "live") {
-    return "border-emerald-400/30 bg-emerald-400/15 text-emerald-200 shadow-[0_0_14px_rgba(16,185,129,0.30)]";
+    return "border-emerald-400/35 bg-emerald-400/18 text-emerald-200 shadow-[0_0_18px_rgba(16,185,129,0.45)]";
   }
   if (tone === "progress") {
-    return "border-cyan-400/30 bg-cyan-400/15 text-cyan-200 shadow-[0_0_14px_rgba(34,211,238,0.30)]";
+    return "border-cyan-400/35 bg-cyan-400/18 text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.45)]";
   }
-  return "border-purple-400/30 bg-purple-400/15 text-purple-200 shadow-[0_0_14px_rgba(168,85,247,0.30)]";
+  return "border-purple-400/35 bg-purple-400/18 text-purple-200 shadow-[0_0_18px_rgba(168,85,247,0.45)]";
 }
 
 function ctaClass(status: Project["status"]) {
@@ -40,21 +94,27 @@ function ctaClass(status: Project["status"]) {
 
   if (tone === "live") {
     return [
-      "bg-gradient-to-r from-emerald-400/25 via-cyan-400/20 to-fuchsia-500/18",
-      "hover:from-emerald-400/32 hover:via-cyan-400/26 hover:to-fuchsia-500/24",
-      "shadow-[0_0_18px_rgba(16,185,129,0.20)]",
+      "bg-gradient-to-r from-emerald-400/28 via-cyan-400/22 to-fuchsia-500/20",
+      "hover:from-emerald-400/36 hover:via-cyan-400/30 hover:to-fuchsia-500/26",
+      "shadow-[0_0_20px_rgba(16,185,129,0.22)]",
     ].join(" ");
   }
 
   if (tone === "progress") {
     return [
-      "bg-gradient-to-r from-cyan-400/22 via-fuchsia-500/18 to-purple-500/18",
-      "hover:from-cyan-400/30 hover:via-fuchsia-500/24 hover:to-purple-500/24",
-      "shadow-[0_0_18px_rgba(34,211,238,0.18)]",
+      "bg-gradient-to-r from-cyan-400/26 via-fuchsia-500/20 to-purple-500/20",
+      "hover:from-cyan-400/34 hover:via-fuchsia-500/28 hover:to-purple-500/28",
+      "shadow-[0_0_20px_rgba(34,211,238,0.20)]",
     ].join(" ");
   }
 
   return "bg-white/10 hover:bg-white/15";
+}
+
+function defaultPrimaryLabel(p: any, kind: "live" | "preview") {
+  const override = (p.ctaLabel ?? "").trim();
+  if (override) return override;
+  return kind === "live" ? "Open Live Project" : "Open Preview";
 }
 
 function StatusLed({ status }: { status: Project["status"] }) {
@@ -62,10 +122,10 @@ function StatusLed({ status }: { status: Project["status"] }) {
 
   const cls =
     tone === "live"
-      ? "bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.55)]"
+      ? "bg-emerald-300 shadow-[0_0_20px_rgba(110,231,183,0.65)]"
       : tone === "progress"
-      ? "bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.55)]"
-      : "bg-purple-300 shadow-[0_0_18px_rgba(216,180,254,0.55)]";
+      ? "bg-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.65)]"
+      : "bg-purple-300 shadow-[0_0_20px_rgba(216,180,254,0.65)]";
 
   return <span className={["h-2.5 w-2.5 rounded-full", cls].join(" ")} />;
 }
@@ -85,10 +145,10 @@ function WindowControl({
     "h-3 w-3 rounded-full border border-white/12 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60";
   const color =
     tone === "close"
-      ? "bg-red-400/70 hover:bg-red-400/85"
+      ? "bg-red-400/75 hover:bg-red-400/90"
       : tone === "min"
-      ? "bg-amber-300/70 hover:bg-amber-300/85"
-      : "bg-emerald-300/70 hover:bg-emerald-300/85";
+      ? "bg-amber-300/75 hover:bg-amber-300/90"
+      : "bg-emerald-300/75 hover:bg-emerald-300/90";
 
   return (
     <button
@@ -104,6 +164,177 @@ function WindowControl({
     />
   );
 }
+
+/* -------------------------
+   Placeholder (static image + animated overlays)
+   Requires: public/static/no-signal.png
+-------------------------- */
+
+function PlaceholderPreview({
+  title,
+  status,
+  reducedMotion,
+}: {
+  title: string;
+  status: Project["status"];
+  reducedMotion: boolean;
+}) {
+  const tone = statusTone(status);
+
+  const tint =
+    tone === "live"
+      ? "from-emerald-400/10 via-cyan-400/06 to-fuchsia-500/10"
+      : tone === "progress"
+      ? "from-cyan-400/12 via-fuchsia-500/06 to-purple-500/10"
+      : "from-purple-400/12 via-fuchsia-500/05 to-cyan-400/06";
+
+  return (
+    <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
+      <div className="absolute inset-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/static/no-signal.png"
+          alt=""
+          className="h-full w-full object-cover opacity-100"
+          draggable={false}
+        />
+      </div>
+
+      <div className={`absolute inset-0 bg-gradient-to-br ${tint} opacity-35`} />
+
+      <div
+        className={[
+          "absolute inset-0 mix-blend-screen opacity-100",
+          "[filter:contrast(270%)_brightness(215%)]",
+          "[background-image:",
+          "repeating-linear-gradient(0deg,rgba(255,255,255,0)_0px,rgba(255,255,255,0)_6px,rgba(255,255,255,0.95)_7px,rgba(255,255,255,0)_12px),",
+          "repeating-linear-gradient(90deg,rgba(255,255,255,0.75)_0px,rgba(255,255,255,0.75)_12px,rgba(0,0,0,0)_12px,rgba(0,0,0,0)_34px)]",
+          "[background-size:100%_18px,240px_100%]",
+          reducedMotion ? "" : "animate-[bandJitter_80ms_steps(2,end)_infinite]",
+        ].join(" ")}
+        style={{
+          clipPath: "polygon(0 0,100% 0,100% 62%,0 62%)",
+        }}
+      />
+
+      <div
+        className={[
+          "absolute inset-x-0 top-[59.5%] h-[14px]",
+          "mix-blend-screen opacity-100",
+          "[filter:contrast(300%)_brightness(240%)]",
+          "[background-image:",
+          "linear-gradient(to_right,rgba(255,255,255,0),rgba(255,255,255,1),rgba(255,255,255,0)),",
+          "repeating-linear-gradient(90deg,rgba(255,255,255,1)_0px,rgba(255,255,255,1)_5px,rgba(0,0,0,0)_5px,rgba(0,0,0,0)_22px)]",
+          "[background-size:100%_100%,260px_100%]",
+          reducedMotion ? "" : "animate-[tearJitter_120ms_steps(2,end)_infinite]",
+        ].join(" ")}
+      />
+
+      <div
+        className={[
+          "absolute inset-x-0 bottom-0 h-[42%]",
+          "mix-blend-overlay opacity-95",
+          "[filter:contrast(280%)_brightness(210%)]",
+          "[background-image:",
+          "repeating-linear-gradient(90deg,rgba(255,255,255,0.95)_0px,rgba(255,255,255,0.95)_3px,rgba(0,0,0,0)_3px,rgba(0,0,0,0)_34px),",
+          "repeating-linear-gradient(0deg,rgba(255,255,255,0.90)_0px,rgba(255,255,255,0.90)_3px,rgba(0,0,0,0)_3px,rgba(0,0,0,0)_28px)]",
+          "[background-size:320px_100%,100%_280px]",
+          reducedMotion ? "" : "animate-[macroDrift_140ms_steps(2,end)_infinite]",
+        ].join(" ")}
+      />
+
+      <div className="absolute inset-0 opacity-45 [background-image:linear-gradient(to_bottom,rgba(0,0,0,0)_0px,rgba(0,0,0,0)_2px,rgba(0,0,0,0.65)_3px)] [background-size:100%_5px]" />
+
+      <div
+        className={[
+          "absolute inset-x-0 -top-20 h-36",
+          "opacity-75 mix-blend-overlay blur-[0.6px]",
+          "bg-gradient-to-b from-white/0 via-white/40 to-white/0",
+          reducedMotion ? "" : "animate-[vhsRoll_0.9s_linear_infinite]",
+        ].join(" ")}
+      />
+
+      <div className="absolute inset-x-0 bottom-0 p-3">
+        <div className="rounded-xl border border-white/12 bg-black/65 px-3 py-2 backdrop-blur">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="truncate text-xs font-semibold tracking-wide text-white/95">
+                {title}
+              </div>
+              <div className="mt-0.5 text-[10px] tracking-[0.28em] text-white/70">
+                NO PREVIEW IMAGE YET
+              </div>
+            </div>
+
+            <div className="shrink-0 inline-flex items-center gap-2 rounded-full border border-white/12 bg-black/40 px-2 py-1">
+              <StatusLed status={status} />
+              <span className="text-[10px] font-semibold text-white/80">
+                {statusLabel(status).toUpperCase()}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes bandJitter {
+          0% {
+            transform: translate3d(0, 0, 0);
+            background-position: 0 0, 0 0;
+          }
+          50% {
+            transform: translate3d(-10px, 2px, 0);
+            background-position: 0 10px, 18px 0;
+          }
+          100% {
+            transform: translate3d(8px, -2px, 0);
+            background-position: 0 18px, 42px 0;
+          }
+        }
+
+        @keyframes tearJitter {
+          0% {
+            transform: translateX(-22px);
+          }
+          50% {
+            transform: translateX(18px);
+          }
+          100% {
+            transform: translateX(-10px);
+          }
+        }
+
+        @keyframes macroDrift {
+          0% {
+            transform: translate3d(0, 0, 0);
+            background-position: 0 0, 0 0;
+          }
+          50% {
+            transform: translate3d(-18px, 6px, 0);
+            background-position: 34px 0, 0 26px;
+          }
+          100% {
+            transform: translate3d(14px, -6px, 0);
+            background-position: 68px 0, 0 52px;
+          }
+        }
+
+        @keyframes vhsRoll {
+          0% {
+            transform: translateY(-35%);
+          }
+          100% {
+            transform: translateY(210%);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+/* -------------------------
+   Modal
+-------------------------- */
 
 export function ProjectModal({
   project,
@@ -122,11 +353,6 @@ export function ProjectModal({
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
   const [maximized, setMaximized] = useState(false);
-
-  const [secretUnlocked, setSecretUnlocked] = useState(false);
-  const tapCountRef = useRef(0);
-  const tapResetTimerRef = useRef<number | null>(null);
-  const finalizeTapTimerRef = useRef<number | null>(null);
 
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const dragState = useRef<{
@@ -147,16 +373,43 @@ export function ProjectModal({
 
   const clamp = (v: number, min: number, max: number) =>
     Math.min(max, Math.max(min, v));
+
   const maxBounds = useMemo(() => ({ x: 220, y: 160 }), []);
-  const label = statusLabel(project.status);
 
-  const href = (project.href ?? "").trim();
-  const hasHref = href.length > 0;
+  // ✅ Build gallery images (images[] wins; fallback to coverImage; else placeholder)
+  const gallery: ProjectCoverImage[] = useMemo(() => {
+    const imgs = project.images?.filter(Boolean) ?? [];
+    if (imgs.length > 0) return imgs;
 
-  const showInProgressNote = project.status === "in-progress" && !hasHref;
-  const showArchivedNote = project.status === "archived" && !hasHref;
+    if (project.coverImage?.src) return [project.coverImage];
 
-  const preview = project.coverImage?.src ? project.coverImage : null;
+    return [];
+  }, [project.coverImage, project.images]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Reset active image on project change
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [project.id]);
+
+  const activeImage = gallery[activeIndex] ?? null;
+
+  const titleId = `proj-title-${project.id}`;
+  const descId = `proj-desc-${project.id}`;
+
+  const liveUrl = normalizeUrl(project.href);
+  const previewUrl = normalizeUrl(project.previewHref);
+  const primaryUrl = liveUrl || previewUrl;
+
+  const primaryKind: "live" | "preview" | null = liveUrl
+    ? "live"
+    : previewUrl
+    ? "preview"
+    : null;
+
+  const secondaryUrl = normalizeUrl(project.secondaryHref);
+  const secondaryLabel = normalizeUrl(project.secondaryLabel) || "View more";
 
   useEffect(() => {
     previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
@@ -188,6 +441,7 @@ export function ProjectModal({
     window.setTimeout(() => onClose(), 180);
   };
 
+  // Trap focus + ESC + gallery keyboard nav
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -196,27 +450,29 @@ export function ProjectModal({
         return;
       }
 
+      // Gallery navigation
+      if (gallery.length > 1) {
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          setActiveIndex((i) => (i - 1 + gallery.length) % gallery.length);
+          return;
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          setActiveIndex((i) => (i + 1) % gallery.length);
+          return;
+        }
+      }
+
       const dialog = dialogRef.current;
       if (!dialog) return;
-
       trapTabKey(e, dialog);
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [closing, reducedMotion]);
-
-  useEffect(() => {
-    setPos({ x: 0, y: 0 });
-    setMaximized(false);
-    setSecretUnlocked(false);
-
-    tapCountRef.current = 0;
-    if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
-    if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
-    tapResetTimerRef.current = null;
-    finalizeTapTimerRef.current = null;
-  }, [project.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [closing, reducedMotion, gallery.length]);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -284,61 +540,14 @@ export function ProjectModal({
     };
   }, [pos.x, pos.y, maximized, maxBounds.x, maxBounds.y]);
 
-  const resetTapWindow = () => {
-    tapCountRef.current = 0;
-    if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
-    if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
-    tapResetTimerRef.current = null;
-    finalizeTapTimerRef.current = null;
-  };
+  async function copyPrimaryLink() {
+    if (!primaryUrl) return;
+    try {
+      await navigator.clipboard.writeText(primaryUrl);
+    } catch {}
+  }
 
-  const handleMinimize = () => {
-    resetTapWindow();
-    setMaximized(false);
-    setPos({ x: 0, y: 0 });
-  };
-
-  const handleMaximize = () => {
-    if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
-    if (finalizeTapTimerRef.current) window.clearTimeout(finalizeTapTimerRef.current);
-
-    tapCountRef.current += 1;
-
-    tapResetTimerRef.current = window.setTimeout(() => {
-      tapCountRef.current = 0;
-    }, 1200);
-
-    finalizeTapTimerRef.current = window.setTimeout(() => {
-      const clicks = tapCountRef.current;
-
-      if (!reducedMotion) {
-        if (!secretUnlocked && clicks >= 3) {
-          setSecretUnlocked(true);
-          window.dispatchEvent(
-            new CustomEvent("broadcast:burst", { detail: { strength: "high" } })
-          );
-          (navigator as any).vibrate?.(35);
-        } else {
-          window.dispatchEvent(
-            new CustomEvent("broadcast:burst", { detail: { strength: "low" } })
-          );
-        }
-      }
-
-      setMaximized((v) => !v);
-      setPos({ x: 0, y: 0 });
-
-      tapCountRef.current = 0;
-      if (tapResetTimerRef.current) window.clearTimeout(tapResetTimerRef.current);
-      tapResetTimerRef.current = null;
-      finalizeTapTimerRef.current = null;
-    }, 260);
-  };
-
-  const behind = project.behindTheBuild;
-
-  const titleId = `proj-title-${project.id}`;
-  const descId = `proj-desc-${project.id}`;
+  const label = statusLabel(project.status);
 
   return (
     <div className="fixed inset-0 z-50">
@@ -374,7 +583,9 @@ export function ProjectModal({
             mounted && !closing ? "opacity-100 scale-100" : "opacity-0 scale-[0.985]",
           ].join(" ")}
           style={{
-            transform: maximized ? "translate(0px, 0px)" : `translate(${pos.x}px, ${pos.y}px)`,
+            transform: maximized
+              ? "translate(0px, 0px)"
+              : `translate(${pos.x}px, ${pos.y}px)`,
           }}
         >
           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
@@ -383,7 +594,9 @@ export function ProjectModal({
             ref={headerRef}
             className={[
               "relative flex items-center justify-between gap-3 border-b border-white/10 bg-black/45 px-4 py-3 select-none",
-              maximized ? "cursor-default" : "md:cursor-grab active:md:cursor-grabbing",
+              maximized
+                ? "cursor-default"
+                : "md:cursor-grab active:md:cursor-grabbing",
             ].join(" ")}
           >
             <div className="flex items-center gap-3">
@@ -392,16 +605,21 @@ export function ProjectModal({
                 <WindowControl
                   tone="min"
                   label="Minimize / center window"
-                  onClick={handleMinimize}
+                  onClick={() => {
+                    setMaximized(false);
+                    setPos({ x: 0, y: 0 });
+                  }}
                 />
                 <WindowControl
                   tone="max"
                   label={maximized ? "Restore window" : "Maximize window"}
-                  onClick={handleMaximize}
+                  onClick={() => {
+                    setMaximized((v) => !v);
+                    setPos({ x: 0, y: 0 });
+                  }}
                 />
               </div>
 
-              {/* ✅ Status chip now uses the new color tones */}
               <div
                 className={[
                   "hidden sm:flex items-center gap-2 rounded-full border px-2.5 py-1",
@@ -409,7 +627,9 @@ export function ProjectModal({
                 ].join(" ")}
               >
                 <StatusLed status={project.status} />
-                <span className="text-xs font-semibold">{label}</span>
+                <span className="text-xs font-semibold">
+                  {statusLabel(project.status)}
+                </span>
               </div>
             </div>
 
@@ -418,7 +638,8 @@ export function ProjectModal({
                 {project.title}
               </div>
               <div className="truncate text-xs text-white/55">
-                {(project.client ?? "Internal") + (project.year ? ` • ${project.year}` : "")}
+                {(project.client ?? "Internal") +
+                  (project.year ? ` • ${project.year}` : "")}
               </div>
             </div>
 
@@ -441,7 +662,9 @@ export function ProjectModal({
             <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
               <div className="grid gap-4">
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-xs tracking-[0.25em] text-white/60">CASE STUDY LITE</div>
+                  <div className="text-xs tracking-[0.25em] text-white/60">
+                    CASE STUDY LITE
+                  </div>
 
                   <p id={descId} className="mt-3 text-sm leading-relaxed text-white/75">
                     {project.summary}
@@ -449,17 +672,24 @@ export function ProjectModal({
 
                   {project.context ? (
                     <>
-                      <div className="mt-4 text-sm font-semibold text-white">Context</div>
+                      <div className="mt-4 text-sm font-semibold text-white">
+                        Context
+                      </div>
                       <p className="mt-2 text-sm text-white/75">{project.context}</p>
                     </>
                   ) : null}
 
                   {project.constraints?.length ? (
                     <>
-                      <div className="mt-4 text-sm font-semibold text-white">Constraints</div>
+                      <div className="mt-4 text-sm font-semibold text-white">
+                        Constraints
+                      </div>
                       <ul className="mt-2 grid gap-2 text-sm text-white/75">
                         {project.constraints.map((c) => (
-                          <li key={c} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                          <li
+                            key={c}
+                            className="rounded-lg border border-white/10 bg-black/25 px-3 py-2"
+                          >
                             {c}
                           </li>
                         ))}
@@ -469,10 +699,15 @@ export function ProjectModal({
 
                   {project.outcomes?.length ? (
                     <>
-                      <div className="mt-4 text-sm font-semibold text-white">Outcomes</div>
+                      <div className="mt-4 text-sm font-semibold text-white">
+                        Outcomes
+                      </div>
                       <ul className="mt-2 grid gap-2 text-sm text-white/75">
                         {project.outcomes.map((o) => (
-                          <li key={o} className="rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                          <li
+                            key={o}
+                            className="rounded-lg border border-white/10 bg-black/25 px-3 py-2"
+                          >
                             {o}
                           </li>
                         ))}
@@ -480,63 +715,124 @@ export function ProjectModal({
                     </>
                   ) : null}
 
-                  {secretUnlocked && behind ? (
+                  {project.behindTheBuild ? (
                     <div className="mt-5 rounded-xl border border-white/10 bg-black/35 p-4">
                       <div className="text-xs tracking-[0.25em] text-white/60">
-                        {behind.title ?? "BEHIND THE BUILD"}
+                        {project.behindTheBuild.title ?? "BEHIND THE BUILD"}
                       </div>
+                      <p className="mt-3 text-sm text-white/75">
+                        {project.behindTheBuild.body}
+                      </p>
 
-                      <p className="mt-3 text-sm text-white/75">{behind.body}</p>
-
-                      {behind.notes?.length ? (
+                      {project.behindTheBuild.notes?.length ? (
                         <ul className="mt-3 space-y-1 text-xs text-white/65 list-disc pl-4">
-                          {behind.notes.map((n) => (
+                          {project.behindTheBuild.notes.map((n) => (
                             <li key={n}>{n}</li>
                           ))}
                         </ul>
                       ) : null}
-
-                      <p className="mt-3 text-xs text-white/55">
-                        Unlocked by triple-clicking maximize.
-                      </p>
                     </div>
                   ) : null}
                 </div>
               </div>
 
               <aside className="grid gap-4">
-                {/* Preview panel */}
-                {preview ? (
-                  <div className="overflow-hidden rounded-xl border border-white/10 bg-black/30">
-                    <div className="px-4 py-3 text-xs tracking-[0.25em] text-white/60 border-b border-white/10 bg-black/35">
-                      PREVIEW
-                    </div>
-                    <div className="relative aspect-[16/10] w-full">
-                      <Image
-                        src={preview.src}
-                        alt={preview.alt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 420px"
-                        className="object-cover"
-                        priority={false}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/10" />
-                    </div>
+                <div className="overflow-hidden rounded-xl border border-white/10 bg-black/30">
+                  <div className="px-4 py-3 text-xs tracking-[0.25em] text-white/60 border-b border-white/10 bg-black/35">
+                    PREVIEW
                   </div>
-                ) : null}
+
+                  {/* Main preview */}
+                  {activeImage ? (
+                    <div className="relative">
+                      <div className="relative aspect-[16/10] w-full">
+                        <Image
+                          src={activeImage.src}
+                          alt={activeImage.alt}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 420px"
+                          className="object-cover"
+                          priority={false}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/10" />
+                      </div>
+
+                      {/* Thumbnails */}
+                      {gallery.length > 1 ? (
+                        <div className="border-t border-white/10 bg-black/45 px-3 py-3">
+                          <div className="flex items-center justify-between">
+                            <div className="text-[10px] tracking-[0.28em] text-white/60">
+                              GALLERY
+                            </div>
+                            <div className="text-[10px] text-white/55">
+                              <span className="text-white/80 font-semibold">
+                                {activeIndex + 1}
+                              </span>
+                              /{gallery.length} • ← →
+                            </div>
+                          </div>
+
+                          <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
+                            {gallery.map((img, i) => {
+                              const active = i === activeIndex;
+                              return (
+                                <button
+                                  key={img.src + i}
+                                  type="button"
+                                  onClick={() => setActiveIndex(i)}
+                                  className={[
+                                    "relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border transition",
+                                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60",
+                                    active
+                                      ? "border-cyan-300/60 shadow-[0_0_0_1px_rgba(34,211,238,0.35),0_0_18px_rgba(217,70,239,0.18)]"
+                                      : "border-white/10 opacity-80 hover:opacity-100",
+                                  ].join(" ")}
+                                  aria-label={`View image ${i + 1}`}
+                                  aria-pressed={active}
+                                >
+                                  <Image
+                                    src={img.src}
+                                    alt={img.alt}
+                                    fill
+                                    sizes="80px"
+                                    className="object-cover"
+                                  />
+                                  <div className="absolute inset-0 bg-black/10" />
+                                  {active ? (
+                                    <div className="absolute inset-0 ring-1 ring-cyan-300/35" />
+                                  ) : null}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <PlaceholderPreview
+                      title={project.title}
+                      status={project.status}
+                      reducedMotion={reducedMotion}
+                    />
+                  )}
+                </div>
 
                 <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-                  <div className="text-xs tracking-[0.25em] text-white/60">DETAILS</div>
+                  <div className="text-xs tracking-[0.25em] text-white/60">
+                    DETAILS
+                  </div>
 
                   <div className="mt-3 grid gap-3 text-sm text-white/80">
                     <div>
                       <div className="text-xs text-white/55">Status</div>
-                      <div className="mt-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold">
-                        <span className={statusChipClass(project.status)} />
-                        <span className="inline-flex items-center gap-2">
-                          <StatusLed status={project.status} />
-                          <span className="text-white/85">{label}</span>
-                        </span>
+                      <div
+                        className={[
+                          "mt-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold",
+                          statusChipClass(project.status),
+                        ].join(" ")}
+                      >
+                        <StatusLed status={project.status} />
+                        {label}
                       </div>
                     </div>
 
@@ -579,36 +875,68 @@ export function ProjectModal({
                   </div>
                 </div>
 
-                {/* CTA */}
-                {hasHref ? (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={[
-                      "rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white",
-                      ctaClass(project.status),
-                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
-                    ].join(" ")}
-                  >
-                    {ctaLabel(project.status)}
-                  </a>
-                ) : showInProgressNote ? (
+                {primaryUrl ? (
+                  <div className="grid gap-2">
+                    <a
+                      href={primaryUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={[
+                        "rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white",
+                        ctaClass(project.status),
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
+                      ].join(" ")}
+                    >
+                      {defaultPrimaryLabel(project, primaryKind ?? "live")}
+                    </a>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={copyPrimaryLink}
+                        className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+                      >
+                        Copy link
+                      </button>
+
+                      {secondaryUrl ? (
+                        <a
+                          href={secondaryUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-center text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60"
+                        >
+                          {secondaryLabel}
+                        </a>
+                      ) : (
+                        <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-center text-xs text-white/50">
+                          Optional link
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="text-xs text-white/50">
+                      {primaryKind === "live" ? "Live link" : "Preview link"}
+                    </div>
+                  </div>
+                ) : project.status === "in-progress" ? (
                   <div className="rounded-xl border border-cyan-400/25 bg-cyan-400/8 p-4">
                     <div className="text-xs tracking-[0.25em] text-cyan-200/80">
                       LAUNCHING SOON
                     </div>
                     <p className="mt-2 text-sm text-white/70">
-                      This build is currently in progress. Check back soon or reach out if you want something similar.
+                      This build is currently in progress. Check back soon or reach
+                      out if you want something similar.
                     </p>
                   </div>
-                ) : showArchivedNote ? (
+                ) : project.status === "archived" ? (
                   <div className="rounded-xl border border-purple-400/25 bg-purple-400/8 p-4">
                     <div className="text-xs tracking-[0.25em] text-purple-200/80">
                       ARCHIVED
                     </div>
                     <p className="mt-2 text-sm text-white/70">
-                      Older work kept for context and growth. The current standard is reflected in Live projects.
+                      Older work kept for context and growth. The current standard
+                      is reflected in Live projects.
                     </p>
                   </div>
                 ) : (
@@ -621,7 +949,9 @@ export function ProjectModal({
           </div>
 
           <div className="relative border-t border-white/10 bg-black/45 px-4 py-3 text-xs text-white/55">
-            Tip: Press <span className="text-white/80">ESC</span> to close.
+            Tip: Press <span className="text-white/80">ESC</span> to close. Use{" "}
+            <span className="text-white/80">←</span>{" "}
+            <span className="text-white/80">→</span> for gallery.
           </div>
         </div>
       </div>
