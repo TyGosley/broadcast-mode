@@ -1,3 +1,5 @@
+import { TrustPack } from "../../components/TrustPack";
+
 export default function StudioPage() {
   return (
     <main className="min-h-dvh px-5 py-10 pb-14">
@@ -176,6 +178,9 @@ export default function StudioPage() {
         </div>
       </section>
 
+      {/* TRUST PACK */}
+      <TrustPack />
+
       {/* CTA */}
       <section className="mx-auto mt-16 max-w-5xl">
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/45 p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_40px_100px_rgba(0,0,0,0.75)] md:p-10">
@@ -248,7 +253,9 @@ function ServiceCard({
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_55px_rgba(0,0,0,0.55)]">
-      <div className={`absolute -inset-0.5 rounded-2xl bg-gradient-to-br ${glow} blur-xl opacity-80`} />
+      <div
+        className={`absolute -inset-0.5 rounded-2xl bg-gradient-to-br ${glow} blur-xl opacity-80`}
+      />
 
       <div className="relative">
         <p className="text-xs tracking-[0.25em] text-white/55">{sub}</p>
