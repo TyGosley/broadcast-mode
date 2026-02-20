@@ -124,3 +124,37 @@ body {
     padding-bottom: 6.5rem;
   }
 }
+
+/* =========================
+   A11Y + Motion Safety
+   ========================= */
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .broadcast-noise {
+    animation: none !important;
+  }
+}
+
+/* Better default focus ring for keyboard users */
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.7);
+  /* cyan-400-ish */
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Prevent iOS tap highlight from looking weird on neon UI */
+:where(a, button) {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.12);
+}
