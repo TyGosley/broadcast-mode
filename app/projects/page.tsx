@@ -41,6 +41,7 @@ function safeYearNum(y?: string) {
 
 const DESKTOP_PROJECTS_PER_PAGE = 4;
 const MOBILE_PROJECTS_PER_PAGE = 3;
+const MAX_FEATURED_PROJECTS = 3;
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -62,6 +63,14 @@ export default function ProjectsPage() {
   const [page, setPage] = useState<number>(
     Number.isFinite(pageFromUrl) && pageFromUrl > 0 ? pageFromUrl : 1
   );
+
+  const featuredProjectIds = useMemo(() => {
+    return new Set(
+      PROJECTS.filter((p) => p.featured)
+        .slice(0, MAX_FEATURED_PROJECTS)
+        .map((p) => p.id)
+    );
+  }, []);
 
   const allTags = useMemo(() => {
     const set = new Set<string>();
@@ -86,8 +95,8 @@ export default function ProjectsPage() {
     });
 
     return list.sort((a, b) => {
-      const af = a.featured ? 1 : 0;
-      const bf = b.featured ? 1 : 0;
+      const af = featuredProjectIds.has(a.id) ? 1 : 0;
+      const bf = featuredProjectIds.has(b.id) ? 1 : 0;
       if (bf !== af) return bf - af;
 
       const sr = statusRank(a.status) - statusRank(b.status);
@@ -98,12 +107,14 @@ export default function ProjectsPage() {
 
       return a.title.localeCompare(b.title);
     });
-  }, [query, status, tag]);
+  }, [query, status, tag, featuredProjectIds]);
 
   // ✅ Featured shelf matches current filters
   const featured = useMemo(() => {
-    return filteredSorted.filter((p) => p.featured).slice(0, 10);
-  }, [filteredSorted]);
+    return filteredSorted
+      .filter((p) => featuredProjectIds.has(p.id))
+      .slice(0, MAX_FEATURED_PROJECTS);
+  }, [filteredSorted, featuredProjectIds]);
 
   const total = filteredSorted.length;
   const totalPages = Math.max(1, Math.ceil(total / perPage));

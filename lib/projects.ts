@@ -144,7 +144,7 @@ export const projects: Project[] = [
     format: "cassette",
     type: ["Portfolio", "UI System", "Interactive"],
 
-    featured: true,
+    // featured: true,
 
     role: "Design + Frontend Engineering",
     stack: ["Next.js", "React", "TypeScript", "Tailwind"],
@@ -250,6 +250,7 @@ export const projects: Project[] = [
     status: "live",
     format: "cassette",
     type: ["Restaurant Site", "Brand", "Responsive UI"],
+    featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Squarespace", "HTML", "CSS", "JavaScript"],
@@ -291,6 +292,7 @@ export const projects: Project[] = [
     status: "in-progress",
     format: "cd",
     type: ["Financial Site", "Brand", "Responsive UI"],
+    // featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Squarespace", "HTML", "CSS", "JavaScript", "SEO Optimization"],
@@ -339,6 +341,7 @@ export const projects: Project[] = [
     status: "in-progress",
     format: "cassette",
     type: ["Rental Site", "Brand", "Responsive UI"],
+    // featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Next.js", "React", "Tailwind"],
@@ -385,6 +388,7 @@ export const projects: Project[] = [
     status: "in-progress",
     format: "cd",
     type: ["Portfolio", "3D", "Interactive"],
+    // featured: true,
 
     role: "Design + Frontend Engineering",
     stack: ["Next.js", "React", "Three.js", "TypeScript"],
@@ -431,6 +435,7 @@ export const projects: Project[] = [
     status: "in-progress",
     format: "cassette",
     type: ["Marketing Site", "Brand", "Responsive UI"],
+    // featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Next.js", "React", "Tailwind", "CMS Integration"],
