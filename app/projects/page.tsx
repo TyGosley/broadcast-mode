@@ -39,12 +39,15 @@ function safeYearNum(y?: string) {
   return Number.isFinite(n) ? n : 0;
 }
 
+const DESKTOP_PROJECTS_PER_PAGE = 4;
+const MOBILE_PROJECTS_PER_PAGE = 3;
+
 export default function ProjectsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
 
-  const perPage = isMobile ? 6 : 8;
+  const perPage = isMobile ? MOBILE_PROJECTS_PER_PAGE : DESKTOP_PROJECTS_PER_PAGE;
   const columns = isMobile ? 1 : 2;
 
   const [query, setQuery] = useState("");

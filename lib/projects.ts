@@ -328,6 +328,144 @@ export const projects: Project[] = [
     href: "",
   },
 
+  {
+    id: "cpg-rentals",
+    title: "CPG Rentals",
+    summary:
+      "A rental-focused website designed to showcase inventory, streamline inquiries, and convert visitors into booked clients.",
+
+    client: "CPG Rentals",
+    year: "2026",
+    status: "in-progress",
+    format: "cassette",
+    type: ["Rental Site", "Brand", "Responsive UI"],
+
+    role: "Project Manager, Web Design + Build",
+    stack: ["Next.js", "React", "Tailwind"],
+
+    context:
+      "CPG needed a modern web presence with clear service categories and an easy way for customers to request rentals.",
+    constraints: [
+      "Fast browsing for equipment categories",
+      "Mobile-first inquiry flow",
+      "Content updates needed to stay simple",
+    ],
+    outcomes: [
+      "Cleaner rental discovery experience",
+      "Improved inquiry funnel structure",
+      "Scalable layout for future inventory growth",
+    ],
+
+    // Preferred gallery approach
+    images: [
+      { src: "/projects/cpg-rentals/cover.jpg", alt: "CPG Rentals homepage" },
+      { src: "/projects/cpg-rentals/shot-1.jpg", alt: "Inventory categories" },
+      { src: "/projects/cpg-rentals/shot-2.jpg", alt: "Inquiry form flow" },
+    ],
+
+    // previewHref: "https://your-preview-url.vercel.app",
+    // ctaLabel: "Open Preview",
+
+    behindTheBuild: {
+      body:
+        "Focused on balancing visual clarity with conversion: inventory should be quick to scan and contacting the team should feel effortless on mobile and desktop.",
+    },
+
+    href: "",
+  },
+
+  {
+    id: "3d-portfolio",
+    title: "3D Portfolio",
+    summary:
+      "An interactive portfolio concept blending 3D presentation and modern UI to create an immersive case-study browsing experience.",
+
+    client: "Be Awesome Productions",
+    year: "2026",
+    status: "in-progress",
+    format: "cd",
+    type: ["Portfolio", "3D", "Interactive"],
+
+    role: "Design + Frontend Engineering",
+    stack: ["Next.js", "React", "Three.js", "TypeScript"],
+
+    context:
+      "The goal was to experiment with spatial storytelling while keeping navigation understandable and performance-friendly.",
+    constraints: [
+      "Maintain smooth interaction on mid-range devices",
+      "Keep motion purposeful and accessible",
+      "Preserve clear project hierarchy despite 3D effects",
+    ],
+    outcomes: [
+      "Interactive visual direction validated",
+      "Reusable 3D scene patterns established",
+      "Balanced immersion with usability",
+    ],
+
+    // Preferred gallery approach
+    images: [
+      { src: "/projects/3d-portfolio/cover.jpg", alt: "3D portfolio home scene" },
+      { src: "/projects/3d-portfolio/shot-1.jpg", alt: "Case study transition" },
+      { src: "/projects/3d-portfolio/shot-2.jpg", alt: "3D interaction detail" },
+    ],
+
+    // previewHref: "https://your-preview-url.vercel.app",
+    // ctaLabel: "Open Preview",
+
+    behindTheBuild: {
+      body:
+        "This build explores how 3D can support narrative, not distract from it. The architecture prioritizes graceful degradation and strong mobile behavior.",
+    },
+
+    href: "",
+  },
+
+  {
+    id: "tactic-website",
+    title: "Tactic Website",
+    summary:
+      "A public-facing marketing site for Tactic focused on brand clarity, offer positioning, and conversion to onboarding.",
+
+    client: "Tactic Fitness",
+    year: "2026",
+    status: "in-progress",
+    format: "cassette",
+    type: ["Marketing Site", "Brand", "Responsive UI"],
+
+    role: "Project Manager, Web Design + Build",
+    stack: ["Next.js", "React", "Tailwind", "CMS Integration"],
+
+    context:
+      "Tactic needed a marketing site that clearly communicates value and directs visitors into the product signup journey.",
+    constraints: [
+      "Differentiate from the app experience",
+      "Support frequent content updates",
+      "Maintain high conversion clarity above the fold",
+    ],
+    outcomes: [
+      "Stronger first-touch brand messaging",
+      "Improved path from marketing page to app signup",
+      "Flexible sections for campaigns and updates",
+    ],
+
+    // Preferred gallery approach
+    images: [
+      { src: "/projects/tactic-website/cover.jpg", alt: "Tactic website homepage" },
+      { src: "/projects/tactic-website/shot-1.jpg", alt: "Programs section" },
+      { src: "/projects/tactic-website/shot-2.jpg", alt: "Mobile CTA section" },
+    ],
+
+    // previewHref: "https://your-preview-url.vercel.app",
+    // ctaLabel: "Open Preview",
+
+    behindTheBuild: {
+      body:
+        "The site is structured to tell the brand story quickly and then guide users into action with minimal friction. Layout decisions emphasize hierarchy and speed.",
+    },
+
+    href: "",
+  },
+
 ];
 
 // Backwards-compatible alias
