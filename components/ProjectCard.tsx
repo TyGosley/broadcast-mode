@@ -1,6 +1,7 @@
 "use client";
 
 import type { Project } from "../lib/projects";
+import { ProjectMediaThumb } from "./ProjectMediaThumb";
 
 export function ProjectCard({
   project,
@@ -54,7 +55,9 @@ export function ProjectCard({
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70",
       ].join(" ")}
     >
-      <div className="flex items-start justify-between gap-3">
+      <ProjectMediaThumb project={project} />
+
+      <div className="mt-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="text-xs tracking-[0.25em] text-white/55">
             {project.client ?? "INTERNAL"}

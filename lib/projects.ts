@@ -162,9 +162,11 @@ export const projects: Project[] = [
       "Modular structure for future pages and content growth",
     ],
 
+    // Preferred gallery approach
     // images: [
     //   { src: "/projects/broadcast-mode/cover.jpg", alt: "Home screen" },
     //   { src: "/projects/broadcast-mode/shot-1.jpg", alt: "Projects modal" },
+    //   { src: "/projects/broadcast-mode/shot-2.jpg", alt: "Project details modal" },
     // ],
 
     // previewHref: "https://broadcast-mode-preview.vercel.app",
@@ -214,11 +216,11 @@ export const projects: Project[] = [
     ],
 
     // Preferred gallery approach
-    // images: [
-    //   { src: "/projects/tactic-app/cover.jpg", alt: "Login screen" },
-    //   { src: "/projects/tactic-app/shot-1.jpg", alt: "Dashboard" },
-    //   { src: "/projects/tactic-app/shot-2.jpg", alt: "Workout detail" },
-    // ],
+    images: [
+      { src: "/projects/tactic-app/tacticFitnessLogo.jpg", alt: "Tactic Fitness Logo" },
+      // { src: "/projects/tactic-app/shot-1.jpg", alt: "Dashboard" },
+      // { src: "/projects/tactic-app/shot-2.jpg", alt: "Workout detail" },
+    ],
 
     href: "https://app.tacticworksout.com/login",
 
@@ -262,6 +264,13 @@ export const projects: Project[] = [
       "SEO optimization",
     ],
 
+    // Preferred gallery approach
+    images: [
+      { src: "/projects/full-time-burgers/fullTimeBurgers.png", alt: "Full Time Burgers Logo" },
+      { src: "/projects/full-time-burgers/shot-1.jpg", alt: "Menu section" },
+      { src: "/projects/full-time-burgers/shot-2.jpg", alt: "Mobile layout" },
+    ],
+
     href: "https://www.fulltimeburgers.com/",
     // ctaLabel: "Visit Site",
 
@@ -272,52 +281,52 @@ export const projects: Project[] = [
   },
 
   {
-  id: "emergence-financial-corp",
-  title: "Emergence Financial Corporation",
-  summary:
-    "A landing page for a financial firm, showcasing services, team, and contact information with a clean, professional design.",
+    id: "emergence-financial-corp",
+    title: "Emergence Financial Corporation",
+    summary:
+      "A landing page for a financial firm, showcasing services, team, and contact information with a clean, professional design.",
 
-  client: "Emergence Financial Corporation",
-  year: "2025",
-  status: "in-progress",
-  format: "cd",
-  type: ["Financial Site", "Brand", "Responsive UI"],
+    client: "Emergence Financial Corporation",
+    year: "2025",
+    status: "in-progress",
+    format: "cd",
+    type: ["Financial Site", "Brand", "Responsive UI"],
 
-  role: "Project Manager, Web Design + Build",
-  stack: ["Squarespace", "HTML", "CSS", "JavaScript", "SEO Optimization"],
+    role: "Project Manager, Web Design + Build",
+    stack: ["Squarespace", "HTML", "CSS", "JavaScript", "SEO Optimization"],
 
-  context:
-    "Emergence needed a modern web presence to communicate trust, services, and a clear path to contact.",
-  constraints: [
-    "Branding created from scratch",
-    "Professional tone with a modern touch",
-    "Small team with limited bandwidth for heavy assets",
-  ],
-  outcomes: [
-    "Responsive layout improvements",
-    "Squarespace customization experience",
-    "SEO best practices applied",
-    "Created a new visual identity",
-  ],
+    context:
+      "Emergence needed a modern web presence to communicate trust, services, and a clear path to contact.",
+    constraints: [
+      "Branding created from scratch",
+      "Professional tone with a modern touch",
+      "Small team with limited bandwidth for heavy assets",
+    ],
+    outcomes: [
+      "Responsive layout improvements",
+      "Squarespace customization experience",
+      "SEO best practices applied",
+      "Created a new visual identity",
+    ],
 
-  // ✅ Recommended: add a cover image file here:
-  // public/projects/emergence-financial-corp/cover.jpg
-  // images: [
-  //   { src: "/projects/emergence-financial-corp/cover.jpg", alt: "Emergence landing page concept" },
-  //   { src: "/projects/emergence-financial-corp/shot-1.jpg", alt: "Services section" },
-  // ],
+    // Preferred gallery approach
+    images: [
+      { src: "/projects/emergence-financial-corp/efcHP.png", alt: "Landing page hero" },
+      { src: "/projects/emergence-financial-corp/shot-1.jpg", alt: "Services section" },
+      { src: "/projects/emergence-financial-corp/shot-2.jpg", alt: "Contact section" },
+    ],
 
-  // Optional preview link if you have it
-  // previewHref: "https://your-preview-url.vercel.app",
-  // ctaLabel: "Open Preview",
+    // Optional preview link if you have it
+    // previewHref: "https://your-preview-url.vercel.app",
+    // ctaLabel: "Open Preview",
 
-  behindTheBuild: {
-    body:
-      "This project is still in progress. I’m leading project management, design, and build. The site is Squarespace for easy updates, plus custom code for interaction and layout control. Since the client had no existing branding, I created a new visual identity aligned with their values and audience.",
+    behindTheBuild: {
+      body:
+        "This project is still in progress. I’m leading project management, design, and build. The site is Squarespace for easy updates, plus custom code for interaction and layout control. Since the client had no existing branding, I created a new visual identity aligned with their values and audience.",
+    },
+
+    href: "",
   },
-
-  href: "",
-},
 
 ];
 

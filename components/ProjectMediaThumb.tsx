@@ -111,8 +111,9 @@ function CdFrame({
 }
 
 export function ProjectMediaThumb({ project }: { project: Project }) {
-  const src = project.coverImage?.src;
-  const alt = project.coverImage?.alt;
+  const primaryImage = project.images?.[0] ?? project.coverImage;
+  const src = primaryImage?.src;
+  const alt = primaryImage?.alt;
 
   return project.format === "cassette" ? (
     <CassetteFrame src={src} alt={alt} />
