@@ -222,7 +222,7 @@ export const projects: Project[] = [
       // { src: "/projects/tactic-app/shot-2.jpg", alt: "Workout detail" },
     ],
 
-    // previewHref: "/projects/tactic-app/preview.jpg",
+    previewHref: "/projects/tactic-app/embedded-workout-video.png",
     href: "https://app.tacticworksout.com/login",
 
     // ctaLabel: "Open App",
@@ -343,7 +343,7 @@ export const projects: Project[] = [
     status: "in-progress",
     format: "cassette",
     type: ["Rental Site", "Brand", "Responsive UI"],
-    // featured: true,
+    featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Next.js", "React", "Tailwind"],
@@ -363,12 +363,12 @@ export const projects: Project[] = [
 
     // Preferred gallery approach
     images: [
-      { src: "/projects/cpg-rentals/cover.jpg", alt: "CPG Rentals homepage" },
-      { src: "/projects/cpg-rentals/shot-1.jpg", alt: "Inventory categories" },
-      { src: "/projects/cpg-rentals/shot-2.jpg", alt: "Inquiry form flow" },
+      { src: "/projects/cpg-rentals/cpgHomeLogo.png", alt: "CPG Rentals homepage" },
+      // { src: "/projects/cpg-rentals/shot-1.jpg", alt: "Inventory categories" },
+      // { src: "/projects/cpg-rentals/shot-2.jpg", alt: "Inquiry form flow" },
     ],
 
-    // previewHref: "/projects/cpg-rentals/preview.jpg",
+    previewHref: "/projects/cpg-rentals/cpgPrevHref.png",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {

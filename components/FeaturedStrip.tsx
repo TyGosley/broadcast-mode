@@ -91,7 +91,7 @@ export function FeaturedStrip({
                         </>
                       )}
 
-                      <div className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-[0.2em] backdrop-blur-sm">
+                      <div className="absolute right-3 top-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-[0.2em] backdrop-blur-sm">
                         <span className={["rounded-full border", statusPill(p.status)].join(" ")}>
                           <span className="px-2 py-0.5 inline-block">
                             {p.status === "live"
