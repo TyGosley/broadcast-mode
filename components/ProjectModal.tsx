@@ -114,7 +114,7 @@ export function ProjectModal({ project, onClose }: Props) {
     <div
       ref={overlayRef}
       onMouseDown={onOverlayMouseDown}
-      className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/55 p-3 backdrop-blur-sm md:items-center"
+      className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/55 p-3 pb-24 backdrop-blur-sm md:items-center lg:pb-28"
       aria-hidden="false"
     >
       <div
@@ -124,10 +124,10 @@ export function ProjectModal({ project, onClose }: Props) {
         aria-labelledby={titleId}
         aria-describedby={descId}
         tabIndex={-1}
-        className="w-full max-w-3xl rounded-3xl border border-white/10 bg-black/55 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_70px_rgba(0,0,0,0.75)] outline-none"
+        className="flex max-h-[calc(100dvh-7.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-black/55 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_70px_rgba(0,0,0,0.75)] outline-none lg:max-h-[calc(100dvh-9rem)]"
       >
         {/* Top bar */}
-        <div className="flex items-start justify-between gap-4 border-b border-white/10 p-5">
+        <div className="shrink-0 flex items-start justify-between gap-4 border-b border-white/10 p-5">
           <div className="min-w-0">
             <p className="text-xs tracking-[0.25em] text-white/60">PROJECT</p>
             <h2
@@ -157,7 +157,7 @@ export function ProjectModal({ project, onClose }: Props) {
         </div>
 
         {/* Content */}
-        <div className="grid gap-5 p-5 md:grid-cols-[1fr_0.9fr]">
+        <div className="grid gap-5 overflow-y-auto p-5 md:grid-cols-[1fr_0.9fr]">
           {/* Left column */}
           <div className="grid gap-4">
             <p id={descId} className="text-sm text-white/75">
@@ -165,11 +165,11 @@ export function ProjectModal({ project, onClose }: Props) {
             </p>
 
             {project.type?.length ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {project.type.map((t) => (
                   <span
                     key={t}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/75"
+                    className="inline-flex h-9 items-center rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold leading-none whitespace-nowrap text-white/75"
                   >
                     {t}
                   </span>

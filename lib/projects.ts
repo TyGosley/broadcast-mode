@@ -169,7 +169,7 @@ export const projects: Project[] = [
     //   { src: "/projects/broadcast-mode/shot-2.jpg", alt: "Project details modal" },
     // ],
 
-    // previewHref: "https://broadcast-mode-preview.vercel.app",
+    // previewHref: "/projects/broadcast-mode/preview.jpg",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {
@@ -222,6 +222,7 @@ export const projects: Project[] = [
       // { src: "/projects/tactic-app/shot-2.jpg", alt: "Workout detail" },
     ],
 
+    // previewHref: "/projects/tactic-app/preview.jpg",
     href: "https://app.tacticworksout.com/login",
 
     // ctaLabel: "Open App",
@@ -272,8 +273,9 @@ export const projects: Project[] = [
       { src: "/projects/full-time-burgers/shot-2.jpg", alt: "Mobile layout" },
     ],
 
+    previewHref: "/projects/full-time-burgers/ftPrevHref.png",
     href: "https://www.fulltimeburgers.com/",
-    // ctaLabel: "Visit Site",
+    ctaLabel: "Visit Site",
 
     behindTheBuild: {
       body:
@@ -319,7 +321,7 @@ export const projects: Project[] = [
     ],
 
     // Optional preview link if you have it
-    // previewHref: "https://your-preview-url.vercel.app",
+    // previewHref: "/projects/emergence-financial-corp/preview.jpg",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {
@@ -366,7 +368,7 @@ export const projects: Project[] = [
       { src: "/projects/cpg-rentals/shot-2.jpg", alt: "Inquiry form flow" },
     ],
 
-    // previewHref: "https://your-preview-url.vercel.app",
+    // previewHref: "/projects/cpg-rentals/preview.jpg",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {
@@ -385,7 +387,7 @@ export const projects: Project[] = [
 
     client: "Be Awesome Productions",
     year: "2026",
-    status: "in-progress",
+    status: "live",
     format: "cd",
     type: ["Portfolio", "3D", "Interactive"],
     // featured: true,
@@ -408,12 +410,12 @@ export const projects: Project[] = [
 
     // Preferred gallery approach
     images: [
-      { src: "/projects/3d-portfolio/cover.jpg", alt: "3D portfolio home scene" },
-      { src: "/projects/3d-portfolio/shot-1.jpg", alt: "Case study transition" },
-      { src: "/projects/3d-portfolio/shot-2.jpg", alt: "3D interaction detail" },
+      { src: "/projects/built-by-tyler-3DPort/welcomesecss.png", alt: "3D portfolio home scene" },
+      // { src: "/projects/3d-portfolio/shot-1.jpg", alt: "Case study transition" },
+      // { src: "/projects/3d-portfolio/shot-2.jpg", alt: "3D interaction detail" },
     ],
 
-    // previewHref: "https://your-preview-url.vercel.app",
+    previewHref: "/projects/built-by-tyler-3DPort/3DPortPrevHref.png",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {
@@ -421,7 +423,7 @@ export const projects: Project[] = [
         "This build explores how 3D can support narrative, not distract from it. The architecture prioritizes graceful degradation and strong mobile behavior.",
     },
 
-    href: "",
+    href: "https://built-by-tyler3d.vercel.app/",
   },
 
   {
@@ -432,10 +434,10 @@ export const projects: Project[] = [
 
     client: "Tactic Fitness",
     year: "2026",
-    status: "in-progress",
+    status: "live",
     format: "cassette",
     type: ["Marketing Site", "Brand", "Responsive UI"],
-    // featured: true,
+    featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Next.js", "React", "Tailwind", "CMS Integration"],
@@ -455,12 +457,12 @@ export const projects: Project[] = [
 
     // Preferred gallery approach
     images: [
-      { src: "/projects/tactic-website/cover.jpg", alt: "Tactic website homepage" },
-      { src: "/projects/tactic-website/shot-1.jpg", alt: "Programs section" },
-      { src: "/projects/tactic-website/shot-2.jpg", alt: "Mobile CTA section" },
+      { src: "/projects/tactic-website/tacticFitness.png", alt: "Tactic website homepage" },
+      // { src: "/projects/tactic-website/shot-1.jpg", alt: "Programs section" },
+      // { src: "/projects/tactic-website/shot-2.jpg", alt: "Mobile CTA section" },
     ],
 
-    // previewHref: "https://your-preview-url.vercel.app",
+    previewHref: "/projects/tactic-website/tfWebPrevHref.png",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {
@@ -468,7 +470,7 @@ export const projects: Project[] = [
         "The site is structured to tell the brand story quickly and then guide users into action with minimal friction. Layout decisions emphasize hierarchy and speed.",
     },
 
-    href: "",
+    href: "https://www.tacticworksout.com/",
   },
 
 ];
