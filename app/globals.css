@@ -26,6 +26,71 @@ body {
   font-family: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+/* Homepage brand sweep: occasional left->right color pass */
+.brand-sweep {
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .brand-sweep::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    color: transparent;
+    background-image: linear-gradient(
+      90deg,
+      #ff0080 0%,
+      #ffb800 38%,
+      #00f3ff 68%,
+      #ff0080 100%
+    );
+    background-size: 240% 100%;
+    background-position: -140% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    filter: none;
+    text-shadow: none;
+    animation: brand-sweep 6.5s ease-in-out infinite;
+  }
+}
+
+@keyframes brand-sweep {
+  0%,
+  62% {
+    opacity: 0;
+    background-position: -140% 50%;
+  }
+  68% {
+    opacity: 0.95;
+    background-position: -90% 50%;
+  }
+  90% {
+    opacity: 0.95;
+    background-position: 125% 50%;
+  }
+  96% {
+    opacity: 0;
+    background-position: 160% 50%;
+  }
+  100% {
+    opacity: 0;
+    background-position: 160% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-sweep::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 /* Site-wide typography system */
 .site-content :where(h1, h2, h3) {
   font-family: var(--font-orbitron), var(--font-inter), ui-sans-serif, system-ui, sans-serif;

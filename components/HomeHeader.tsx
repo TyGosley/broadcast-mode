@@ -72,7 +72,10 @@ export function HomeHeader() {
               BROADCAST MODE
             </div>
 
-            <h1 className="font-display mt-2 text-xl font-semibold text-white [text-shadow:0_2px_0_rgba(0,0,0,0.55),0_0_14px_rgba(0,243,255,0.18)] sm:text-2xl">
+            <h1
+              className="font-display brand-sweep mt-2 text-xl font-semibold sm:text-2xl"
+              data-text="Be Awesome Productions"
+            >
               Be Awesome Productions
             </h1>
 
