@@ -3,8 +3,8 @@ import { TransmitForm } from "../../components/TransmitForm";
 export default function ContactPage() {
   return (
     <main className="min-h-dvh px-5 py-8">
-      <header className="mx-auto max-w-5xl">
-        <p className="text-xs tracking-[0.25em] text-white/60">CONTACT</p>
+      <header className="ui-section mt-0">
+        <p className="ui-eyebrow">CONTACT</p>
         <h1 className="page-title mt-2 text-white">
           Transmit
         </h1>
@@ -14,7 +14,7 @@ export default function ContactPage() {
         </p>
       </header>
 
-      <section className="mx-auto mt-8 max-w-5xl">
+      <section className="ui-section">
         <TransmitForm />
       </section>
     </main>

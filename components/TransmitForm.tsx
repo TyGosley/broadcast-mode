@@ -162,12 +162,12 @@ export function TransmitForm() {
   }
 
   return (
-    <div className="grid gap-5">
+    <div className="ui-stack-lg">
       {/* Status panel */}
-      <div className="panel-glass rounded-2xl p-4">
+      <div className="ui-panel rounded-2xl p-4">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs tracking-[0.25em] text-white/60">TRANSMISSION</p>
+            <p className="ui-eyebrow">TRANSMISSION</p>
             <h2 className="mt-2 text-xl font-semibold text-white">
               {status === "success" ? "Signal received." : "Transmit a signal."}
             </h2>
@@ -183,7 +183,7 @@ export function TransmitForm() {
       {/* Form */}
       <form
         onSubmit={onSubmit}
-        className="panel-glass rounded-2xl p-5"
+        className="ui-panel rounded-2xl p-5"
       >
         <input
           type="text"
@@ -200,7 +200,7 @@ export function TransmitForm() {
             <input
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
-              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -210,7 +210,7 @@ export function TransmitForm() {
             <input
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
-              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -226,7 +226,7 @@ export function TransmitForm() {
               onChange={(e) =>
                 update("projectType", e.target.value as FormState["projectType"])
               }
-              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             >
               <option value="">Select…</option>
               <option value="website">New Website</option>
@@ -247,7 +247,7 @@ export function TransmitForm() {
               onChange={(e) =>
                 update("timeline", e.target.value as FormState["timeline"])
               }
-              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
             >
               <option value="">Select…</option>
               <option value="asap">ASAP</option>
@@ -265,7 +265,7 @@ export function TransmitForm() {
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
             rows={6}
-            className="panel-inset resize-none rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+            className="ui-panel-inset resize-none rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             disabled={status === "sending"}
           />
         </label>
@@ -282,11 +282,11 @@ export function TransmitForm() {
           </div>
         )}
 
-        <div className="mt-5 flex gap-3">
+        <div className="mt-5 flex flex-wrap gap-3">
           <button
             type="submit"
             disabled={!canSubmit || status === "sending"}
-            className="rounded-xl border border-white/15 bg-gradient-to-r from-[#00F3FF]/50 via-[#FF0080]/42 to-[#FFB800]/42 px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+            className="ui-btn-primary rounded-xl border-white/15 bg-gradient-to-r from-[#00F3FF]/50 via-[#FF0080]/42 to-[#FFB800]/42 px-5 py-3 text-sm text-white disabled:opacity-50"
           >
             {status === "sending" ? "Transmitting…" : "Transmit"}
           </button>
@@ -294,7 +294,7 @@ export function TransmitForm() {
           <button
             type="button"
             onClick={reset}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85"
+            className="ui-btn-secondary rounded-xl px-4 py-3 text-sm text-white/85"
           >
             Reset
           </button>
