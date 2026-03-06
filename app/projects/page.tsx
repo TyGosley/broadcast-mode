@@ -247,8 +247,8 @@ export default function ProjectsPage() {
 
   return (
     <main className="min-h-dvh px-5 py-8">
-      <header className="mx-auto max-w-5xl">
-        <p className="text-xs tracking-[0.25em] text-white/60">PROJECTS</p>
+      <header className="ui-section mt-0 ui-stack">
+        <p className="ui-eyebrow">PROJECTS</p>
         <h1 className="page-title mt-2 text-white">
           Live, In Progress, Archived
         </h1>
@@ -298,15 +298,15 @@ export default function ProjectsPage() {
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-center gap-2 text-xs">
-          <span className="tracking-[0.2em] text-white/55">CARD STYLE</span>
-          <div className="inline-flex rounded-xl border border-white/10 bg-black/35 p-1">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span className="ui-eyebrow text-white/55">CARD STYLE</span>
+          <div className="ui-panel-inset inline-flex p-1">
             <button
               type="button"
               onClick={() => setThumbVariant("clean")}
               aria-pressed={thumbVariant === "clean"}
               className={[
-                "rounded-lg px-3 py-1.5 transition",
+                "min-h-10 rounded-lg px-3 py-1.5 transition",
                 thumbVariant === "clean"
                   ? "bg-white/15 text-white"
                   : "text-white/65 hover:text-white/85",
@@ -320,7 +320,7 @@ export default function ProjectsPage() {
               onClick={() => setThumbVariant("classic")}
               aria-pressed={thumbVariant === "classic"}
               className={[
-                "rounded-lg px-3 py-1.5 transition",
+                "min-h-10 rounded-lg px-3 py-1.5 transition",
                 thumbVariant === "classic"
                   ? "bg-white/15 text-white"
                   : "text-white/65 hover:text-white/85",
@@ -336,9 +336,9 @@ export default function ProjectsPage() {
       {/* Great Move 10B: Featured strip */}
       <FeaturedStrip projects={featured} onOpen={openProject} />
 
-      <section className="mx-auto mt-8 max-w-5xl">
+      <section className="ui-section">
         {paged.length === 0 ? (
-          <div className="panel-glass rounded-2xl p-6 text-white/70">
+          <div className="ui-panel p-6 text-white/70">
             No projects match that filter yet.
           </div>
         ) : (
@@ -354,14 +354,14 @@ export default function ProjectsPage() {
           </div>
         )}
 
-        <div className="mt-8 flex items-center justify-center gap-2">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
             onClick={() => goToPage(1)}
             disabled={page <= 1}
             className={[
-              "rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold",
-              "bg-white/5 text-white/80 hover:bg-white/10",
+              "ui-btn-secondary rounded-xl px-3 text-xs font-semibold",
+              "text-white/80 hover:bg-white/10",
               "disabled:opacity-40 disabled:cursor-not-allowed",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB800]/70",
             ].join(" ")}
@@ -374,8 +374,8 @@ export default function ProjectsPage() {
             onClick={() => goToPage(page - 1)}
             disabled={page <= 1}
             className={[
-              "rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold",
-              "bg-white/5 text-white/80 hover:bg-white/10",
+              "ui-btn-secondary rounded-xl px-3 text-xs font-semibold",
+              "text-white/80 hover:bg-white/10",
               "disabled:opacity-40 disabled:cursor-not-allowed",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70",
             ].join(" ")}
@@ -383,7 +383,7 @@ export default function ProjectsPage() {
             Prev
           </button>
 
-          <label className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-xs text-white/70">
+          <label className="ui-panel-inset inline-flex min-h-11 items-center gap-2 rounded-xl px-3 py-2 text-xs text-white/70">
             <span className="whitespace-nowrap">Page</span>
             <input
               type="number"
@@ -409,8 +409,8 @@ export default function ProjectsPage() {
             onClick={() => goToPage(page + 1)}
             disabled={page >= totalPages}
             className={[
-              "rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold",
-              "bg-white/5 text-white/80 hover:bg-white/10",
+              "ui-btn-secondary rounded-xl px-3 text-xs font-semibold",
+              "text-white/80 hover:bg-white/10",
               "disabled:opacity-40 disabled:cursor-not-allowed",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
             ].join(" ")}
@@ -423,10 +423,10 @@ export default function ProjectsPage() {
       {/* ========================= */}
       {/* Move 11 — Conversion CTA  */}
       {/* ========================= */}
-      <section className="mx-auto mt-16 max-w-5xl">
+      <section className="ui-section !mt-16">
         <div
           className={[
-            "panel-glass-strong relative overflow-hidden rounded-3xl",
+            "ui-panel-strong relative overflow-hidden rounded-3xl",
             "p-8 md:p-10",
           ].join(" ")}
         >
@@ -441,7 +441,7 @@ export default function ProjectsPage() {
           />
 
           <div className="relative text-center">
-            <p className="text-xs tracking-[0.3em] text-white/55">
+            <p className="ui-eyebrow text-white/55">
               READY TO BUILD?
             </p>
 
@@ -472,9 +472,8 @@ export default function ProjectsPage() {
               <a
                 href="/contact"
                 className={[
-                  "rounded-2xl px-6 py-3 text-sm font-semibold tracking-wide",
-                  "bg-gradient-to-r from-[#00F3FF] to-[#FF0080]",
-                  "text-black shadow-lg",
+                  "ui-btn-primary rounded-2xl px-6 py-3 text-sm tracking-wide",
+                  "shadow-lg",
                   "transition hover:scale-[1.03] hover:shadow-xl",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/75",
                 ].join(" ")}
@@ -485,8 +484,7 @@ export default function ProjectsPage() {
               <a
                 href="/studio"
                 className={[
-                  "rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold",
-                  "bg-white/5 text-white",
+                  "ui-btn-secondary rounded-2xl px-6 py-3 text-sm",
                   "transition hover:bg-white/10",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
                 ].join(" ")}

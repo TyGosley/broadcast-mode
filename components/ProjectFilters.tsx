@@ -35,7 +35,7 @@ export function ProjectFilters({
   allTags,
 }: Props) {
   return (
-    <div className="grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center">
+    <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_11rem_11rem] md:items-center">
       {/* Search */}
       <label className="block">
         <span className="sr-only">Search projects</span>
@@ -43,7 +43,7 @@ export function ProjectFilters({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search projects..."
-          className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/45 outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+          className="ui-panel-inset h-11 w-full px-4 text-sm text-white placeholder:text-white/45 outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
         />
       </label>
 
@@ -56,7 +56,7 @@ export function ProjectFilters({
             setStatus(e.target.value as ProjectStatus | "all")
           }
           className={[
-            "w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm outline-none",
+            "ui-panel-inset h-11 w-full px-3 text-sm outline-none",
             "focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70",
             statusClass(status),
           ].join(" ")}
@@ -74,7 +74,7 @@ export function ProjectFilters({
         <select
           value={tag}
           onChange={(e) => setTag(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+          className="ui-panel-inset h-11 w-full px-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
         >
           <option value="all">All tags</option>
           {allTags.map((t) => (

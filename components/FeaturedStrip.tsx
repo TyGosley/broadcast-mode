@@ -37,10 +37,10 @@ export function FeaturedStrip({
   if (!projects.length) return null;
 
   return (
-    <section className="mx-auto mt-7 max-w-5xl">
+    <section className="ui-section !mt-7">
       <div className="flex flex-col items-center gap-2">
         <div>
-          <p className="text-xs tracking-[0.25em] text-white/60">FEATURED</p>
+          <p className="ui-eyebrow">FEATURED</p>
           <h2 className="mt-2 text-lg font-bold text-white">
             Quick access to top work
           </h2>
@@ -144,7 +144,7 @@ export function FeaturedStrip({
                           <span
                             key={t}
                             className={[
-                              "rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/75",
+                              "ui-pill px-2.5 text-xs",
                               i === 2 ? "col-span-2 justify-self-center" : "",
                             ].join(" ")}
                           >

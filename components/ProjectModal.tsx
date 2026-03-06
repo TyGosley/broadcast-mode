@@ -131,12 +131,12 @@ export function ProjectModal({ project, onClose }: Props) {
         aria-labelledby={titleId}
         aria-describedby={descId}
         tabIndex={-1}
-        className="panel-glass-strong flex max-h-[calc(100dvh-7.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl outline-none lg:max-h-[calc(100dvh-9rem)]"
+        className="ui-panel-strong flex max-h-[calc(100dvh-7.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl outline-none lg:max-h-[calc(100dvh-9rem)]"
       >
         {/* Top bar */}
         <div className="shrink-0 flex items-start justify-between gap-4 border-b border-white/10 p-5">
           <div className="min-w-0">
-            <p className="text-xs tracking-[0.25em] text-white/60">PROJECT</p>
+            <p className="ui-eyebrow">PROJECT</p>
             <h2
               id={titleId}
               className="font-display mt-2 truncate text-xl font-bold text-white md:text-2xl"
@@ -160,7 +160,7 @@ export function ProjectModal({ project, onClose }: Props) {
 
             <button
               onClick={onClose}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
+              className="ui-btn-secondary rounded-xl px-3 text-xs text-white/85 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
               aria-label="Close project window"
             >
               Close
@@ -181,7 +181,7 @@ export function ProjectModal({ project, onClose }: Props) {
                 {project.type.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex h-9 items-center rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold leading-none whitespace-nowrap text-white/75"
+                    className="ui-pill px-4 text-xs font-semibold leading-none whitespace-nowrap text-white/75"
                   >
                     {t}
                   </span>
@@ -190,15 +190,15 @@ export function ProjectModal({ project, onClose }: Props) {
             ) : null}
 
             {project.context ? (
-              <div className="panel-inset rounded-2xl p-4">
-                <p className="text-xs tracking-[0.25em] text-white/60">CONTEXT</p>
+              <div className="ui-panel-inset rounded-2xl p-4">
+                <p className="ui-eyebrow">CONTEXT</p>
                 <p className="mt-2 text-sm text-white/75">{project.context}</p>
               </div>
             ) : null}
 
             {project.outcomes?.length ? (
-              <div className="panel-inset rounded-2xl p-4">
-                <p className="text-xs tracking-[0.25em] text-white/60">OUTCOMES</p>
+              <div className="ui-panel-inset rounded-2xl p-4">
+                <p className="ui-eyebrow">OUTCOMES</p>
                 <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
                   {project.outcomes.map((o) => (
                     <li key={o}>{o}</li>
@@ -211,9 +211,9 @@ export function ProjectModal({ project, onClose }: Props) {
           {/* Right column */}
           <div className="grid gap-4">
             {/* Preview block (uses your previewHref if you have it) */}
-            <div className="panel-glass overflow-hidden rounded-2xl">
+            <div className="ui-panel overflow-hidden rounded-2xl">
               <div className="p-3">
-                <p className="text-xs tracking-[0.25em] text-white/60">PREVIEW</p>
+                <p className="ui-eyebrow">PREVIEW</p>
               </div>
 
               {/* Uses previewHref when present, otherwise no-signal placeholder image. */}
@@ -231,13 +231,13 @@ export function ProjectModal({ project, onClose }: Props) {
             </div>
 
             {project.stack?.length ? (
-              <div className="panel-inset rounded-2xl p-4">
-                <p className="text-xs tracking-[0.25em] text-white/60">STACK</p>
+              <div className="ui-panel-inset rounded-2xl p-4">
+                <p className="ui-eyebrow">STACK</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {project.stack.map((s) => (
                     <span
                       key={s}
-                      className="rounded-full border border-white/10 bg-black/35 px-3 py-1 text-xs font-semibold text-white/75"
+                      className="ui-pill px-3 text-xs font-semibold text-white/75"
                     >
                       {s}
                     </span>
@@ -258,14 +258,14 @@ export function ProjectModal({ project, onClose }: Props) {
                   Open Live Project
                 </a>
               ) : (
-                <span className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/70">
+                <span className="ui-btn-secondary rounded-xl px-5 py-3 text-sm text-white/70">
                   Launching soon
                 </span>
               )}
 
               <button
                 onClick={onClose}
-                className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/85 hover:bg-white/10 transition"
+                className="ui-btn-secondary rounded-xl px-5 py-3 text-sm text-white/85 transition hover:bg-white/10"
               >
                 Close window
               </button>
@@ -273,8 +273,8 @@ export function ProjectModal({ project, onClose }: Props) {
 
             {/* Behind the build */}
             {project.behindTheBuild?.body ? (
-              <div className="panel-inset rounded-2xl p-4">
-                <p className="text-xs tracking-[0.25em] text-white/60">
+              <div className="ui-panel-inset rounded-2xl p-4">
+                <p className="ui-eyebrow">
                   {project.behindTheBuild.title ?? "BEHIND THE BUILD"}
                 </p>
                 <p className="mt-2 text-sm text-white/75">

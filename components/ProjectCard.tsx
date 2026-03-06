@@ -49,7 +49,7 @@ export function ProjectCard({
       data-project-id={project.id}
       className={[
         "group flex h-full w-full flex-col text-center",
-        "panel-glass rounded-2xl p-5",
+        "ui-panel rounded-2xl p-5",
         "transition",
         "hover:border-white/16",
         // ✅ focus style
@@ -88,7 +88,7 @@ export function ProjectCard({
             <span
               key={t}
               className={[
-                "rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/75",
+                "ui-pill px-2.5 text-xs",
                 i === 2 ? "col-span-2 justify-self-center" : "",
               ].join(" ")}
             >
