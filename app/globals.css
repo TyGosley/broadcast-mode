@@ -6,6 +6,47 @@ body {
   height: 100%;
 }
 
+:root {
+  /* Panels */
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --panel-border-strong: rgba(255, 255, 255, 0.12);
+  --panel-bg: linear-gradient(170deg, rgba(12, 16, 24, 0.64), rgba(8, 11, 17, 0.5));
+  --panel-bg-strong: linear-gradient(170deg, rgba(10, 13, 20, 0.78), rgba(7, 10, 15, 0.64));
+  --panel-bg-inset: linear-gradient(170deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+
+  /* Neon */
+  --neon-cyan: #00f3ff;
+  --neon-pink: #ff0080;
+  --neon-amber: #ffb800;
+
+  /* Radius */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+
+  /* Rhythm */
+  --section-space: 2rem;
+  --component-gap: 0.75rem;
+
+  /* Type scale */
+  --type-eyebrow: 0.75rem;
+  --type-body: 0.875rem;
+  --type-title: 1.875rem;
+  --type-title-md: 2.25rem;
+
+  /* Buttons */
+  --btn-height: 2.75rem;
+  --btn-pad-x: 1.25rem;
+  --btn-pad-y: 0.625rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-space: 3.5rem;
+    --component-gap: 1rem;
+  }
+}
+
 body {
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: #0b0e14;
@@ -34,27 +75,30 @@ body {
   opacity: 0.74;
 }
 
-.panel-glass {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(170deg, rgba(12, 16, 24, 0.64), rgba(8, 11, 17, 0.5));
+.panel-glass,
+.ui-panel {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
   backdrop-filter: blur(16px);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.05),
     0 20px 60px rgba(0, 0, 0, 0.54);
 }
 
-.panel-glass-strong {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(170deg, rgba(10, 13, 20, 0.78), rgba(7, 10, 15, 0.64));
+.panel-glass-strong,
+.ui-panel-strong {
+  border: 1px solid var(--panel-border-strong);
+  background: var(--panel-bg-strong);
   backdrop-filter: blur(18px);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.06),
     0 24px 72px rgba(0, 0, 0, 0.64);
 }
 
-.panel-inset {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(170deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+.panel-inset,
+.ui-panel-inset {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg-inset);
   backdrop-filter: blur(12px);
 }
 
@@ -150,16 +194,95 @@ body {
 
 /* Shared top-level page title scale (matches Projects page heading) */
 .page-title {
-  font-size: 1.875rem;
+  font-size: var(--type-title);
   line-height: 2.25rem;
   font-weight: 700;
 }
 
 @media (min-width: 768px) {
   .page-title {
-    font-size: 2.25rem;
+    font-size: var(--type-title-md);
     line-height: 2.5rem;
   }
+}
+
+/* Shared semantic utilities (first-pass foundation) */
+.ui-section {
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+  margin-top: var(--section-space);
+}
+
+.ui-stack {
+  display: grid;
+  gap: var(--component-gap);
+}
+
+.ui-stack-lg {
+  display: grid;
+  gap: calc(var(--component-gap) * 2);
+}
+
+.ui-eyebrow {
+  font-family: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ui-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-height);
+  padding: var(--btn-pad-y) var(--btn-pad-x);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-image: linear-gradient(to right, var(--neon-cyan), var(--neon-pink));
+  color: #0b0e14;
+  font-size: var(--type-body);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ui-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-height);
+  padding: var(--btn-pad-y) var(--btn-pad-x);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: var(--type-body);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ui-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.75rem;
+  padding-inline: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.ui-panel,
+.ui-panel-strong {
+  border-radius: var(--radius-lg);
+}
+
+.ui-panel-inset {
+  border-radius: var(--radius-md);
 }
 
 /* -----------------------------
