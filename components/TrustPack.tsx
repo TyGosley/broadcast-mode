@@ -41,18 +41,18 @@ export function TrustPack({
       <div className="panel-glass relative overflow-hidden rounded-3xl p-7 md:p-9">
         <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/34 blur-xl opacity-70" />
 
-        <div className="relative">
-          <p className="text-xs tracking-[0.25em] text-white/60">TRUST SIGNAL</p>
+        <div className="relative text-center">
+          <p className="font-tech text-xs tracking-[0.25em] text-white/60">TRUST SIGNAL</p>
           <h2 className="mt-2 text-xl font-bold text-white md:text-2xl">
             {brandLine}
           </h2>
 
           {/* Brands */}
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
             {brands.map((b) => (
               <span
                 key={b}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/80"
+                className="font-tech rounded-md border border-white/15 bg-black/45 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-white/82 shadow-[0_1px_0_rgba(0,0,0,0.85)]"
               >
                 {b}
               </span>
@@ -64,10 +64,10 @@ export function TrustPack({
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="panel-inset rounded-2xl p-4"
+                className="panel-inset rounded-2xl p-4 text-center"
               >
                 <div className="text-lg font-bold text-white">{s.value}</div>
-                <div className="mt-1 text-xs tracking-wide text-white/60">
+                <div className="font-tech mt-1 text-xs tracking-[0.12em] text-white/60">
                   {s.label}
                 </div>
               </div>
@@ -79,12 +79,12 @@ export function TrustPack({
             {testimonials.map((t, idx) => (
               <figure
                 key={idx}
-                className="panel-inset rounded-2xl p-5"
+                className="panel-inset rounded-2xl p-5 text-center"
               >
                 <blockquote className="text-sm text-white/75">
                   “{t.quote}”
                 </blockquote>
-                <figcaption className="mt-4 text-xs text-white/60">
+                <figcaption className="font-tech mt-4 text-xs tracking-[0.08em] text-white/60">
                   <span className="font-semibold text-white/80">{t.name}</span>
                   {t.title ? ` • ${t.title}` : ""}
                   {t.company ? ` • ${t.company}` : ""}
