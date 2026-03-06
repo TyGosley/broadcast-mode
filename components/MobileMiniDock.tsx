@@ -22,7 +22,11 @@ export function MobileMiniDock() {
     <nav aria-label="Mobile mini dock" className="fixed inset-x-0 bottom-4 z-[2147483647] flex justify-center px-4 lg:hidden">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-8 -top-12 h-12 bg-gradient-to-b from-transparent via-[#0D1117]/45 to-[#12151D]/95 blur-[1px]"
+        className="pointer-events-none absolute left-1/2 -top-12 h-16 w-[92vw] max-w-md -translate-x-1/2 rounded-full blur-lg"
+        style={{
+          background:
+            "radial-gradient(62% 100% at 50% 100%, rgba(13,17,23,0.4) 0%, rgba(13,17,23,0.2) 52%, rgba(13,17,23,0) 100%)",
+        }}
       />
       <div
         className="relative w-full max-w-md rounded-2xl border border-white/8 border-t-white/12 bg-gradient-to-b from-[#111216]/96 via-[#1A1B1F]/93 to-[#26272B]/88 p-2 shadow-[inset_0_10px_20px_rgba(0,0,0,0.6),0_-10px_30px_rgba(0,0,0,0.4),0_20px_60px_rgba(0,0,0,0.72)] backdrop-blur-xl"

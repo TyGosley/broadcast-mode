@@ -229,13 +229,13 @@ export default function ProjectsPage() {
     : "I help businesses design and build modern, conversion-focused websites that feel intentional, fast, and memorable.";
 
   return (
-    <main className="min-h-dvh px-5 py-8 pb-10">
+    <main className="min-h-dvh px-5 py-8">
       <header className="mx-auto max-w-5xl">
         <p className="text-xs tracking-[0.25em] text-white/60">PROJECTS</p>
         <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
           Live, In Progress, Archived
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-white/70">
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-white/70">
           Tip: Tab to a card, press <span className="text-white/85">Space</span>{" "}
           to Quick Look. Use{" "}
           <span className="text-white/85">arrow keys</span> to move between cards.
@@ -287,7 +287,7 @@ export default function ProjectsPage() {
 
       <section className="mx-auto mt-8 max-w-5xl">
         {paged.length === 0 ? (
-          <div className="rounded-2xl border border-white/10 bg-black/40 p-6 text-white/70">
+          <div className="panel-glass rounded-2xl p-6 text-white/70">
             No projects match that filter yet.
           </div>
         ) : (
@@ -339,10 +339,8 @@ export default function ProjectsPage() {
       <section className="mx-auto mt-16 max-w-5xl">
         <div
           className={[
-            "relative overflow-hidden rounded-3xl border border-white/10",
-            "bg-gradient-to-br from-black via-black/80 to-black/60",
+            "panel-glass-strong relative overflow-hidden rounded-3xl",
             "p-8 md:p-10",
-            "shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_40px_100px_rgba(0,0,0,0.75)]",
           ].join(" ")}
         >
           {/* Neon ambient glow (motion-safe) */}

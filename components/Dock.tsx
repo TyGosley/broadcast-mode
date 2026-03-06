@@ -26,7 +26,11 @@ export function Dock() {
     <nav aria-label="Dock" className="fixed inset-x-0 bottom-4 z-[2147483647] hidden lg:flex justify-center px-4">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-8 -top-14 h-14 bg-gradient-to-b from-transparent via-[#0D1117]/45 to-[#12151D]/95 blur-[1px]"
+        className="pointer-events-none absolute left-1/2 -top-16 h-20 w-[92vw] max-w-3xl -translate-x-1/2 rounded-full blur-xl"
+        style={{
+          background:
+            "radial-gradient(60% 100% at 50% 100%, rgba(13,17,23,0.42) 0%, rgba(13,17,23,0.24) 48%, rgba(13,17,23,0) 100%)",
+        }}
       />
       <div
         className="relative w-full max-w-3xl rounded-2xl border border-white/8 border-t-white/12 bg-gradient-to-b from-[#111216]/96 via-[#1A1B1F]/93 to-[#26272B]/88 p-2 shadow-[inset_0_10px_20px_rgba(0,0,0,0.6),0_-10px_30px_rgba(0,0,0,0.4),0_20px_60px_rgba(0,0,0,0.72)] backdrop-blur-xl"

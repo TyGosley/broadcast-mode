@@ -2,7 +2,7 @@ import { TrustPack } from "../../components/TrustPack";
 
 export default function StudioPage() {
   return (
-    <main className="min-h-dvh px-5 py-10 pb-14">
+    <main className="min-h-dvh px-5 py-10">
       <header className="mx-auto max-w-5xl">
         <p className="text-xs tracking-[0.25em] text-white/60">STUDIO</p>
 
@@ -183,7 +183,7 @@ export default function StudioPage() {
 
       {/* CTA */}
       <section className="mx-auto mt-16 max-w-5xl">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/45 p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_40px_100px_rgba(0,0,0,0.75)] md:p-10">
+        <div className="panel-glass-strong relative overflow-hidden rounded-3xl p-8 md:p-10">
           <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-[#00F3FF]/30 via-[#FF0080]/28 to-[#5F368C]/34 blur-xl opacity-70" />
 
           <div className="relative">
@@ -252,7 +252,7 @@ function ServiceCard({
       : "from-[#5F368C]/34 via-[#5F368C]/22 to-[#00F3FF]/24";
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_55px_rgba(0,0,0,0.55)]">
+    <div className="panel-glass relative overflow-hidden rounded-2xl p-6">
       <div
         className={`absolute -inset-0.5 rounded-2xl bg-gradient-to-br ${glow} blur-xl opacity-80`}
       />
@@ -265,7 +265,7 @@ function ServiceCard({
           {bullets.map((b) => (
             <li
               key={b}
-              className="rounded-xl border border-white/10 bg-black/30 px-3 py-2"
+              className="panel-inset rounded-xl px-3 py-2"
             >
               {b}
             </li>
@@ -288,7 +288,7 @@ function ProcessStep({
   items: string[];
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_55px_rgba(0,0,0,0.55)]">
+    <div className="panel-glass relative overflow-hidden rounded-2xl p-6">
       <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/30 blur-xl opacity-70" />
 
       <div className="relative">
@@ -306,7 +306,7 @@ function ProcessStep({
           {items.map((i) => (
             <li
               key={i}
-              className="rounded-xl border border-white/10 bg-black/30 px-3 py-2"
+              className="panel-inset rounded-xl px-3 py-2"
             >
               {i}
             </li>
@@ -319,7 +319,7 @@ function ProcessStep({
 
 function DeliverableCard({ title, desc }: { title: string; desc: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/35 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_55px_rgba(0,0,0,0.55)]">
+    <div className="panel-glass rounded-2xl p-6">
       <h3 className="text-lg font-bold text-white">{title}</h3>
       <p className="mt-2 text-sm text-white/70">{desc}</p>
     </div>

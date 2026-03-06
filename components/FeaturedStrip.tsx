@@ -10,7 +10,7 @@ function getThumb(project: Project) {
 }
 
 function statusPill(status: Project["status"]) {
-  if (status === "live") return "bg-[#FFB800]/32 text-[#FFE7C8] border-[#FFB800]/70";
+  if (status === "live") return "bg-[#FF0080]/30 text-[#FFD8EA] border-[#FF0080]/70";
   if (status === "in-progress") return "bg-[#00F3FF]/32 text-[#DEE6FF] border-[#00F3FF]/70";
   return "bg-[#5F368C]/50 text-[#E9CCFF] border-[#5F368C]/80";
 }
@@ -42,12 +42,13 @@ export function FeaturedStrip({
       <div className="mt-4">
         <div className="relative">
           {/* edge fades */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-black/60 to-black/0" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-black/60 to-black/0" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-black/60 to-black/0 md:hidden" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-black/60 to-black/0 md:hidden" />
 
-          <div className="flex gap-3 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]">
+          <div className="flex gap-3 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch] md:justify-center md:overflow-visible md:pb-0">
             {projects.map((p) => {
               const thumb = getThumb(p);
+              const tags = p.type.slice(0, 3);
 
               return (
                 <button
@@ -55,16 +56,15 @@ export function FeaturedStrip({
                   type="button"
                   onClick={() => onOpen(p.id)}
                   className={[
-                    "group relative w-[260px] shrink-0 overflow-hidden rounded-2xl",
-                    "border border-white/10 bg-black/35 text-center",
-                    "shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_18px_55px_rgba(0,0,0,0.55)]",
-                    "transition hover:bg-black/45 hover:border-white/15",
+                    "group relative h-[420px] w-[260px] shrink-0 overflow-hidden rounded-2xl",
+                    "panel-glass text-center",
+                    "transition hover:border-white/15",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
                   ].join(" ")}
                 >
                   <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/36 via-[#FF0080]/28 to-[#5F368C]/38 blur-md opacity-70" />
 
-                  <div className="relative">
+                  <div className="relative flex h-full flex-col">
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
                       {thumb ? (
                         <>
@@ -104,7 +104,7 @@ export function FeaturedStrip({
                       </div>
                     </div>
 
-                    <div className="p-4">
+                    <div className="flex flex-1 flex-col justify-start p-4">
                       <div className="text-xs tracking-[0.25em] text-white/55">
                         {(p.client ?? "INTERNAL") + (p.year ? ` • ${p.year}` : "")}
                       </div>
@@ -113,15 +113,18 @@ export function FeaturedStrip({
                         {p.title}
                       </div>
 
-                      <p className="mt-2 line-clamp-2 text-sm text-white/70">
+                      <p className="mt-2 min-h-[2.75rem] line-clamp-2 text-sm text-white/70">
                         {p.summary}
                       </p>
 
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {p.type.slice(0, 3).map((t) => (
+                      <div className="mt-3 grid grid-cols-2 justify-center gap-2">
+                        {tags.map((t, i) => (
                           <span
                             key={t}
-                            className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/75"
+                            className={[
+                              "rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/75",
+                              i === 2 ? "col-span-2 justify-self-center" : "",
+                            ].join(" ")}
                           >
                             {t}
                           </span>

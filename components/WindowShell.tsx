@@ -10,9 +10,7 @@ export function WindowShell({ title, children }: WindowShellProps) {
         className={[
           "mx-auto max-w-5xl",
           "rounded-2xl",
-          "bg-black/40 backdrop-blur",
-          "border border-white/10",
-          "shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_50px_rgba(0,0,0,0.6)]",
+          "panel-glass",
         ].join(" ")}
       >
         {/* Title bar */}

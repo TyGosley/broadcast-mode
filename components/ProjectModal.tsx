@@ -109,6 +109,12 @@ export function ProjectModal({ project, onClose }: Props) {
       : project.status === "in-progress"
       ? "In Progress"
       : "Archived";
+  const statusClass =
+    project.status === "live"
+      ? "border-[#FF0080]/70 bg-[#FF0080]/30 text-[#FFD8EA]"
+      : project.status === "in-progress"
+      ? "border-[#00F3FF]/70 bg-[#00F3FF]/30 text-[#DEE6FF]"
+      : "border-[#5F368C]/80 bg-[#5F368C]/50 text-[#E9CCFF]";
   const previewSrc = project.previewHref || "/static/no-signal.png";
 
   return (
@@ -125,7 +131,7 @@ export function ProjectModal({ project, onClose }: Props) {
         aria-labelledby={titleId}
         aria-describedby={descId}
         tabIndex={-1}
-        className="flex max-h-[calc(100dvh-7.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-black/55 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_20px_70px_rgba(0,0,0,0.75)] outline-none lg:max-h-[calc(100dvh-9rem)]"
+        className="panel-glass-strong flex max-h-[calc(100dvh-7.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-3xl outline-none lg:max-h-[calc(100dvh-9rem)]"
       >
         {/* Top bar */}
         <div className="shrink-0 flex items-start justify-between gap-4 border-b border-white/10 p-5">
@@ -143,7 +149,12 @@ export function ProjectModal({ project, onClose }: Props) {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/80">
+            <span
+              className={[
+                "rounded-full border px-3 py-1 text-xs font-semibold",
+                statusClass,
+              ].join(" ")}
+            >
               {statusLabel}
             </span>
 
@@ -179,14 +190,14 @@ export function ProjectModal({ project, onClose }: Props) {
             ) : null}
 
             {project.context ? (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="panel-inset rounded-2xl p-4">
                 <p className="text-xs tracking-[0.25em] text-white/60">CONTEXT</p>
                 <p className="mt-2 text-sm text-white/75">{project.context}</p>
               </div>
             ) : null}
 
             {project.outcomes?.length ? (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="panel-inset rounded-2xl p-4">
                 <p className="text-xs tracking-[0.25em] text-white/60">OUTCOMES</p>
                 <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/75">
                   {project.outcomes.map((o) => (
@@ -200,7 +211,7 @@ export function ProjectModal({ project, onClose }: Props) {
           {/* Right column */}
           <div className="grid gap-4">
             {/* Preview block (uses your previewHref if you have it) */}
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/35">
+            <div className="panel-glass overflow-hidden rounded-2xl">
               <div className="p-3">
                 <p className="text-xs tracking-[0.25em] text-white/60">PREVIEW</p>
               </div>
@@ -220,7 +231,7 @@ export function ProjectModal({ project, onClose }: Props) {
             </div>
 
             {project.stack?.length ? (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="panel-inset rounded-2xl p-4">
                 <p className="text-xs tracking-[0.25em] text-white/60">STACK</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {project.stack.map((s) => (
@@ -262,7 +273,7 @@ export function ProjectModal({ project, onClose }: Props) {
 
             {/* Behind the build */}
             {project.behindTheBuild?.body ? (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="panel-inset rounded-2xl p-4">
                 <p className="text-xs tracking-[0.25em] text-white/60">
                   {project.behindTheBuild.title ?? "BEHIND THE BUILD"}
                 </p>

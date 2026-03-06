@@ -142,9 +142,9 @@ export function TransmitForm() {
         message: "",
         company: "",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus("error");
-      setError(err?.message || "Transmission failed. Please try again.");
+      setError(err instanceof Error ? err.message : "Transmission failed. Please try again.");
     }
   }
 
@@ -164,7 +164,7 @@ export function TransmitForm() {
   return (
     <div className="grid gap-5">
       {/* Status panel */}
-      <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur">
+      <div className="panel-glass rounded-2xl p-4">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs tracking-[0.25em] text-white/60">TRANSMISSION</p>
@@ -183,7 +183,7 @@ export function TransmitForm() {
       {/* Form */}
       <form
         onSubmit={onSubmit}
-        className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur"
+        className="panel-glass rounded-2xl p-5"
       >
         <input
           type="text"
@@ -200,7 +200,7 @@ export function TransmitForm() {
             <input
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -210,7 +210,7 @@ export function TransmitForm() {
             <input
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -223,8 +223,10 @@ export function TransmitForm() {
             </span>
             <select
               value={form.projectType}
-              onChange={(e) => update("projectType", e.target.value as any)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              onChange={(e) =>
+                update("projectType", e.target.value as FormState["projectType"])
+              }
+              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             >
               <option value="">Select…</option>
               <option value="website">New Website</option>
@@ -242,8 +244,10 @@ export function TransmitForm() {
             </span>
             <select
               value={form.timeline}
-              onChange={(e) => update("timeline", e.target.value as any)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+              onChange={(e) =>
+                update("timeline", e.target.value as FormState["timeline"])
+              }
+              className="panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
             >
               <option value="">Select…</option>
               <option value="asap">ASAP</option>
@@ -261,7 +265,7 @@ export function TransmitForm() {
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
             rows={6}
-            className="resize-none rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+            className="panel-inset resize-none rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             disabled={status === "sending"}
           />
         </label>

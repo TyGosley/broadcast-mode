@@ -93,6 +93,7 @@ export default function RootLayout({
           <SettingsGate>
             <EasterEggGate>
               <BroadcastOverlay enabled allowEasterEgg />
+              <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[5] site-canvas" />
               <div className="relative z-10 site-content">{children}</div>
             </EasterEggGate>
           </SettingsGate>

@@ -32,7 +32,7 @@ export function ProjectCard({
 
   const statusClass =
     project.status === "live"
-      ? "border-[#FFB800]/70 bg-[#FFB800]/30 text-[#FFE7C8]"
+      ? "border-[#FF0080]/70 bg-[#FF0080]/30 text-[#FFD8EA]"
       : project.status === "in-progress"
       ? "border-[#00F3FF]/70 bg-[#00F3FF]/30 text-[#DEE6FF]"
       : "border-[#5F368C]/80 bg-[#5F368C]/50 text-[#E9CCFF]";
@@ -46,54 +46,58 @@ export function ProjectCard({
       data-project-card
       data-project-id={project.id}
       className={[
-        "group w-full text-center",
-        "rounded-2xl border border-white/10 bg-black/35 p-5",
-        "shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_60px_rgba(0,0,0,0.55)]",
+        "group flex h-full w-full flex-col text-center",
+        "panel-glass rounded-2xl p-5",
         "transition",
-        "hover:border-white/16 hover:bg-black/45",
+        "hover:border-white/16",
         // ✅ focus style
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
       ].join(" ")}
     >
       <ProjectMediaThumb project={project} />
 
-      <div className="mt-4 flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="text-xs tracking-[0.25em] text-white/55">
-            {project.client ?? "INTERNAL"}
-            {project.year ? ` • ${project.year}` : ""}
+      <div className="mt-4 flex flex-1 flex-col justify-start">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-xs tracking-[0.25em] text-white/55">
+              {project.client ?? "INTERNAL"}
+              {project.year ? ` • ${project.year}` : ""}
+            </div>
+            <div className="font-display mt-2 truncate text-lg font-bold text-white">
+              {project.title}
+            </div>
+            <p className="mt-2 min-h-[2.75rem] line-clamp-2 text-sm text-white/70">
+              {project.summary}
+            </p>
           </div>
-          <div className="font-display mt-2 truncate text-lg font-bold text-white">
-            {project.title}
-          </div>
-          <p className="mt-2 line-clamp-2 text-sm text-white/70">
-            {project.summary}
-          </p>
+
+          <span
+            className={[
+              "shrink-0 rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.2em]",
+              statusClass,
+            ].join(" ")}
+          >
+            {status}
+          </span>
         </div>
 
-        <span
-          className={[
-            "shrink-0 rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.2em]",
-            statusClass,
-          ].join(" ")}
-        >
-          {status}
-        </span>
-      </div>
+        <div className="mt-4 grid grid-cols-2 justify-center gap-2">
+          {project.type.slice(0, 3).map((t, i) => (
+            <span
+              key={t}
+              className={[
+                "rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/75",
+                i === 2 ? "col-span-2 justify-self-center" : "",
+              ].join(" ")}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {project.type.slice(0, 4).map((t) => (
-          <span
-            key={t}
-            className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/75"
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-
-      <div className="mt-4 text-xs text-white/55">
-        Tip: Press <span className="text-white/80">Space</span> to Quick Look
+        <div className="mt-auto pt-4 text-xs text-white/55">
+          Tip: Press <span className="text-white/80">Space</span> to Quick Look
+        </div>
       </div>
     </button>
   );

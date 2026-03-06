@@ -5,7 +5,7 @@ import { LauncherGrid } from "../components/LauncherGrid";
 export default function HomePage() {
   return (
     <BootGate brand="Be Awesome Productions">
-      <main className="homepage-shell min-h-[calc(100dvh-88px)] pb-24">
+      <main className="homepage-shell min-h-[calc(100dvh-88px)]">
         <HomeHeader />
         <div className="mx-auto w-full max-w-5xl px-4 pt-6">
           <LauncherGrid />
