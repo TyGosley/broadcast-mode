@@ -97,8 +97,16 @@ export default function StudioPage() {
       </section>
 
       {/* PROCESS */}
-      <section className="mx-auto mt-14 max-w-5xl">
-        <div className="text-center">
+      <section className="relative mx-auto mt-14 max-w-5xl overflow-hidden rounded-3xl px-3 py-2">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.08]">
+          <div className="absolute -left-10 top-16 h-56 w-56 rounded-full border border-white/35" />
+          <div className="absolute left-5 top-[7.5rem] h-24 w-24 rounded-full border border-white/30" />
+          <div className="absolute right-[-2rem] top-14 h-64 w-64 rounded-full border border-white/35" />
+          <div className="absolute right-16 top-32 h-28 w-28 rounded-full border border-white/30" />
+          <div className="absolute left-20 right-20 top-1/2 h-[2px] -translate-y-1/2 bg-white/18" />
+        </div>
+
+        <div className="relative z-10 text-center">
           <p className="font-tech text-xs tracking-[0.25em] text-white/60">PROCESS</p>
           <h2 className="mt-2 text-2xl font-bold text-white md:text-3xl">
             A clean system that keeps projects moving
@@ -109,7 +117,7 @@ export default function StudioPage() {
           </p>
         </div>
 
-        <div className="mt-7 grid gap-5 md:grid-cols-2">
+        <div className="relative z-10 mt-7 grid gap-5 md:grid-cols-2">
           <ProcessStep
             number="01"
             tone="cyan"
@@ -255,6 +263,12 @@ function moduleTheme(tone: ModuleTone) {
   return { variant: "card-amber", accent: "#FFB800", accentRgb: "255,184,0" };
 }
 
+function dymoVariant(tone: ModuleTone) {
+  if (tone === "cyan") return "dymo-teal";
+  if (tone === "fuchsia") return "dymo-pink";
+  return "dymo-amber";
+}
+
 function ServiceCard({
   title,
   sub,
@@ -274,7 +288,7 @@ function ServiceCard({
   return (
     <div
       className={[
-        "card-module relative overflow-hidden rounded-2xl border border-white/12 bg-[#0D1117]/58 p-6 backdrop-blur-2xl",
+        "card-module relative overflow-hidden rounded-2xl border border-white/12 bg-[#0D1117]/58 p-6 pl-8 backdrop-blur-2xl",
         theme.variant,
       ].join(" ")}
       style={cardVars}
@@ -285,9 +299,11 @@ function ServiceCard({
           background: `radial-gradient(130% 90% at 50% 0%, ${theme.accent}55 0%, transparent 70%)`,
         }}
       />
+      <span className="pointer-events-none absolute inset-y-2 left-2 w-1 rounded-full bg-gradient-to-b from-white/30 via-white/10 to-white/25 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)]" />
+      <span className="pointer-events-none absolute inset-y-2 left-4 w-[1px] bg-white/14" />
 
       <div className="relative">
-        <p className="font-tech inline-flex rounded-md border border-white/15 bg-black/45 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-white/78 shadow-[0_1px_0_rgba(0,0,0,0.85)]">
+        <p className={["dymo-label", dymoVariant(tone)].join(" ")}>
           {sub}
         </p>
         <h3 className="mt-2 text-lg font-bold text-white">{title}</h3>
@@ -346,7 +362,7 @@ function ProcessStep({
 
       <div className="relative">
         <div className="flex items-center justify-between">
-          <div className="font-tech rounded-md border border-white/15 bg-black/45 px-2.5 py-1 text-[11px] font-semibold tracking-[0.16em] text-white/78 shadow-[0_1px_0_rgba(0,0,0,0.85)]">
+          <div className={["dymo-label", dymoVariant(tone)].join(" ")}>
             STEP {number}
           </div>
           <div className="font-tech text-[11px] tracking-[0.14em] text-white/58">

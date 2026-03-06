@@ -8,11 +8,16 @@ body {
 
 body {
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #0b0e14;
   background:
-    radial-gradient(760px 360px at 14% 0%, rgba(0, 243, 255, 0.2), transparent 56%),
-    radial-gradient(880px 420px at 86% 0%, rgba(255, 0, 128, 0.18), transparent 58%),
-    radial-gradient(980px 640px at 55% 100%, rgba(255, 184, 0, 0.14), transparent 66%),
-    linear-gradient(168deg, #131b27 0%, #0d1117 46%, #090d12 100%);
+    radial-gradient(at 0% 0%, hsla(328, 100%, 10%, 0.92) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(242, 100%, 10%, 0.92) 0, transparent 50%),
+    radial-gradient(at 50% 100%, hsla(180, 100%, 5%, 0.88) 0, transparent 50%),
+    linear-gradient(170deg, #0b0e14 0%, #0d1117 52%, #090d12 100%);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 
   color: white;
 }
@@ -180,7 +185,55 @@ body {
       rgba(255, 255, 255, 0.05) 1px,
       rgba(0, 0, 0, 0) 3px,
       rgba(0, 0, 0, 0) 6px);
-  opacity: 0.06;
+  opacity: 0.05;
+}
+
+/* Dymo-style embossed label tape */
+.dymo-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 2px;
+  border-left: 3px solid #00f3ff;
+  background-color: #0b0e14;
+  color: #fff;
+  font-family: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-shadow:
+    1px 1px 0 rgba(0, 0, 0, 0.8),
+    -0.5px -0.5px 0 rgba(255, 255, 255, 0.4);
+  box-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.9),
+    inset 0 -1px 3px rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dymo-label:hover {
+    transform: translateY(1px) translateX(1px);
+    box-shadow:
+      1px 1px 0 rgba(0, 0, 0, 0.9),
+      inset 0 -1px 3px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.dymo-pink {
+  background-color: #b20059;
+  border-left-color: #ff0080;
+}
+
+.dymo-teal {
+  background-color: #008b94;
+  border-left-color: #00f3ff;
+}
+
+.dymo-amber {
+  background-color: #b28100;
+  border-left-color: #ffb800;
 }
 
 /* Noise grain (animated) */

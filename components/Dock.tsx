@@ -33,7 +33,7 @@ export function Dock() {
         }}
       />
       <div
-        className="relative w-full max-w-3xl rounded-2xl border border-white/8 border-t-white/12 bg-gradient-to-b from-[#111216]/96 via-[#1A1B1F]/93 to-[#26272B]/88 p-2 shadow-[inset_0_10px_20px_rgba(0,0,0,0.6),0_-10px_30px_rgba(0,0,0,0.4),0_20px_60px_rgba(0,0,0,0.72)] backdrop-blur-xl"
+        className="relative w-full max-w-3xl rounded-2xl border border-white/8 border-t-white/12 bg-gradient-to-b from-[#111216]/96 via-[#1A1B1F]/93 to-[#26272B]/88 p-2 shadow-[inset_0_10px_20px_rgba(0,0,0,0.8),0_-10px_30px_rgba(0,0,0,0.4),0_20px_60px_rgba(0,0,0,0.72)] backdrop-blur-xl"
       >
         <ul className="flex items-center justify-between gap-2">
           {ITEMS.map((it) => {

@@ -49,10 +49,13 @@ export function TrustPack({
 
           {/* Brands */}
           <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {brands.map((b) => (
+            {brands.map((b, idx) => (
               <span
                 key={b}
-                className="font-tech rounded-md border border-white/15 bg-black/45 px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-white/82 shadow-[0_1px_0_rgba(0,0,0,0.85)]"
+                className={[
+                  "dymo-label",
+                  idx % 3 === 0 ? "dymo-teal" : idx % 3 === 1 ? "dymo-pink" : "dymo-amber",
+                ].join(" ")}
               >
                 {b}
               </span>
