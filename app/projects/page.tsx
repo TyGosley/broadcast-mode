@@ -57,6 +57,7 @@ export default function ProjectsPage() {
   const [tag, setTag] = useState<string>("all");
   const [openId, setOpenId] = useState<string | null>(null);
   const [thumbVariant, setThumbVariant] = useState<ThumbVariant>("clean");
+  const [pageInput, setPageInput] = useState<string>("1");
 
   // ✅ Move 11 enhancement: remember what they last opened (for CTA personalization)
   const [lastOpened, setLastOpened] = useState<Project | null>(null);
@@ -162,9 +163,19 @@ export default function ProjectsPage() {
   }
 
   function goToPage(nextPage: number) {
-    const clamped = Math.min(Math.max(1, nextPage), totalPages);
+    const normalized = Math.round(nextPage);
+    const clamped = Math.min(Math.max(1, normalized), totalPages);
     setPage(clamped);
     replaceParams({ page: String(clamped) });
+  }
+
+  function commitPageInput() {
+    const parsed = Number(pageInput);
+    if (!Number.isFinite(parsed)) {
+      setPageInput(String(page));
+      return;
+    }
+    goToPage(parsed);
   }
 
   // Sync page state to URL back/forward
@@ -173,6 +184,10 @@ export default function ProjectsPage() {
     if (Number.isFinite(p) && p > 0 && p !== page) setPage(p);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  useEffect(() => {
+    setPageInput(String(page));
+  }, [page]);
 
   const activeProject: Project | null = openId
     ? PROJECTS.find((p) => p.id === openId) ?? null
@@ -342,6 +357,20 @@ export default function ProjectsPage() {
         <div className="mt-8 flex items-center justify-center gap-2">
           <button
             type="button"
+            onClick={() => goToPage(1)}
+            disabled={page <= 1}
+            className={[
+              "rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold",
+              "bg-white/5 text-white/80 hover:bg-white/10",
+              "disabled:opacity-40 disabled:cursor-not-allowed",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB800]/70",
+            ].join(" ")}
+          >
+            First
+          </button>
+
+          <button
+            type="button"
             onClick={() => goToPage(page - 1)}
             disabled={page <= 1}
             className={[
@@ -354,9 +383,26 @@ export default function ProjectsPage() {
             Prev
           </button>
 
-          <div className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-xs text-white/70">
-            {page} / {totalPages}
-          </div>
+          <label className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-xs text-white/70">
+            <span className="whitespace-nowrap">Page</span>
+            <input
+              type="number"
+              min={1}
+              max={totalPages}
+              value={pageInput}
+              onChange={(e) => setPageInput(e.target.value)}
+              onBlur={commitPageInput}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  commitPageInput();
+                }
+              }}
+              className="w-16 rounded-md border border-white/10 bg-black/45 px-2 py-1 text-center text-xs text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              aria-label="Go to page number"
+            />
+            <span className="whitespace-nowrap">/ {totalPages}</span>
+          </label>
 
           <button
             type="button"

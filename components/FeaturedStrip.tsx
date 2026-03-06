@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import type { Project } from "../lib/projects";
 
 function getThumb(project: Project) {
@@ -13,6 +14,17 @@ function statusPill(status: Project["status"]) {
   if (status === "live") return "bg-[#FF0080]/30 text-[#FFD8EA] border-[#FF0080]/70";
   if (status === "in-progress") return "bg-[#00F3FF]/32 text-[#DEE6FF] border-[#00F3FF]/70";
   return "bg-[#5F368C]/50 text-[#E9CCFF] border-[#5F368C]/80";
+}
+
+const HOME_CARD_THEME = [
+  { variant: "card-pink", accent: "#FF0080", accentRgb: "255,0,128" },
+  { variant: "card-cyan", accent: "#00F3FF", accentRgb: "0,243,255" },
+  { variant: "card-amber", accent: "#FFB800", accentRgb: "255,184,0" },
+  { variant: "card-cyan", accent: "#00F3FF", accentRgb: "0,243,255" },
+] as const;
+
+function homeThemeAt(index: number) {
+  return HOME_CARD_THEME[index % HOME_CARD_THEME.length];
 }
 
 export function FeaturedStrip({
@@ -46,26 +58,36 @@ export function FeaturedStrip({
           <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-black/60 to-black/0 md:hidden" />
 
           <div className="flex gap-3 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch] md:justify-center md:overflow-visible md:pb-0">
-            {projects.map((p) => {
+            {projects.map((p, index) => {
               const thumb = getThumb(p);
               const tags = p.type.slice(0, 3);
+              const theme = homeThemeAt(index);
+              const cardVars: CSSProperties & { "--card-accent-rgb": string } = {
+                "--card-accent-rgb": theme.accentRgb,
+              };
 
               return (
                 <button
                   key={p.id}
                   type="button"
                   onClick={() => onOpen(p.id)}
+                  style={cardVars}
                   className={[
-                    "group relative h-[420px] w-[260px] shrink-0 overflow-hidden rounded-2xl",
-                    "panel-glass text-center",
-                    "transition hover:border-white/15",
+                    "card-module group relative h-[420px] w-[260px] shrink-0 overflow-hidden rounded-2xl",
+                    theme.variant,
+                    "border border-white/12 bg-[#0D1117]/58 text-center backdrop-blur-2xl",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
                   ].join(" ")}
                 >
-                  <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/36 via-[#FF0080]/28 to-[#5F368C]/38 blur-md opacity-70" />
+                  <div
+                    className="pointer-events-none absolute -inset-0.5 rounded-2xl blur-md opacity-75"
+                    style={{
+                      background: `radial-gradient(130% 90% at 50% 0%, ${theme.accent}55 0%, transparent 70%)`,
+                    }}
+                  />
 
                   <div className="relative flex h-full flex-col">
-                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-2xl border-b border-white/10 bg-black/45">
                       {thumb ? (
                         <>
                           <Image
@@ -138,9 +160,10 @@ export function FeaturedStrip({
           </div>
         </div>
 
-        <div className="mt-2 text-xs text-white/50">
-          Tip: Featured is controlled by <span className="text-white/75 font-semibold">featured: true</span> in <span className="text-white/75">lib/projects.ts</span>.
-        </div>
+        {/*
+          Dev note:
+          Featured items are controlled by `featured: true` in `lib/projects.ts`.
+        */}
       </div>
     </section>
   );
