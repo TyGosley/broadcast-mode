@@ -6,7 +6,7 @@ export default function StudioPage() {
       <header className="mx-auto max-w-5xl">
         <p className="text-xs tracking-[0.25em] text-white/60">STUDIO</p>
 
-        <h1 className="mt-2 text-3xl font-bold text-white md:text-5xl">
+        <h1 className="page-title mt-2 text-white">
           Design + build that feels premium and converts.
         </h1>
 

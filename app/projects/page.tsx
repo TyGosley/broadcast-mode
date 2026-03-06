@@ -249,7 +249,7 @@ export default function ProjectsPage() {
     <main className="min-h-dvh px-5 py-8">
       <header className="mx-auto max-w-5xl">
         <p className="text-xs tracking-[0.25em] text-white/60">PROJECTS</p>
-        <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="page-title mt-2 text-white">
           Live, In Progress, Archived
         </h1>
         <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-white/70">

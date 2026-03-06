@@ -5,7 +5,7 @@ export default function ContactPage() {
     <main className="min-h-dvh px-5 py-8">
       <header className="mx-auto max-w-5xl">
         <p className="text-xs tracking-[0.25em] text-white/60">CONTACT</p>
-        <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="page-title mt-2 text-white">
           Transmit
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-white/70">

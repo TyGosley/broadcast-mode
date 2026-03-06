@@ -6,7 +6,7 @@ export function StudioSections() {
       {/* Intro */}
       <section className="rounded-2xl border border-white/10 bg-black/35 p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
         <p className="text-xs tracking-[0.35em] text-white/55">STUDIO</p>
-        <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="page-title mt-2 text-white">
           Built for brands that want something memorable
         </h1>
         <p className="mt-3 max-w-2xl text-sm text-white/70">

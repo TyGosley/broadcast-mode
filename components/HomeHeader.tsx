@@ -73,7 +73,7 @@ export function HomeHeader() {
             </div>
 
             <h1
-              className="font-display brand-sweep mt-2 text-xl font-semibold sm:text-2xl"
+              className="font-display page-title brand-sweep mt-2 text-white"
               data-text="Be Awesome Productions"
             >
               Be Awesome Productions
