@@ -3,6 +3,8 @@
 import Image from "next/image";
 import type { Project } from "../lib/projects";
 
+export type ProjectThumbVariant = "clean" | "classic";
+
 function MediaBase({
   src,
   alt,
@@ -49,6 +51,20 @@ function MediaBase({
   );
 }
 
+function CleanFrame({
+  src,
+  alt,
+}: {
+  src?: string;
+  alt?: string;
+}) {
+  return (
+    <MediaBase src={src} alt={alt}>
+      <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10" />
+    </MediaBase>
+  );
+}
+
 function CassetteFrame({
   src,
   alt,
@@ -58,12 +74,9 @@ function CassetteFrame({
 }) {
   return (
     <MediaBase src={src} alt={alt}>
-      {/* Cassette overlay, simplified */}
       <div className="absolute inset-0">
-        {/* Label window */}
         <div className="absolute left-4 right-4 top-4 h-[46%] rounded-xl border border-white/10 bg-black/18 backdrop-blur-[2px]" />
 
-        {/* Spool panel */}
         <div className="absolute bottom-4 left-4 right-4 h-[34%] rounded-xl border border-white/10 bg-black/22 backdrop-blur-[2px]">
           <div className="absolute left-6 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full border border-white/10 bg-black/20" />
           <div className="absolute right-6 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full border border-white/10 bg-black/20" />
@@ -72,7 +85,6 @@ function CassetteFrame({
           <div className="absolute left-1/2 top-1/2 h-5 w-[36%] -translate-x-1/2 -translate-y-1/2 rounded-md border border-white/10 bg-black/22" />
         </div>
 
-        {/* Tiny format tag */}
         <div className="absolute right-3 top-3 rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[10px] font-semibold tracking-[0.22em] text-white/65">
           CASSETTE
         </div>
@@ -91,17 +103,14 @@ function CdFrame({
   return (
     <MediaBase src={src} alt={alt}>
       <div className="absolute inset-0">
-        {/* Jewel bezel */}
         <div className="absolute inset-3 rounded-xl border border-white/10 bg-white/0" />
         <div className="absolute inset-4 rounded-xl border border-white/10 bg-black/10" />
 
-        {/* Disc hint */}
         <div className="absolute bottom-4 right-4 h-20 w-20 rounded-full border border-white/10 bg-black/18 backdrop-blur-[2px]">
           <div className="absolute inset-3 rounded-full border border-white/10 bg-black/14" />
           <div className="absolute inset-8 rounded-full bg-white/8" />
         </div>
 
-        {/* Tiny format tag */}
         <div className="absolute right-3 top-3 rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[10px] font-semibold tracking-[0.22em] text-white/65">
           CD
         </div>
@@ -110,14 +119,24 @@ function CdFrame({
   );
 }
 
-export function ProjectMediaThumb({ project }: { project: Project }) {
+export function ProjectMediaThumb({
+  project,
+  variant = "clean",
+}: {
+  project: Project;
+  variant?: ProjectThumbVariant;
+}) {
   const primaryImage = project.images?.[0] ?? project.coverImage;
   const src = primaryImage?.src;
   const alt = primaryImage?.alt;
 
-  return project.format === "cassette" ? (
-    <CassetteFrame src={src} alt={alt} />
-  ) : (
-    <CdFrame src={src} alt={alt} />
-  );
+  if (variant === "classic") {
+    return project.format === "cassette" ? (
+      <CassetteFrame src={src} alt={alt} />
+    ) : (
+      <CdFrame src={src} alt={alt} />
+    );
+  }
+
+  return <CleanFrame src={src} alt={alt} />;
 }

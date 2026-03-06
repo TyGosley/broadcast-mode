@@ -1,14 +1,16 @@
 "use client";
 
 import type { Project } from "../lib/projects";
-import { ProjectMediaThumb } from "./ProjectMediaThumb";
+import { ProjectMediaThumb, type ProjectThumbVariant } from "./ProjectMediaThumb";
 
 export function ProjectCard({
   project,
   onOpen,
+  thumbVariant = "clean",
 }: {
   project: Project;
   onOpen: (id: string) => void;
+  thumbVariant?: ProjectThumbVariant;
 }) {
   // Keep click behavior
   function handleOpen() {
@@ -54,7 +56,7 @@ export function ProjectCard({
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
       ].join(" ")}
     >
-      <ProjectMediaThumb project={project} />
+      <ProjectMediaThumb project={project} variant={thumbVariant} />
 
       <div className="mt-4 flex flex-1 flex-col justify-start">
         <div className="flex items-start justify-between gap-3">
