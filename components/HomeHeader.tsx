@@ -64,11 +64,11 @@ export function HomeHeader() {
   );
 
   return (
-    <header className="mx-auto w-full max-w-5xl px-4 pt-6">
-      <div className="rounded-2xl border border-white/12 bg-[#0D1117]/58 p-5 backdrop-blur-2xl shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_24px_58px_rgba(0,0,0,0.58)]">
+    <header className="ui-section mt-0 px-4 pt-6">
+      <div className="ui-panel rounded-2xl p-5">
         <div className="flex flex-col items-center gap-4">
           <div className="flex min-w-0 flex-col items-center text-center">
-            <div className="font-tech text-xs tracking-[0.35em] text-white/60">
+            <div className="ui-eyebrow tracking-[0.35em]">
               BROADCAST MODE
             </div>
 
@@ -84,20 +84,20 @@ export function HomeHeader() {
             </p>
 
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <span className="rounded-full border border-white/12 bg-[#0D1117]/64 px-3 py-1 text-xs font-medium text-white/75">
+              <span className="ui-pill px-3 text-xs font-medium text-white/75">
                 Mobile-first
               </span>
-              <span className="rounded-full border border-white/12 bg-[#0D1117]/64 px-3 py-1 text-xs font-medium text-white/75">
+              <span className="ui-pill px-3 text-xs font-medium text-white/75">
                 React / Next.js
               </span>
-              <span className="rounded-full border border-white/12 bg-[#0D1117]/64 px-3 py-1 text-xs font-medium text-white/75">
+              <span className="ui-pill px-3 text-xs font-medium text-white/75">
                 Motion + UI systems
               </span>
             </div>
           </div>
 
           <div className="flex shrink-0 flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full border border-[#FFB800]/50 bg-[#0D1117]/68 px-3 py-1.5">
+            <div className="ui-pill gap-2 border-[#FFB800]/50 bg-[#0D1117]/68 px-3 text-[#FFB800]">
               <span className="h-2 w-2 rounded-full bg-[#FFB800] shadow-[0_0_18px_rgba(255,184,0,0.72)]" />
               <span className="font-tech text-xs font-semibold text-[#FFB800]">
                 System ready

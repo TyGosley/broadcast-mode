@@ -7,7 +7,7 @@ export default function HomePage() {
     <BootGate brand="Be Awesome Productions">
       <main className="homepage-shell min-h-[calc(100dvh-88px)]">
         <HomeHeader />
-        <div className="mx-auto w-full max-w-5xl px-4 pt-6">
+        <div className="ui-section mt-0 px-4 pt-6">
           <LauncherGrid />
         </div>
       </main>
