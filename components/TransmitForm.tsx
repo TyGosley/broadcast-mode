@@ -200,7 +200,7 @@ export function TransmitForm() {
             <input
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -210,7 +210,7 @@ export function TransmitForm() {
             <input
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60"
+              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -224,7 +224,7 @@ export function TransmitForm() {
             <select
               value={form.projectType}
               onChange={(e) => update("projectType", e.target.value as any)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             >
               <option value="">Select…</option>
               <option value="website">New Website</option>
@@ -243,7 +243,7 @@ export function TransmitForm() {
             <select
               value={form.timeline}
               onChange={(e) => update("timeline", e.target.value as any)}
-              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60"
+              className="rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
             >
               <option value="">Select…</option>
               <option value="asap">ASAP</option>
@@ -261,7 +261,7 @@ export function TransmitForm() {
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
             rows={6}
-            className="resize-none rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-purple-300/60"
+            className="resize-none rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             disabled={status === "sending"}
           />
         </label>
@@ -273,7 +273,7 @@ export function TransmitForm() {
         )}
 
         {status === "success" && (
-          <div className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-50">
+          <div className="mt-4 rounded-xl border border-[#FFB800]/35 bg-[#FFB800]/12 px-4 py-3 text-sm text-[#FFE2BF]">
             Signal received. I’ll reply soon.
           </div>
         )}
@@ -282,7 +282,7 @@ export function TransmitForm() {
           <button
             type="submit"
             disabled={!canSubmit || status === "sending"}
-            className="rounded-xl border border-white/10 bg-gradient-to-r from-cyan-400/25 via-fuchsia-500/20 to-purple-500/20 px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+            className="rounded-xl border border-white/15 bg-gradient-to-r from-[#00F3FF]/50 via-[#FF0080]/42 to-[#FFB800]/42 px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
           >
             {status === "sending" ? "Transmitting…" : "Transmit"}
           </button>

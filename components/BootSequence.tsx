@@ -114,7 +114,7 @@ export function BootSequence({
                 <button
                   type="button"
                   onClick={onDisableNextTime}
-                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/75 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/75 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
                 >
                   Disable boot
                 </button>
@@ -123,7 +123,7 @@ export function BootSequence({
               <button
                 type="button"
                 onClick={onDone}
-                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
               >
                 Skip
               </button>
@@ -144,7 +144,7 @@ export function BootSequence({
               </div>
               <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-cyan-400/70 via-fuchsia-500/60 to-purple-500/70 transition-[width] duration-300 ease-out"
+                  className="h-full rounded-full bg-gradient-to-r from-[#00F3FF]/72 via-[#FF0080]/62 to-[#FFB800]/72 transition-[width] duration-300 ease-out"
                   style={{ width: `${progress}%` }}
                 />
               </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { VhsIntensity } from "../lib/settings";
 
 type Props = {
@@ -14,6 +15,7 @@ export function BroadcastOverlay({
   intensity,
   allowEasterEgg = true,
 }: Props) {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [flicker, setFlicker] = useState(false);
 
@@ -89,6 +91,7 @@ export function BroadcastOverlay({
     <div
       aria-hidden="true"
       data-broadcast
+      data-route={pathname === "/" ? "home" : "default"}
       data-flicker={flicker ? "true" : "false"}
       className="pointer-events-none fixed inset-0 z-40"
       style={

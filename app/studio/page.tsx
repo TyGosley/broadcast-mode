@@ -21,10 +21,10 @@ export default function StudioPage() {
             href="/contact"
             className={[
               "rounded-2xl px-6 py-3 text-sm font-semibold tracking-wide",
-              "bg-gradient-to-r from-cyan-400 to-fuchsia-500",
+              "bg-gradient-to-r from-[#00F3FF] to-[#FF0080]",
               "text-black shadow-lg",
               "transition hover:scale-[1.03] hover:shadow-xl",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/75",
             ].join(" ")}
           >
             Start a Project
@@ -36,7 +36,7 @@ export default function StudioPage() {
               "rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold",
               "bg-white/5 text-white",
               "transition hover:bg-white/10",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
             ].join(" ")}
           >
             See Work
@@ -184,7 +184,7 @@ export default function StudioPage() {
       {/* CTA */}
       <section className="mx-auto mt-16 max-w-5xl">
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/45 p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_40px_100px_rgba(0,0,0,0.75)] md:p-10">
-          <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-cyan-500/15 via-fuchsia-500/15 to-purple-500/15 blur-xl opacity-70" />
+          <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-[#00F3FF]/30 via-[#FF0080]/28 to-[#5F368C]/34 blur-xl opacity-70" />
 
           <div className="relative">
             <p className="text-xs tracking-[0.3em] text-white/55">
@@ -203,10 +203,10 @@ export default function StudioPage() {
                 href="/contact"
                 className={[
                   "rounded-2xl px-6 py-3 text-sm font-semibold tracking-wide",
-                  "bg-gradient-to-r from-cyan-400 to-fuchsia-500",
+                  "bg-gradient-to-r from-[#00F3FF] to-[#FF0080]",
                   "text-black shadow-lg",
                   "transition hover:scale-[1.03] hover:shadow-xl",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/75",
                 ].join(" ")}
               >
                 Start a Project
@@ -218,7 +218,7 @@ export default function StudioPage() {
                   "rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold",
                   "bg-white/5 text-white",
                   "transition hover:bg-white/10",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
                 ].join(" ")}
               >
                 Browse Projects
@@ -246,10 +246,10 @@ function ServiceCard({
 }) {
   const glow =
     tone === "cyan"
-      ? "from-cyan-400/14 via-cyan-400/05 to-fuchsia-500/10"
+      ? "from-[#00F3FF]/34 via-[#00F3FF]/18 to-[#FF0080]/24"
       : tone === "fuchsia"
-      ? "from-fuchsia-500/14 via-fuchsia-500/06 to-purple-500/10"
-      : "from-purple-500/14 via-purple-500/06 to-cyan-400/10";
+      ? "from-[#FF0080]/30 via-[#FF0080]/18 to-[#5F368C]/24"
+      : "from-[#5F368C]/34 via-[#5F368C]/22 to-[#00F3FF]/24";
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_55px_rgba(0,0,0,0.55)]">
@@ -289,7 +289,7 @@ function ProcessStep({
 }) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/35 p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_55px_rgba(0,0,0,0.55)]">
-      <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-fuchsia-500/10 to-purple-500/10 blur-xl opacity-70" />
+      <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/30 blur-xl opacity-70" />
 
       <div className="relative">
         <div className="flex items-center justify-between">

@@ -109,6 +109,7 @@ export function ProjectModal({ project, onClose }: Props) {
       : project.status === "in-progress"
       ? "In Progress"
       : "Archived";
+  const previewSrc = project.previewHref || "/static/no-signal.png";
 
   return (
     <div
@@ -132,7 +133,7 @@ export function ProjectModal({ project, onClose }: Props) {
             <p className="text-xs tracking-[0.25em] text-white/60">PROJECT</p>
             <h2
               id={titleId}
-              className="mt-2 truncate text-xl font-bold text-white md:text-2xl"
+              className="font-display mt-2 truncate text-xl font-bold text-white md:text-2xl"
             >
               {project.title}
             </h2>
@@ -204,26 +205,18 @@ export function ProjectModal({ project, onClose }: Props) {
                 <p className="text-xs tracking-[0.25em] text-white/60">PREVIEW</p>
               </div>
 
-              {/* If you have previewHref in your Project model, it will show.
-                  Otherwise it falls back to static/noise block. */}
-              {"previewHref" in project && (project as any).previewHref ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={(project as any).previewHref}
-                  alt={`${project.title} preview`}
-                  className="h-44 w-full object-cover opacity-90"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="relative h-44 w-full bg-black/50">
-                  <div className="absolute inset-0 broadcast-noise opacity-70" />
-                  <div className="absolute inset-0 [background:linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:100%_4px] opacity-30" />
-                  <div className="absolute inset-0 [background:radial-gradient(circle_at_30%_20%,rgba(34,211,238,0.18),transparent_55%)]" />
-                  <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold tracking-[0.2em] text-white/70">
-                    SIGNAL PREVIEW
-                  </div>
-                </div>
-              )}
+              {/* Uses previewHref when present, otherwise no-signal placeholder image. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewSrc}
+                alt={`${project.title} preview`}
+                className="h-44 w-full object-cover opacity-90"
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/static/no-signal.png";
+                }}
+              />
             </div>
 
             {project.stack?.length ? (
@@ -249,7 +242,7 @@ export function ProjectModal({ project, onClose }: Props) {
                   href={project.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-gradient-to-r from-cyan-400/25 via-fuchsia-500/20 to-purple-500/20 px-5 py-3 text-sm font-semibold text-white transition hover:from-cyan-400/30 hover:via-fuchsia-500/25 hover:to-purple-500/25"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-gradient-to-r from-[#00F3FF]/50 via-[#FF0080]/42 to-[#FFB800]/42 px-5 py-3 text-sm font-semibold text-white transition hover:from-[#00F3FF]/64 hover:via-[#FF0080]/56 hover:to-[#FFB800]/56"
                 >
                   Open Live Project
                 </a>

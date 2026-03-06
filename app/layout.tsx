@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 
 import { Dock } from "../components/Dock";
@@ -7,6 +8,27 @@ import { SettingsProvider } from "../components/SettingsProvider";
 import { SettingsGate } from "../components/SettingsGate";
 import { EasterEggGate } from "../components/EasterEggGate";
 import { BroadcastOverlay } from "../components/BroadcastOverlay";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  display: "swap",
+  weight: ["500", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://beawesomeproductions.com"),
@@ -63,7 +85,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-dvh">
+      <body className={`${inter.variable} ${orbitron.variable} ${jetbrainsMono.variable} min-h-dvh`}>
         <SettingsProvider>
           <MobileMiniDock />
           <Dock />
@@ -71,7 +93,7 @@ export default function RootLayout({
           <SettingsGate>
             <EasterEggGate>
               <BroadcastOverlay enabled allowEasterEgg />
-              <div className="relative z-10">{children}</div>
+              <div className="relative z-10 site-content">{children}</div>
             </EasterEggGate>
           </SettingsGate>
         </SettingsProvider>

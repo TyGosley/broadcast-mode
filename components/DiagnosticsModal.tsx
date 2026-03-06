@@ -78,7 +78,7 @@ export function DiagnosticsModal({ onClose }: { onClose: () => void }) {
             mounted && !closing ? "opacity-100 scale-100" : "opacity-0 scale-[0.985]",
           ].join(" ")}
         >
-          <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 blur-md opacity-70" />
+          <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/34 blur-md opacity-70" />
 
           <div className="relative flex items-center justify-between border-b border-white/10 bg-black/45 px-4 py-3">
             <div>
@@ -89,7 +89,7 @@ export function DiagnosticsModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={close}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             >
               Close
             </button>

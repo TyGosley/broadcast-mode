@@ -262,7 +262,7 @@ export default function ProjectsPage() {
           />
         </div>
 
-        <div className="mt-4 flex items-center justify-between text-xs text-white/55">
+        <div className="mt-4 flex flex-col items-center gap-2 text-xs text-white/55 md:flex-row md:justify-center md:gap-8">
           <div>
             Showing{" "}
             <span className="text-white/80 font-semibold">
@@ -307,7 +307,7 @@ export default function ProjectsPage() {
               "rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold",
               "bg-white/5 text-white/80 hover:bg-white/10",
               "disabled:opacity-40 disabled:cursor-not-allowed",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70",
             ].join(" ")}
           >
             Prev
@@ -325,7 +325,7 @@ export default function ProjectsPage() {
               "rounded-xl border border-white/10 px-3 py-2 text-xs font-semibold",
               "bg-white/5 text-white/80 hover:bg-white/10",
               "disabled:opacity-40 disabled:cursor-not-allowed",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
             ].join(" ")}
           >
             Next
@@ -349,7 +349,7 @@ export default function ProjectsPage() {
           <div
             className={[
               "absolute -inset-0.5 rounded-3xl blur-xl opacity-80",
-              "bg-gradient-to-br from-cyan-500/18 via-fuchsia-500/18 to-purple-500/18",
+              "bg-gradient-to-br from-[#00F3FF]/34 via-[#FF0080]/30 to-[#5F368C]/38",
               "motion-safe:animate-[ctaGlow_6s_ease-in-out_infinite]",
               "motion-reduce:animate-none",
             ].join(" ")}
@@ -388,10 +388,10 @@ export default function ProjectsPage() {
                 href="/contact"
                 className={[
                   "rounded-2xl px-6 py-3 text-sm font-semibold tracking-wide",
-                  "bg-gradient-to-r from-cyan-400 to-fuchsia-500",
+                  "bg-gradient-to-r from-[#00F3FF] to-[#FF0080]",
                   "text-black shadow-lg",
                   "transition hover:scale-[1.03] hover:shadow-xl",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/75",
                 ].join(" ")}
               >
                 Start a Project
@@ -403,7 +403,7 @@ export default function ProjectsPage() {
                   "rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold",
                   "bg-white/5 text-white",
                   "transition hover:bg-white/10",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
                 ].join(" ")}
               >
                 See My Process

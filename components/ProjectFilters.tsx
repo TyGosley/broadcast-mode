@@ -15,11 +15,11 @@ type Props = {
 function statusClass(value: string) {
   switch (value) {
     case "live":
-      return "text-emerald-300";
+      return "text-[#FFB800]";
     case "in-progress":
-      return "text-cyan-300";
+      return "text-[#00F3FF]";
     case "archived":
-      return "text-purple-300";
+      return "text-[#B68BC2]";
     default:
       return "text-white/80";
   }
@@ -43,7 +43,7 @@ export function ProjectFilters({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search projects..."
-          className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/45 outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+          className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/45 outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
         />
       </label>
 
@@ -57,7 +57,7 @@ export function ProjectFilters({
           }
           className={[
             "w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm outline-none",
-            "focus-visible:ring-2 focus-visible:ring-cyan-300/60",
+            "focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70",
             statusClass(status),
           ].join(" ")}
         >
@@ -74,7 +74,7 @@ export function ProjectFilters({
         <select
           value={tag}
           onChange={(e) => setTag(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60"
+          className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
         >
           <option value="all">All tags</option>
           {allTags.map((t) => (

@@ -15,7 +15,7 @@ export function StudioToggle({
     <button
       type="button"
       onClick={() => onChange(!enabled)}
-      className="flex w-full items-center justify-between gap-4 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-left transition hover:bg-black/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+      className="flex w-full items-center justify-between gap-4 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-center transition hover:bg-black/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
     >
       <div>
         <div className="text-sm font-semibold text-white">{label}</div>
@@ -27,7 +27,7 @@ export function StudioToggle({
       <div
         className={[
           "relative h-6 w-11 rounded-full transition",
-          enabled ? "bg-cyan-400/60" : "bg-white/20",
+          enabled ? "bg-[#00F3FF]/60" : "bg-white/20",
         ].join(" ")}
       >
         <span

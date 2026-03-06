@@ -48,7 +48,7 @@ export function StudioSections() {
 
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-            <p className="text-xs tracking-[0.3em] text-cyan-200/80">01 DISCOVER</p>
+            <p className="text-xs tracking-[0.3em] text-[#00F3FF]/90">01 DISCOVER</p>
             <h3 className="mt-2 text-lg font-semibold text-white">Align on the problem</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/70">
               <li>• Goals, audience, and success criteria</li>
@@ -58,7 +58,7 @@ export function StudioSections() {
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-            <p className="text-xs tracking-[0.3em] text-fuchsia-200/80">02 DESIGN</p>
+            <p className="text-xs tracking-[0.3em] text-[#FF0080]/90">02 DESIGN</p>
             <h3 className="mt-2 text-lg font-semibold text-white">Make it clear and bold</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/70">
               <li>• Mobile-first layout + type scale</li>
@@ -68,7 +68,7 @@ export function StudioSections() {
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-            <p className="text-xs tracking-[0.3em] text-emerald-200/80">03 BUILD</p>
+            <p className="text-xs tracking-[0.3em] text-[#FFB800]/90">03 BUILD</p>
             <h3 className="mt-2 text-lg font-semibold text-white">Ship something solid</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/70">
               <li>• Responsive implementation</li>
@@ -175,7 +175,7 @@ export function StudioSections() {
       </section>
 
       {/* CTA */}
-      <section className="rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-400/12 via-fuchsia-500/10 to-purple-500/12 p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
+      <section className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/34 p-6 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
         <p className="text-xs tracking-[0.35em] text-white/55">NEXT STEP</p>
         <h2 className="mt-2 text-2xl font-bold text-white">Want to build something?</h2>
         <p className="mt-2 max-w-2xl text-sm text-white/70">
@@ -186,13 +186,13 @@ export function StudioSections() {
         <div className="mt-5 flex flex-wrap gap-3">
           <a
             href="/contact"
-            className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+            className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
           >
             Go to Contact
           </a>
           <a
             href="/projects"
-            className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-black/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/60"
+            className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm font-semibold text-white/85 hover:bg-black/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
           >
             Browse Projects
           </a>

@@ -32,10 +32,10 @@ export function ProjectCard({
 
   const statusClass =
     project.status === "live"
-      ? "border-emerald-400/35 bg-emerald-400/15 text-emerald-200"
+      ? "border-[#FFB800]/70 bg-[#FFB800]/30 text-[#FFE7C8]"
       : project.status === "in-progress"
-      ? "border-cyan-400/35 bg-cyan-400/15 text-cyan-200"
-      : "border-purple-400/35 bg-purple-400/15 text-purple-200";
+      ? "border-[#00F3FF]/70 bg-[#00F3FF]/30 text-[#DEE6FF]"
+      : "border-[#5F368C]/80 bg-[#5F368C]/50 text-[#E9CCFF]";
 
   return (
     <button
@@ -46,13 +46,13 @@ export function ProjectCard({
       data-project-card
       data-project-id={project.id}
       className={[
-        "group w-full text-left",
+        "group w-full text-center",
         "rounded-2xl border border-white/10 bg-black/35 p-5",
         "shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_20px_60px_rgba(0,0,0,0.55)]",
         "transition",
         "hover:border-white/16 hover:bg-black/45",
         // ✅ focus style
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
       ].join(" ")}
     >
       <ProjectMediaThumb project={project} />
@@ -63,7 +63,7 @@ export function ProjectCard({
             {project.client ?? "INTERNAL"}
             {project.year ? ` • ${project.year}` : ""}
           </div>
-          <div className="mt-2 truncate text-lg font-bold text-white">
+          <div className="font-display mt-2 truncate text-lg font-bold text-white">
             {project.title}
           </div>
           <p className="mt-2 line-clamp-2 text-sm text-white/70">

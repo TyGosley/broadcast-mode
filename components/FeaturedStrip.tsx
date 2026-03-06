@@ -10,9 +10,9 @@ function getThumb(project: Project) {
 }
 
 function statusPill(status: Project["status"]) {
-  if (status === "live") return "bg-emerald-400/18 text-emerald-200 border-emerald-400/30";
-  if (status === "in-progress") return "bg-cyan-400/18 text-cyan-200 border-cyan-400/30";
-  return "bg-purple-400/18 text-purple-200 border-purple-400/30";
+  if (status === "live") return "bg-[#FFB800]/32 text-[#FFE7C8] border-[#FFB800]/70";
+  if (status === "in-progress") return "bg-[#00F3FF]/32 text-[#DEE6FF] border-[#00F3FF]/70";
+  return "bg-[#5F368C]/50 text-[#E9CCFF] border-[#5F368C]/80";
 }
 
 export function FeaturedStrip({
@@ -26,7 +26,7 @@ export function FeaturedStrip({
 
   return (
     <section className="mx-auto mt-7 max-w-5xl">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex flex-col items-center gap-2">
         <div>
           <p className="text-xs tracking-[0.25em] text-white/60">FEATURED</p>
           <h2 className="mt-2 text-lg font-bold text-white">
@@ -34,7 +34,7 @@ export function FeaturedStrip({
           </h2>
         </div>
 
-        <div className="hidden sm:block text-xs text-white/55">
+        <div className="text-xs text-white/55">
           Swipe or scroll →
         </div>
       </div>
@@ -56,13 +56,13 @@ export function FeaturedStrip({
                   onClick={() => onOpen(p.id)}
                   className={[
                     "group relative w-[260px] shrink-0 overflow-hidden rounded-2xl",
-                    "border border-white/10 bg-black/35 text-left",
+                    "border border-white/10 bg-black/35 text-center",
                     "shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_18px_55px_rgba(0,0,0,0.55)]",
                     "transition hover:bg-black/45 hover:border-white/15",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
                   ].join(" ")}
                 >
-                  <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/10 via-fuchsia-500/10 to-purple-500/10 blur-md opacity-70" />
+                  <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/36 via-[#FF0080]/28 to-[#5F368C]/38 blur-md opacity-70" />
 
                   <div className="relative">
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-black">
@@ -109,7 +109,7 @@ export function FeaturedStrip({
                         {(p.client ?? "INTERNAL") + (p.year ? ` • ${p.year}` : "")}
                       </div>
 
-                      <div className="mt-2 truncate text-base font-bold text-white">
+                      <div className="font-display mt-2 truncate text-base font-bold text-white">
                         {p.title}
                       </div>
 

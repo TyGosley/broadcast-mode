@@ -39,7 +39,7 @@ export function TrustPack({
   return (
     <section className="mx-auto mt-12 max-w-5xl">
       <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/35 p-7 shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_30px_80px_rgba(0,0,0,0.7)] md:p-9">
-        <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-cyan-500/12 via-fuchsia-500/12 to-purple-500/12 blur-xl opacity-70" />
+        <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/34 blur-xl opacity-70" />
 
         <div className="relative">
           <p className="text-xs tracking-[0.25em] text-white/60">TRUST SIGNAL</p>

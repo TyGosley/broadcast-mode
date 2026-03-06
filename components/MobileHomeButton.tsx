@@ -13,7 +13,7 @@ export function MobileHomeButton() {
         "shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_18px_50px_rgba(0,0,0,0.7)]",
         "text-white/90",
         "transition-transform duration-200 active:scale-95",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
       ].join(" ")}
     >
       <span className="text-base font-bold" aria-hidden="true">

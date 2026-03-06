@@ -33,7 +33,7 @@ function MediaBase({
             </>
           ) : (
             <>
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-fuchsia-500/8 to-purple-500/10" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/34" />
               <div className="absolute inset-0 bg-black/25" />
             </>
           )}
@@ -43,7 +43,7 @@ function MediaBase({
         <div className="absolute inset-0">{children}</div>
 
         {/* Subtle edge glow only */}
-        <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-400/10 via-fuchsia-500/8 to-purple-500/10 blur-md opacity-35" />
+        <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-[#00F3FF]/30 via-[#FF0080]/24 to-[#5F368C]/30 blur-md opacity-55" />
       </div>
     </div>
   );

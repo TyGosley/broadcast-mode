@@ -104,19 +104,19 @@ export function BroadcastTicker({
 
   const toneClass = useMemo(() => {
     const t = msgs[idx]?.tone ?? "info";
-    if (t === "egg") return "text-fuchsia-200/85";
-    if (t === "hint") return "text-cyan-100/85";
-    return "text-white/75";
+    if (t === "egg") return "text-[#FF0080]";
+    if (t === "hint") return "text-[#00F3FF]";
+    return "text-[#FFB800]";
   }, [msgs, idx]);
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4">
-      <div className="rounded-2xl border border-white/10 bg-black/35 backdrop-blur shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
+      <div className="rounded-2xl border border-white/12 bg-[#0D1117]/58 backdrop-blur-2xl shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_38px_rgba(0,0,0,0.55)]">
         <div className="flex items-center gap-3 px-4 py-3">
           {/* Left: CH + LED */}
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5">
-            <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_14px_rgba(110,231,183,0.5)]" />
-            <span className="text-[11px] font-semibold tracking-[0.2em] text-white/70">
+          <div className="flex items-center gap-2 rounded-xl border border-white/12 bg-[#0D1117]/66 px-2.5 py-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#00F3FF] shadow-[0_0_14px_rgba(0,243,255,0.72)]" />
+            <span className="font-tech text-[11px] font-semibold tracking-[0.2em] text-white/75">
               CH-99
             </span>
           </div>
@@ -126,7 +126,7 @@ export function BroadcastTicker({
             {/* Reduced motion: no scrolling, just swap text */}
             {reducedMotion ? (
               <div
-                className={["text-xs font-semibold tracking-[0.18em]", toneClass].join(" ")}
+                className={["font-tech text-xs font-semibold tracking-[0.18em]", toneClass].join(" ")}
                 aria-live="polite"
               >
                 {current}
@@ -135,7 +135,7 @@ export function BroadcastTicker({
               <div className="relative">
                 <div
                   className={[
-                    "ticker-track text-xs font-semibold tracking-[0.18em] whitespace-nowrap",
+                    "ticker-track font-tech text-xs font-semibold tracking-[0.18em] whitespace-nowrap",
                     toneClass,
                     paused ? "ticker-paused" : "",
                   ].join(" ")}
@@ -152,10 +152,10 @@ export function BroadcastTicker({
           <button
             type="button"
             onClick={() => setPaused((v) => !v)}
-            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-[11px] font-semibold text-white/80 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
+            className="font-tech rounded-xl border border-[#FFB800]/45 bg-[#0D1117]/68 px-3 py-2 text-[11px] font-semibold tracking-[0.08em] text-[#FFB800] hover:bg-[#141922]/88 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             aria-pressed={paused}
           >
-            {paused ? "Resume" : "Pause"}
+            {paused ? "GO!" : "Freeze"}
           </button>
         </div>
       </div>
