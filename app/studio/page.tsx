@@ -4,8 +4,8 @@ import { TrustPack } from "../../components/TrustPack";
 export default function StudioPage() {
   return (
     <main className="min-h-dvh px-5 py-10">
-      <header className="mx-auto max-w-5xl text-center">
-        <p className="font-tech text-xs tracking-[0.25em] text-white/60">STUDIO</p>
+      <header className="ui-section mt-0 text-center">
+        <p className="ui-eyebrow">STUDIO</p>
 
         <h1 className="page-title mt-2 text-white">
           Design + build that feels premium and converts.
@@ -21,9 +21,8 @@ export default function StudioPage() {
           <a
             href="/contact"
             className={[
-              "rounded-2xl px-6 py-3 text-sm font-semibold tracking-wide",
-              "bg-gradient-to-r from-[#00F3FF] to-[#FF0080]",
-              "text-black shadow-lg",
+              "ui-btn-primary rounded-2xl px-6 py-3 text-sm tracking-wide",
+              "shadow-lg",
               "transition hover:scale-[1.03] hover:shadow-xl",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/75",
             ].join(" ")}
@@ -34,8 +33,7 @@ export default function StudioPage() {
           <a
             href="/projects"
             className={[
-              "rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold",
-              "bg-white/5 text-white",
+              "ui-btn-secondary rounded-2xl px-6 py-3 text-sm",
               "transition hover:bg-white/10",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
             ].join(" ")}
@@ -46,9 +44,9 @@ export default function StudioPage() {
       </header>
 
       {/* SERVICES */}
-      <section className="mx-auto mt-14 max-w-5xl">
+      <section className="ui-section !mt-14">
         <div className="text-center">
-          <p className="font-tech text-xs tracking-[0.25em] text-white/60">SERVICES</p>
+          <p className="ui-eyebrow">SERVICES</p>
           <h2 className="mt-2 text-2xl font-bold text-white md:text-3xl">
             What I can build for you
           </h2>
@@ -97,7 +95,7 @@ export default function StudioPage() {
       </section>
 
       {/* PROCESS */}
-      <section className="relative mx-auto mt-14 max-w-5xl overflow-hidden rounded-3xl px-3 py-2">
+      <section className="ui-section !mt-14 relative overflow-hidden rounded-3xl px-3 py-2">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.08]">
           <div className="absolute -left-10 top-16 h-56 w-56 rounded-full border border-white/35" />
           <div className="absolute left-5 top-[7.5rem] h-24 w-24 rounded-full border border-white/30" />
@@ -107,7 +105,7 @@ export default function StudioPage() {
         </div>
 
         <div className="relative z-10 text-center">
-          <p className="font-tech text-xs tracking-[0.25em] text-white/60">PROCESS</p>
+          <p className="ui-eyebrow">PROCESS</p>
           <h2 className="mt-2 text-2xl font-bold text-white md:text-3xl">
             A clean system that keeps projects moving
           </h2>
@@ -169,9 +167,9 @@ export default function StudioPage() {
       </section>
 
       {/* DELIVERABLES */}
-      <section className="mx-auto mt-14 max-w-5xl">
+      <section className="ui-section !mt-14">
         <div className="text-center">
-          <p className="font-tech text-xs tracking-[0.25em] text-white/60">DELIVERABLES</p>
+          <p className="ui-eyebrow">DELIVERABLES</p>
           <h2 className="mt-2 text-2xl font-bold text-white md:text-3xl">
             What you get
           </h2>
@@ -200,12 +198,12 @@ export default function StudioPage() {
       <TrustPack />
 
       {/* CTA */}
-      <section className="mx-auto mt-16 max-w-5xl">
-        <div className="panel-glass-strong relative overflow-hidden rounded-3xl p-8 md:p-10">
+      <section className="ui-section !mt-16">
+        <div className="ui-panel-strong relative overflow-hidden rounded-3xl p-8 md:p-10">
           <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-[#00F3FF]/30 via-[#FF0080]/28 to-[#5F368C]/34 blur-xl opacity-70" />
 
           <div className="relative text-center">
-            <p className="font-tech text-xs tracking-[0.3em] text-white/55">
+            <p className="ui-eyebrow text-white/55">
               READY WHEN YOU ARE
             </p>
             <h2 className="mt-3 text-2xl font-bold text-white md:text-3xl">
@@ -220,9 +218,8 @@ export default function StudioPage() {
               <a
                 href="/contact"
                 className={[
-                  "rounded-2xl px-6 py-3 text-sm font-semibold tracking-wide",
-                  "bg-gradient-to-r from-[#00F3FF] to-[#FF0080]",
-                  "text-black shadow-lg",
+                  "ui-btn-primary rounded-2xl px-6 py-3 text-sm tracking-wide",
+                  "shadow-lg",
                   "transition hover:scale-[1.03] hover:shadow-xl",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/75",
                 ].join(" ")}
@@ -233,8 +230,7 @@ export default function StudioPage() {
               <a
                 href="/projects"
                 className={[
-                  "rounded-2xl border border-white/15 px-6 py-3 text-sm font-semibold",
-                  "bg-white/5 text-white",
+                  "ui-btn-secondary rounded-2xl px-6 py-3 text-sm",
                   "transition hover:bg-white/10",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/75",
                 ].join(" ")}
@@ -312,7 +308,7 @@ function ServiceCard({
           {bullets.map((b) => (
             <li
               key={b}
-              className="panel-inset rounded-xl px-3 py-2"
+              className="ui-panel-inset rounded-xl px-3 py-2"
             >
               {b}
             </li>
@@ -377,7 +373,7 @@ function ProcessStep({
           {items.map((i) => (
             <li
               key={i}
-              className="panel-inset rounded-xl px-3 py-2"
+              className="ui-panel-inset rounded-xl px-3 py-2"
             >
               {i}
             </li>

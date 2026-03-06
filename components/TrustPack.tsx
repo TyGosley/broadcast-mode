@@ -37,12 +37,12 @@ export function TrustPack({
   ],
 }: Props) {
   return (
-    <section className="mx-auto mt-12 max-w-5xl">
-      <div className="panel-glass relative overflow-hidden rounded-3xl p-7 md:p-9">
+    <section className="ui-section !mt-12">
+      <div className="ui-panel relative overflow-hidden rounded-3xl p-7 md:p-9">
         <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-br from-[#00F3FF]/26 via-[#FF0080]/24 to-[#5F368C]/34 blur-xl opacity-70" />
 
         <div className="relative text-center">
-          <p className="font-tech text-xs tracking-[0.25em] text-white/60">TRUST SIGNAL</p>
+          <p className="ui-eyebrow">TRUST SIGNAL</p>
           <h2 className="mt-2 text-xl font-bold text-white md:text-2xl">
             {brandLine}
           </h2>
@@ -67,7 +67,7 @@ export function TrustPack({
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="panel-inset rounded-2xl p-4 text-center"
+                className="ui-panel-inset rounded-2xl p-4 text-center"
               >
                 <div className="text-lg font-bold text-white">{s.value}</div>
                 <div className="font-tech mt-1 text-xs tracking-[0.12em] text-white/60">
@@ -82,7 +82,7 @@ export function TrustPack({
             {testimonials.map((t, idx) => (
               <figure
                 key={idx}
-                className="panel-inset rounded-2xl p-5 text-center"
+                className="ui-panel-inset rounded-2xl p-5 text-center"
               >
                 <blockquote className="text-sm text-white/75">
                   “{t.quote}”
