@@ -26,7 +26,7 @@ function MediaBase({
                 alt={alt ?? "Project cover"}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover opacity-85"
+                className="object-cover opacity-85 transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                 priority={false}
               />
               {/* Light darken for readability, not heavy */}

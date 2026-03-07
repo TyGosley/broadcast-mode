@@ -94,7 +94,14 @@ export default function RootLayout({
             <EasterEggGate>
               <BroadcastOverlay enabled allowEasterEgg />
               <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[5] site-canvas" />
-              <div className="relative z-10 site-content">{children}</div>
+              <div className="relative z-10 site-content">
+                {children}
+                <footer className="ui-section !mt-8 px-4 pb-3">
+                  <p className="ui-eyebrow text-center text-white/40">
+                    BROADCAST SIGNATURE • SIGNAL LOCKED • BAP SYSTEM
+                  </p>
+                </footer>
+              </div>
             </EasterEggGate>
           </SettingsGate>
         </SettingsProvider>

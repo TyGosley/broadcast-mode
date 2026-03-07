@@ -12,6 +12,10 @@ export default function ContactPage() {
           Drop a note. If you have a rough idea, that’s enough. We can shape it
           together.
         </p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="ui-pill px-3 text-[11px]">TX CHANNEL: OPEN</span>
+          <span className="ui-pill px-3 text-[11px]">REPLY: PRIORITY</span>
+        </div>
       </header>
 
       <section className="ui-section">

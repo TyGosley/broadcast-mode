@@ -95,7 +95,7 @@ export function FeaturedStrip({
                             alt={`${p.title} preview`}
                             fill
                             sizes="260px"
-                            className="object-cover opacity-95 transition group-hover:opacity-100"
+                            className="object-cover opacity-95 transition duration-300 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/10" />
                         </>

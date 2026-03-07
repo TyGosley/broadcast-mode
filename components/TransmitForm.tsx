@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type ProjectType =
   | "website"
@@ -26,6 +26,11 @@ type FormState = {
 type Status = "idle" | "sending" | "success" | "error";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/maqbaoey";
+const TERMINAL_SEND_STEPS = [
+  "Establishing uplink...",
+  "Transmitting packet...",
+  "Awaiting signal lock...",
+] as const;
 
 function isValidEmail(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -75,6 +80,7 @@ export function TransmitForm() {
 
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [sendStep, setSendStep] = useState(0);
 
   const canSubmit = useMemo(() => {
     if (!form.name.trim()) return false;
@@ -88,6 +94,19 @@ export function TransmitForm() {
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
+
+  useEffect(() => {
+    if (status !== "sending") {
+      setSendStep(0);
+      return;
+    }
+
+    const id = window.setInterval(() => {
+      setSendStep((prev) => (prev + 1) % TERMINAL_SEND_STEPS.length);
+    }, 700);
+
+    return () => window.clearInterval(id);
+  }, [status]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -176,6 +195,27 @@ export function TransmitForm() {
                 ? "Message delivered. I’ll reply soon."
                 : "Send a message through the neon ether. Fast reply, no spam."}
             </p>
+
+            {status === "sending" ? (
+              <p
+                className="mt-3 inline-flex items-center gap-2 rounded-lg border border-[#00F3FF]/30 bg-[#00F3FF]/8 px-3 py-1.5 font-tech text-[11px] tracking-[0.12em] text-[#00F3FF]/88"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-[#00F3FF] shadow-[0_0_10px_rgba(0,243,255,0.75)]"
+                />
+                {TERMINAL_SEND_STEPS[sendStep]}
+              </p>
+            ) : null}
+
+            {status === "success" ? (
+              <p className="mt-3 font-tech text-[11px] tracking-[0.12em] text-[#FFB800]/90">
+                Signal locked.
+              </p>
+            ) : null}
           </div>
         </div>
       </div>

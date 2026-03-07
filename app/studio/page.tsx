@@ -94,6 +94,16 @@ export default function StudioPage() {
         </div>
       </section>
 
+      <section className="ui-section !mt-10">
+        <div className="ui-panel-inset rounded-xl p-3">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="ui-eyebrow text-white/55">PIPELINE STATUS</span>
+            <span className="ui-pill px-3 text-[11px]">QUEUE: STABLE</span>
+            <span className="ui-pill px-3 text-[11px]">BUILD FLOW: LIVE</span>
+          </div>
+        </div>
+      </section>
+
       {/* PROCESS */}
       <section className="ui-section !mt-14 relative overflow-hidden rounded-3xl px-3 py-2">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.08]">
