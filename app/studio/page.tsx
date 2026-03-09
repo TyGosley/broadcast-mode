@@ -309,9 +309,11 @@ function ServiceCard({
       <span className="pointer-events-none absolute inset-y-2 left-4 w-[1px] bg-white/14" />
 
       <div className="relative">
-        <p className={["dymo-label", dymoVariant(tone)].join(" ")}>
-          {sub}
-        </p>
+        <div className="flex justify-center">
+          <p className={["dymo-label", dymoVariant(tone)].join(" ")}>
+            {sub}
+          </p>
+        </div>
         <h3 className="mt-2 text-lg font-bold text-white">{title}</h3>
 
         <ul className="mt-4 grid gap-2 text-sm text-white/75">
@@ -367,12 +369,9 @@ function ProcessStep({
       <span className="pointer-events-none absolute right-3 bottom-3 h-2.5 w-2.5 rounded-full border border-white/20 bg-black/45 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_0_4px_rgba(0,0,0,0.45)]" />
 
       <div className="relative">
-        <div className="flex items-center justify-between">
-          <div className={["dymo-label", dymoVariant(tone)].join(" ")}>
+        <div className="flex items-center">
+          <div className={["dymo-label", "dymo-step", dymoVariant(tone)].join(" ")}>
             STEP {number}
-          </div>
-          <div className="font-tech text-[11px] tracking-[0.14em] text-white/58">
-            BROADCAST SYSTEM
           </div>
         </div>
 

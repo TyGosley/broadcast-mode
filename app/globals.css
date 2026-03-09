@@ -534,6 +534,45 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.dymo-step {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-left-width: 3px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.03) 38%, rgba(0, 0, 0, 0.2) 100%),
+    var(--dymo-step-bg, #0b0e14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 0, 0, 0.26),
+    2px 2px 0 rgba(0, 0, 0, 0.88),
+    0 0 12px rgba(var(--dymo-accent-rgb, 0, 243, 255), 0.16);
+}
+
+.dymo-step::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 1px;
+  pointer-events: none;
+  opacity: 0.42;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 65%);
+}
+
+.dymo-step::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.45;
+  box-shadow:
+    0 0 0 1px rgba(var(--dymo-accent-rgb, 0, 243, 255), 0.22),
+    0 0 10px rgba(var(--dymo-accent-rgb, 0, 243, 255), 0.14);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .dymo-label:hover {
     transform: translateY(1px) translateX(1px);
@@ -541,19 +580,34 @@ body {
       1px 1px 0 rgba(0, 0, 0, 0.9),
       inset 0 -1px 3px rgba(255, 255, 255, 0.1);
   }
+
+  .dymo-step:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(0, 0, 0, 0.26),
+      1px 1px 0 rgba(0, 0, 0, 0.88),
+      0 0 14px rgba(var(--dymo-accent-rgb, 0, 243, 255), 0.2);
+  }
 }
 
 .dymo-pink {
+  --dymo-accent-rgb: 255, 0, 128;
+  --dymo-step-bg: #b20059;
   background-color: #b20059;
   border-left-color: #ff0080;
 }
 
 .dymo-teal {
+  --dymo-accent-rgb: 0, 243, 255;
+  --dymo-step-bg: #008b94;
   background-color: #008b94;
   border-left-color: #00f3ff;
 }
 
 .dymo-amber {
+  --dymo-accent-rgb: 255, 184, 0;
+  --dymo-step-bg: #b28100;
   background-color: #b28100;
   border-left-color: #ffb800;
 }
