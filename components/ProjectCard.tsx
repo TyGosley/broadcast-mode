@@ -48,7 +48,7 @@ export function ProjectCard({
       data-project-card
       data-project-id={project.id}
       className={[
-        "group flex h-full w-full flex-col text-center",
+        "project-module-card group flex h-full w-full flex-col text-center",
         "ui-panel rounded-2xl p-5",
         "transition",
         "hover:border-white/16",

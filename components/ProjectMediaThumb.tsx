@@ -16,7 +16,7 @@ function MediaBase({
 }) {
   return (
     <div className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-black/35 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.55)]">
-      <div className="relative aspect-[16/10] w-full">
+      <div className="project-thumb-scanline relative aspect-[16/10] w-full">
         {/* Artwork */}
         <div className="absolute inset-0">
           {src ? (
@@ -26,12 +26,12 @@ function MediaBase({
                 alt={alt ?? "Project cover"}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover opacity-85 transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                className="object-cover opacity-[0.9] [filter:brightness(1.08)_contrast(1.04)_saturate(1.08)] transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                 priority={false}
               />
               {/* Light darken for readability, not heavy */}
-              <div className="absolute inset-0 bg-black/25" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-black/10" />
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/26 via-black/7 to-black/7" />
             </>
           ) : (
             <>

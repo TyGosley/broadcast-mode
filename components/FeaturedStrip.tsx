@@ -73,7 +73,7 @@ export function FeaturedStrip({
                   onClick={() => onOpen(p.id)}
                   style={cardVars}
                   className={[
-                    "card-module group relative h-[420px] w-[260px] shrink-0 overflow-hidden rounded-2xl",
+                    "featured-module-card card-module group relative h-[420px] w-[260px] shrink-0 overflow-hidden rounded-2xl",
                     theme.variant,
                     "border border-white/12 bg-[#0D1117]/58 text-center backdrop-blur-2xl",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
@@ -87,7 +87,7 @@ export function FeaturedStrip({
                   />
 
                   <div className="relative flex h-full flex-col">
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-2xl border-b border-white/10 bg-black/45">
+                    <div className="featured-thumb-scanline relative aspect-[16/10] w-full overflow-hidden rounded-t-2xl border-b border-white/10 bg-black/45">
                       {thumb ? (
                         <>
                           <Image
@@ -95,9 +95,9 @@ export function FeaturedStrip({
                             alt={`${p.title} preview`}
                             fill
                             sizes="260px"
-                            className="object-cover opacity-95 transition duration-300 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
+                            className="object-cover opacity-[0.97] [filter:brightness(1.08)_contrast(1.04)_saturate(1.07)] transition duration-300 ease-out group-hover:scale-[1.03] group-hover:opacity-100"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/10" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/54 via-black/12 to-black/8" />
                         </>
                       ) : (
                         <>
@@ -106,10 +106,10 @@ export function FeaturedStrip({
                           <img
                             src="/static/no-signal.png"
                             alt=""
-                            className="h-full w-full object-cover opacity-95"
+                            className="h-full w-full object-cover opacity-[0.97] [filter:brightness(1.08)_contrast(1.04)_saturate(1.07)]"
                             draggable={false}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/10" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/54 via-black/12 to-black/8" />
                         </>
                       )}
 

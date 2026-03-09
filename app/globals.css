@@ -300,6 +300,98 @@ body {
   border-radius: var(--radius-md);
 }
 
+/* Project/featured module premium polish (localized) */
+.project-module-card,
+.featured-module-card {
+  position: relative;
+  isolation: isolate;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.project-module-card::before,
+.featured-module-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.34;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.06) 12%,
+    rgba(255, 255, 255, 0) 30%
+  );
+}
+
+.project-module-card::after,
+.featured-module-card::after {
+  --module-corner-offset: 10px;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    radial-gradient(circle at var(--module-corner-offset) var(--module-corner-offset),
+      rgba(255, 255, 255, 0.34) 0 1px,
+      rgba(0, 243, 255, 0.14) 1.5px 2.4px,
+      rgba(0, 0, 0, 0) 2.8px),
+    radial-gradient(circle at calc(100% - var(--module-corner-offset)) var(--module-corner-offset),
+      rgba(255, 255, 255, 0.34) 0 1px,
+      rgba(0, 243, 255, 0.14) 1.5px 2.4px,
+      rgba(0, 0, 0, 0) 2.8px),
+    radial-gradient(circle at var(--module-corner-offset) calc(100% - var(--module-corner-offset)),
+      rgba(255, 255, 255, 0.34) 0 1px,
+      rgba(0, 243, 255, 0.14) 1.5px 2.4px,
+      rgba(0, 0, 0, 0) 2.8px),
+    radial-gradient(circle at calc(100% - var(--module-corner-offset)) calc(100% - var(--module-corner-offset)),
+      rgba(255, 255, 255, 0.34) 0 1px,
+      rgba(0, 243, 255, 0.14) 1.5px 2.4px,
+      rgba(0, 0, 0, 0) 2.8px);
+}
+
+/* Subtle broadcast scanlines on project thumbnail hover */
+.project-thumb-scanline::after,
+.featured-thumb-scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 243, 255, 0.1) 0px,
+      rgba(0, 243, 255, 0.1) 1px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 6px
+    ),
+    linear-gradient(to bottom, rgba(0, 243, 255, 0.06), rgba(255, 0, 128, 0.05));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-module-card:hover::before,
+  .featured-module-card:hover::before {
+    opacity: 0.42;
+  }
+
+  .project-module-card:hover::after,
+  .featured-module-card:hover::after {
+    opacity: 0.62;
+  }
+
+  .group:hover .project-thumb-scanline::after,
+  .group:hover .featured-thumb-scanline::after {
+    opacity: 0.065;
+  }
+}
+
 /* Smooth, lightweight feedback for interactive surfaces */
 :is(a, button, [role="button"]).ui-panel,
 :is(a, button, [role="button"]).ui-panel-strong,
