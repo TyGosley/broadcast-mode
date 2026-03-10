@@ -91,6 +91,9 @@ export function TransmitForm() {
     return true;
   }, [form]);
 
+  const messageLength = form.message.trim().length;
+  const messageTooShort = form.message.length > 0 && messageLength < 10;
+
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
@@ -183,47 +186,50 @@ export function TransmitForm() {
   return (
     <div className="ui-stack-lg">
       {/* Status panel */}
-      <div className="ui-panel rounded-2xl p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="ui-eyebrow">TRANSMISSION</p>
-            <h2 className="mt-2 text-xl font-semibold text-white">
-              {status === "success" ? "Signal received." : "Transmit a signal."}
-            </h2>
-            <p className="mt-2 text-sm text-white/70">
-              {status === "success"
-                ? "Message delivered. I’ll reply soon."
-                : "Send a message through the neon ether. Fast reply, no spam."}
+      <div className="ui-panel-strong relative rounded-2xl p-4 md:p-5">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-2xl border border-white/14 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_0_16px_rgba(0,243,255,0.08)]"
+        />
+
+        <div className="relative flex min-h-[8.25rem] flex-col items-center justify-center text-center">
+          <p className="ui-eyebrow">TRANSMISSION</p>
+          <h2 className="mt-2 text-xl font-semibold text-white">
+            {status === "success" ? "Signal received." : "Transmit a signal."}
+          </h2>
+          <p className="mt-1.5 max-w-xl text-sm text-white/70">
+            {status === "success"
+              ? "Message delivered. I’ll reply soon."
+              : "Send a message through the neon ether. Fast reply, no spam."}
+          </p>
+
+          {status === "sending" ? (
+            <p
+              className="mt-3 inline-flex w-fit items-center gap-2 rounded-lg border border-[#00F3FF]/30 bg-[#00F3FF]/8 px-3 py-1.5 font-tech text-[11px] tracking-[0.12em] text-[#00F3FF]/88"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <span
+                aria-hidden="true"
+                className="h-1.5 w-1.5 rounded-full bg-[#00F3FF] shadow-[0_0_10px_rgba(0,243,255,0.75)]"
+              />
+              {TERMINAL_SEND_STEPS[sendStep]}
             </p>
+          ) : null}
 
-            {status === "sending" ? (
-              <p
-                className="mt-3 inline-flex items-center gap-2 rounded-lg border border-[#00F3FF]/30 bg-[#00F3FF]/8 px-3 py-1.5 font-tech text-[11px] tracking-[0.12em] text-[#00F3FF]/88"
-                role="status"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 rounded-full bg-[#00F3FF] shadow-[0_0_10px_rgba(0,243,255,0.75)]"
-                />
-                {TERMINAL_SEND_STEPS[sendStep]}
-              </p>
-            ) : null}
-
-            {status === "success" ? (
-              <p className="mt-3 font-tech text-[11px] tracking-[0.12em] text-[#FFB800]/90">
-                Signal locked.
-              </p>
-            ) : null}
-          </div>
+          {status === "success" ? (
+            <p className="mt-3 font-tech text-[11px] tracking-[0.12em] text-[#FFB800]/90">
+              Signal locked.
+            </p>
+          ) : null}
         </div>
       </div>
 
       {/* Form */}
       <form
         onSubmit={onSubmit}
-        className="ui-panel rounded-2xl p-5"
+        className="ui-panel mt-1 rounded-2xl p-5 text-center md:mt-1.5 md:p-6"
       >
         <input
           type="text"
@@ -240,7 +246,7 @@ export function TransmitForm() {
             <input
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
-              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-center text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -250,7 +256,7 @@ export function TransmitForm() {
             <input
               value={form.email}
               onChange={(e) => update("email", e.target.value)}
-              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-center text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
               disabled={status === "sending"}
             />
           </label>
@@ -266,7 +272,7 @@ export function TransmitForm() {
               onChange={(e) =>
                 update("projectType", e.target.value as FormState["projectType"])
               }
-              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-center text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             >
               <option value="">Select…</option>
               <option value="website">New Website</option>
@@ -287,7 +293,7 @@ export function TransmitForm() {
               onChange={(e) =>
                 update("timeline", e.target.value as FormState["timeline"])
               }
-              className="ui-panel-inset rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
+              className="ui-panel-inset rounded-xl px-4 py-3 text-center text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70"
             >
               <option value="">Select…</option>
               <option value="asap">ASAP</option>
@@ -305,9 +311,17 @@ export function TransmitForm() {
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
             rows={6}
-            className="ui-panel-inset resize-none rounded-xl px-4 py-3 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+            className="ui-panel-inset resize-none rounded-xl px-4 py-3 text-center text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
             disabled={status === "sending"}
           />
+          <span
+            className={[
+              "text-[11px] font-tech tracking-[0.12em] transition-colors",
+              messageTooShort ? "text-[#FF9AAE]/85" : "text-white/45",
+            ].join(" ")}
+          >
+            {messageLength}/10 characters
+          </span>
         </label>
 
         {error && (
@@ -322,11 +336,11 @@ export function TransmitForm() {
           </div>
         )}
 
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
           <button
             type="submit"
             disabled={!canSubmit || status === "sending"}
-            className="ui-btn-primary rounded-xl border-white/15 bg-gradient-to-r from-[#00F3FF]/50 via-[#FF0080]/42 to-[#FFB800]/42 px-5 py-3 text-sm text-white disabled:opacity-50"
+            className="ui-btn-primary rounded-xl px-5 py-3 text-sm disabled:opacity-50"
           >
             {status === "sending" ? "Transmitting…" : "Transmit"}
           </button>
@@ -339,6 +353,10 @@ export function TransmitForm() {
             Reset
           </button>
         </div>
+
+        <p className="mt-3 font-tech text-[11px] tracking-[0.12em] text-white/52">
+          RESPONSE WINDOW: &lt; 24H
+        </p>
       </form>
     </div>
   );
