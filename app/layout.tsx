@@ -7,7 +7,7 @@ import { MobileMiniDock } from "../components/MobileMiniDock";
 import { SettingsProvider } from "../components/SettingsProvider";
 import { SettingsGate } from "../components/SettingsGate";
 import { EasterEggGate } from "../components/EasterEggGate";
-import { BroadcastOverlay } from "../components/BroadcastOverlay";
+import { OverlayController } from "../components/OverlayController";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -92,7 +92,7 @@ export default function RootLayout({
 
           <SettingsGate>
             <EasterEggGate>
-              <BroadcastOverlay enabled allowEasterEgg />
+              <OverlayController />
               <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[5] site-canvas" />
               <div className="relative z-10 site-content">
                 {children}

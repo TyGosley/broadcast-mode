@@ -17,10 +17,10 @@ const APPS: AppDefinition[] = [
     href: "/studio",
   },
   {
-    id: "archive",
-    label: "Archive",
-    subtitle: "Legacy work",
-    href: "/archive",
+    id: "settings",
+    label: "Settings",
+    subtitle: "Look + feel",
+    href: "/settings",
   },
   {
     id: "contact",

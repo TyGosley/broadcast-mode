@@ -17,12 +17,12 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-const SESSION_KEY = "broadcastMode_ticker_msgs_v1";
+const SESSION_KEY = "broadcastMode_ticker_msgs_v2";
 
 type TickerMsg = {
   id: string;
   text: string;
-  tone?: "info" | "hint" | "egg";
+  tone?: "info" | "hint";
 };
 
 const DEFAULT_MSGS: TickerMsg[] = [
@@ -30,31 +30,24 @@ const DEFAULT_MSGS: TickerMsg[] = [
   { id: "nav-projects", text: "TIP: OPEN PROJECTS TO BROWSE CURRENT + PAST WORK", tone: "hint" },
   { id: "nav-contact", text: "TIP: USE CONTACT TO START A BUILD OR REQUEST A QUOTE", tone: "hint" },
   { id: "dock", text: "SHORTCUT: DOCK ICONS = FAST NAVIGATION BETWEEN MODULES", tone: "hint" },
-  { id: "egg-press", text: "EASTER EGG: LONG PRESS A CASSETTE/CD FOR A SIGNAL BURST", tone: "egg" },
-  { id: "egg-konami", text: "ANOMALY DETECTED… TRY ↑ ↑ ↓ ↓ ← → ← → B A", tone: "egg" },
-  { id: "egg-max", text: "HIDDEN PANEL: TRIPLE-CLICK MAXIMIZE INSIDE A PROJECT WINDOW", tone: "egg" },
 ];
 
-function pickSessionMessages(all: TickerMsg[], includeEggs: boolean) {
-  const pool = includeEggs ? all : all.filter((m) => m.tone !== "egg");
-
+function pickSessionMessages(all: TickerMsg[]) {
+  const pool = all;
   // Small rotation set so it feels curated per session.
   // Client-only selection, stored in sessionStorage to stay stable (no hydration mismatch).
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
 
-  // Keep a mix: at least 1 info + 2 hints + optional 1 egg
+  // Keep a mix: at least 1 info + 2 hints
   const info = shuffled.find((m) => m.tone === "info") ?? pool[0];
   const hints = shuffled.filter((m) => m.tone === "hint").slice(0, 2);
-  const eggs = includeEggs ? shuffled.filter((m) => m.tone === "egg").slice(0, 1) : [];
 
-  return [info, ...hints, ...eggs].filter(Boolean);
+  return [info, ...hints].filter(Boolean);
 }
 
 export function BroadcastTicker({
-  includeEggHints = true,
   cycleMs = 9000,
 }: {
-  includeEggHints?: boolean;
   cycleMs?: number;
 }) {
   const reducedMotion = usePrefersReducedMotion();
@@ -78,7 +71,7 @@ export function BroadcastTicker({
       // ignore
     }
 
-    const picked = pickSessionMessages(DEFAULT_MSGS, includeEggHints);
+    const picked = pickSessionMessages(DEFAULT_MSGS);
 
     setMsgs(picked);
     try {
@@ -86,7 +79,7 @@ export function BroadcastTicker({
     } catch {
       // ignore
     }
-  }, [includeEggHints]);
+  }, []);
 
   // Cycle
   useEffect(() => {
@@ -104,7 +97,6 @@ export function BroadcastTicker({
 
   const toneClass = useMemo(() => {
     const t = msgs[idx]?.tone ?? "info";
-    if (t === "egg") return "text-[#FF0080]";
     if (t === "hint") return "text-[#00F3FF]";
     return "text-[#FFB800]";
   }, [msgs, idx]);

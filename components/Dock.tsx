@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
+import { SettingsGearIcon } from "./SettingsGearIcon";
 
 const ITEMS = [
   { href: "/", label: "Home", short: "H" },
   { href: "/projects", label: "Projects", short: "P" },
   { href: "/studio", label: "Studio", short: "S" },
-  { href: "/archive", label: "Archive", short: "A" },
+  { href: "/settings", label: "Settings", short: "S" },
   { href: "/contact", label: "Contact", short: "C" },
 ];
 
@@ -16,7 +17,7 @@ const ICON_COLOR: Record<string, string> = {
   "/": "#FFB800",
   "/projects": "#FF0080",
   "/studio": "#00F3FF",
-  "/archive": "#FFB800",
+  "/settings": "#FFB800",
   "/contact": "#EAF0FF",
 };
 
@@ -24,7 +25,7 @@ const ICON_COLOR_RGB: Record<string, string> = {
   "/": "255,184,0",
   "/projects": "255,0,128",
   "/studio": "0,243,255",
-  "/archive": "255,184,0",
+  "/settings": "255,184,0",
   "/contact": "234,240,255",
 };
 
@@ -91,17 +92,29 @@ export function Dock() {
                     ].join(" ")}
                     aria-hidden="true"
                   >
-                    <span
-                      className="text-sm font-bold"
-                      style={{
-                        color: active ? "#00F3FF" : ICON_COLOR[it.href] ?? "#EAF0FF",
-                        textShadow: active
-                          ? "0 0 8px rgba(0,243,255,0.85), 0 0 16px rgba(0,243,255,0.45)"
-                          : "0 0 8px rgba(255,184,0,0.35)",
-                      }}
-                    >
-                      {it.short}
-                    </span>
+                    {it.href === "/settings" ? (
+                      <SettingsGearIcon
+                        className="h-4 w-4"
+                        style={{
+                          color: active ? "#00F3FF" : ICON_COLOR[it.href] ?? "#EAF0FF",
+                          filter: active
+                            ? "drop-shadow(0 0 6px rgba(0,243,255,0.85)) drop-shadow(0 0 10px rgba(0,243,255,0.45))"
+                            : "drop-shadow(0 0 6px rgba(255,184,0,0.35))",
+                        }}
+                      />
+                    ) : (
+                      <span
+                        className="text-sm font-bold"
+                        style={{
+                          color: active ? "#00F3FF" : ICON_COLOR[it.href] ?? "#EAF0FF",
+                          textShadow: active
+                            ? "0 0 8px rgba(0,243,255,0.85), 0 0 16px rgba(0,243,255,0.45)"
+                            : "0 0 8px rgba(255,184,0,0.35)",
+                        }}
+                      >
+                        {it.short}
+                      </span>
+                    )}
                   </span>
                   <span className="hidden lg:inline">{it.label}</span>
                 </Link>

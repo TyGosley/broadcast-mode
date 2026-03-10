@@ -7,12 +7,14 @@ import type { VhsIntensity } from "../lib/settings";
 type Props = {
   enabled: boolean;
   intensity: VhsIntensity;
+  reducedMotion?: boolean;
   allowEasterEgg?: boolean;
 };
 
 export function BroadcastOverlay({
   enabled,
   intensity,
+  reducedMotion = false,
   allowEasterEgg = true,
 }: Props) {
   const pathname = usePathname();
@@ -20,6 +22,16 @@ export function BroadcastOverlay({
   const [flicker, setFlicker] = useState(false);
 
   const config = useMemo(() => {
+    if (reducedMotion) {
+      return {
+        noiseOpacity: "0.04",
+        scanOpacity: "0.08",
+        scanSize: "4px",
+        bleedOpacity: "0.05",
+        jitterMs: 1600,
+        noiseMs: 320,
+      };
+    }
     if (intensity === "low") {
       return {
         noiseOpacity: "0.07",
@@ -48,12 +60,12 @@ export function BroadcastOverlay({
       jitterMs: 900,
       noiseMs: 180,
     };
-  }, [intensity]);
+  }, [intensity, reducedMotion]);
 
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || reducedMotion) return;
 
     const burst = (ms: number) => {
       setFlicker(true);
@@ -69,10 +81,10 @@ export function BroadcastOverlay({
 
     window.addEventListener("broadcast:burst", onBurst as EventListener);
     return () => window.removeEventListener("broadcast:burst", onBurst as EventListener);
-  }, [enabled]);
+  }, [enabled, reducedMotion]);
 
   useEffect(() => {
-    if (!enabled || !allowEasterEgg) return;
+    if (!enabled || !allowEasterEgg || reducedMotion) return;
 
     const onKey = (e: KeyboardEvent) => {
       if (e.shiftKey && e.key.toLowerCase() === "b") {
@@ -82,7 +94,7 @@ export function BroadcastOverlay({
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [enabled, allowEasterEgg]);
+  }, [enabled, allowEasterEgg, reducedMotion]);
 
   if (!enabled) return null;
   if (!mounted) return null;
@@ -111,7 +123,7 @@ export function BroadcastOverlay({
           opacity: "var(--noise-opacity)",
           backgroundImage:
             "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"4\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\"/></svg>')",
-          animation: "noise var(--noise-ms) steps(2) infinite",
+          animation: reducedMotion ? "none" : "noise var(--noise-ms) steps(2) infinite",
         }}
       />
 
@@ -122,7 +134,7 @@ export function BroadcastOverlay({
           backgroundImage:
             "linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)",
           backgroundSize: "100% var(--scan-size)",
-          animation: "scanlines 6s linear infinite",
+          animation: reducedMotion ? "none" : "scanlines 6s linear infinite",
         }}
       />
 
@@ -136,7 +148,7 @@ export function BroadcastOverlay({
         }}
       />
 
-      {allowEasterEgg ? (
+      {allowEasterEgg && !reducedMotion ? (
         <div
           className="absolute inset-0"
           style={{

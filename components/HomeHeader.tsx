@@ -114,7 +114,7 @@ export function HomeHeader() {
 
       {/* Broadcast ticker */}
       <div className="mt-3">
-        <BroadcastTicker includeEggHints />
+        <BroadcastTicker />
       </div>
     </header>
   );

@@ -25,10 +25,10 @@ export const APPS: AppDefinition[] = [
     href: "/studio",
   },
   {
-    id: "archive",
-    label: "Archive",
-    subtitle: "Experiments",
-    href: "/archive",
+    id: "settings",
+    label: "Settings",
+    subtitle: "Look + Feel",
+    href: "/settings",
   },
   {
     id: "contact",

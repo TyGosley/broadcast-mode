@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import type { AppDefinition } from "../lib/apps";
+import { SettingsGearIcon } from "./SettingsGearIcon";
 
 type AppIconProps = {
   app: AppDefinition;
@@ -9,21 +10,21 @@ type AppIconProps = {
 const APP_NEON: Record<string, string> = {
   projects: "#FF0080",
   studio: "#00F3FF",
-  archive: "#FFB800",
+  settings: "#FFB800",
   contact: "#00F3FF",
 };
 
 const APP_NEON_RGB: Record<string, string> = {
   projects: "255,0,128",
   studio: "0,243,255",
-  archive: "255,184,0",
+  settings: "255,184,0",
   contact: "0,243,255",
 };
 
 const APP_CARD_VARIANT: Record<string, string> = {
   projects: "card-pink",
   studio: "card-cyan",
-  archive: "card-amber",
+  settings: "card-amber",
   contact: "card-cyan",
 };
 
@@ -69,9 +70,20 @@ export function AppIcon({ app }: AppIconProps) {
             className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/20 bg-[#0D1117]/78"
             style={{ boxShadow: `4px 4px 0 ${accent}88` }}
           >
-            <span className="bg-gradient-to-b from-[#F8FAFF] via-[#B0B8C8] to-[#EEF2FF] bg-clip-text text-xl font-black tracking-wide text-transparent drop-shadow-[0_1px_0_rgba(255,255,255,0.45)]">
-              {app.label.charAt(0)}
-            </span>
+            {app.id === "settings" ? (
+              <SettingsGearIcon
+                className="h-6 w-6"
+                style={{
+                  color: "#EEF2FF",
+                  filter:
+                    "drop-shadow(0 1px 0 rgba(255,255,255,0.45)) drop-shadow(0 0 8px rgba(255,184,0,0.26))",
+                }}
+              />
+            ) : (
+              <span className="bg-gradient-to-b from-[#F8FAFF] via-[#B0B8C8] to-[#EEF2FF] bg-clip-text text-xl font-black tracking-wide text-transparent drop-shadow-[0_1px_0_rgba(255,255,255,0.45)]">
+                {app.label.charAt(0)}
+              </span>
+            )}
           </div>
         </div>
       </div>

@@ -1,9 +1,5 @@
-import { WindowShell } from "@/components/WindowShell";
+import { redirect } from "next/navigation";
 
-export default function ArchivePage() {
-  return (
-    <WindowShell title="Archive">
-      <p>Past projects and experiments.</p>
-    </WindowShell>
-  );
+export default function ArchiveRedirectPage() {
+  redirect("/settings");
 }
