@@ -11,21 +11,21 @@ const APP_NEON: Record<string, string> = {
   projects: "#FF0080",
   studio: "#00F3FF",
   settings: "#FFB800",
-  contact: "#00F3FF",
+  contact: "#1DE9B6",
 };
 
 const APP_NEON_RGB: Record<string, string> = {
   projects: "255,0,128",
   studio: "0,243,255",
   settings: "255,184,0",
-  contact: "0,243,255",
+  contact: "29,233,182",
 };
 
 const APP_CARD_VARIANT: Record<string, string> = {
   projects: "card-pink",
   studio: "card-cyan",
   settings: "card-amber",
-  contact: "card-cyan",
+  contact: "card-teal",
 };
 
 export function AppIcon({ app }: AppIconProps) {

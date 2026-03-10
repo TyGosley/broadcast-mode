@@ -1,14 +1,36 @@
 import { BootGate } from "../components/BootGate";
 import Link from "next/link";
+import Image from "next/image";
+import type { CSSProperties } from "react";
 import { HomeHeader } from "../components/HomeHeader";
 import { LauncherGrid } from "../components/LauncherGrid";
-import { PROJECTS } from "../lib/projects";
+import { PROJECTS, type Project } from "../lib/projects";
+
+function getFeaturedAccent(project: Project) {
+  const signal = `${project.id} ${project.title} ${project.type.join(" ")}`.toLowerCase();
+
+  if (signal.includes("restaurant") || signal.includes("burger") || signal.includes("food")) {
+    return { hex: "#FFB800", rgb: "255,184,0" };
+  }
+
+  if (signal.includes("fitness") || signal.includes("workout") || signal.includes("health")) {
+    return { hex: "#00F3FF", rgb: "0,243,255" };
+  }
+
+  return { hex: "#FF0080", rgb: "255,0,128" };
+}
+
+function getFeaturedPreview(project: Project) {
+  return project.images?.[0] ?? project.coverImage ?? null;
+}
 
 export default function HomePage() {
   const featuredProject =
     PROJECTS.find((p) => p.featured && p.status === "live") ??
     PROJECTS.find((p) => p.featured) ??
     null;
+  const featuredAccent = featuredProject ? getFeaturedAccent(featuredProject) : null;
+  const featuredPreview = featuredProject ? getFeaturedPreview(featuredProject) : null;
 
   return (
     <BootGate brand="Be Awesome Productions">
@@ -54,8 +76,50 @@ export default function HomePage() {
           </div>
 
           {featuredProject ? (
-            <div className="ui-panel-inset rounded-2xl p-5 text-center">
-              <p className="ui-eyebrow">FEATURED BUILD</p>
+            <div className="ui-panel-inset relative overflow-hidden rounded-2xl p-5 text-center">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-2 rounded-[22px] blur-2xl"
+                style={{
+                  background: `radial-gradient(58% 42% at 50% 0%, rgba(${featuredAccent?.rgb ?? "0,243,255"},0.2) 0%, rgba(${featuredAccent?.rgb ?? "0,243,255"},0.08) 38%, transparent 78%)`,
+                }}
+              />
+
+              <div className="relative mx-auto flex w-fit items-center gap-2">
+                <span aria-hidden="true" className="h-px w-5 bg-white/24" />
+                <p className="ui-eyebrow tracking-[0.32em] text-white/78">FEATURED BUILD</p>
+                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-white/42" />
+              </div>
+
+              {featuredPreview ? (
+                <Link
+                  href={`/projects?p=${featuredProject.id}`}
+                  className="group relative mx-auto mt-4 block w-full max-w-[220px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70"
+                  aria-label={`Open ${featuredProject.title}`}
+                >
+                    <div className="featured-thumb-scanline relative aspect-[16/10] overflow-hidden rounded-xl border border-white/15 bg-black/35 shadow-[0_10px_24px_rgba(0,0,0,0.45),0_0_16px_rgba(var(--featured-accent-rgb),0.16)] [--featured-accent-rgb:0,243,255] transition duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.02] group-hover:shadow-[0_14px_30px_rgba(0,0,0,0.52),0_0_20px_rgba(var(--featured-accent-rgb),0.24)]"
+                    style={
+                      { "--featured-accent-rgb": featuredAccent?.rgb ?? "0,243,255" } as CSSProperties
+                    }
+                  >
+                    <Image
+                      src={featuredPreview.src}
+                      alt={featuredPreview.alt}
+                      fill
+                      sizes="(max-width: 640px) 55vw, 220px"
+                      className="object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background: `linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(13,17,23,0.1) 45%, rgba(13,17,23,0.34) 100%), radial-gradient(90% 70% at 50% 0%, ${featuredAccent?.hex ?? "#00F3FF"}33 0%, transparent 76%)`,
+                      }}
+                    />
+                  </div>
+                </Link>
+              ) : null}
+
               <h3 className="mt-2 text-lg font-bold text-white md:text-xl">
                 {featuredProject.title}
               </h3>

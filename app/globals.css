@@ -846,4 +846,12 @@ body {
       0 22px 38px rgba(0, 0, 0, 0.62),
       0 0 26px rgba(255, 184, 0, 0.35);
   }
+
+  .card-module.card-teal:hover {
+    border-color: rgba(29, 233, 182, 0.65);
+    box-shadow:
+      inset 0 0 16px rgba(29, 233, 182, 0.24),
+      0 22px 38px rgba(0, 0, 0, 0.62),
+      0 0 26px rgba(29, 233, 182, 0.35);
+  }
 }

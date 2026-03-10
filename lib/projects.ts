@@ -197,7 +197,7 @@ export const projects: Project[] = [
     format: "cd",
     type: ["Fitness Site", "Brand", "Responsive UI"],
 
-    featured: true,
+    featured: false,
 
     role: "Project Manager, Web Design + Build",
     stack: ["React", "Prisma", "Tailwind"],

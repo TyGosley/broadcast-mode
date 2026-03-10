@@ -16,14 +16,14 @@ const ICON_COLOR: Record<string, string> = {
   "/": "#FFB800",
   "/projects": "#FF0080",
   "/settings": "#FFB800",
-  "/contact": "#EAF0FF",
+  "/contact": "#1DE9B6",
 };
 
 const ICON_COLOR_RGB: Record<string, string> = {
   "/": "255,184,0",
   "/projects": "255,0,128",
   "/settings": "255,184,0",
-  "/contact": "234,240,255",
+  "/contact": "29,233,182",
 };
 
 const PANEL_SHELL_CLASS = [
@@ -64,6 +64,7 @@ export function MobileMiniDock() {
           {ITEMS.map((it) => {
             const active = pathname === it.href;
             const accentRgb = ICON_COLOR_RGB[it.href] ?? "0,243,255";
+            const accentHex = ICON_COLOR[it.href] ?? "#EAF0FF";
             const dockVars: CSSProperties & { "--dock-accent-rgb": string } = {
               "--dock-accent-rgb": accentRgb,
             };
@@ -93,20 +94,20 @@ export function MobileMiniDock() {
                       <SettingsGearIcon
                         className="h-4 w-4"
                         style={{
-                          color: active ? "#00F3FF" : ICON_COLOR[it.href] ?? "#EAF0FF",
+                          color: accentHex,
                           filter: active
-                            ? "drop-shadow(0 0 6px rgba(0,243,255,0.85)) drop-shadow(0 0 10px rgba(0,243,255,0.45))"
-                            : "drop-shadow(0 0 6px rgba(255,184,0,0.35))",
+                            ? `drop-shadow(0 0 6px rgba(${accentRgb},0.85)) drop-shadow(0 0 10px rgba(${accentRgb},0.45))`
+                            : `drop-shadow(0 0 6px rgba(${accentRgb},0.35))`,
                         }}
                       />
                     ) : (
                       <span
                         className="text-sm font-bold"
                         style={{
-                          color: active ? "#00F3FF" : ICON_COLOR[it.href] ?? "#EAF0FF",
+                          color: accentHex,
                           textShadow: active
-                            ? "0 0 8px rgba(0,243,255,0.85), 0 0 16px rgba(0,243,255,0.45)"
-                            : "0 0 8px rgba(255,184,0,0.35)",
+                            ? `0 0 8px rgba(${accentRgb},0.85), 0 0 16px rgba(${accentRgb},0.45)`
+                            : `0 0 8px rgba(${accentRgb},0.35)`,
                         }}
                       >
                         {it.short}
