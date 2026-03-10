@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { PROJECTS, ProjectStatus, Project } from "../../lib/projects";
 import { ProjectFilters } from "../../components/ProjectFilters";
 import { ProjectCard } from "../../components/ProjectCard";
@@ -44,20 +44,6 @@ const MOBILE_PROJECTS_PER_PAGE = 3;
 const MAX_FEATURED_PROJECTS = 3;
 type ThumbVariant = "clean" | "classic";
 
-function SearchParamsBridge({
-  onParamsChange,
-}: {
-  onParamsChange: (next: string) => void;
-}) {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    onParamsChange(searchParams.toString());
-  }, [searchParams, onParamsChange]);
-
-  return null;
-}
-
 export default function ProjectsPage() {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -69,9 +55,6 @@ export default function ProjectsPage() {
     () => new URLSearchParams(searchParamsRaw),
     [searchParamsRaw]
   );
-  const handleParamsChange = useCallback((next: string) => {
-    setSearchParamsRaw((prev) => (prev === next ? prev : next));
-  }, []);
 
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<ProjectStatus | "all">("all");
@@ -84,6 +67,19 @@ export default function ProjectsPage() {
   const [lastOpened, setLastOpened] = useState<Project | null>(null);
 
   const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    const syncFromLocation = () => {
+      const current = window.location.search.startsWith("?")
+        ? window.location.search.slice(1)
+        : window.location.search;
+      setSearchParamsRaw((prev) => (prev === current ? prev : current));
+    };
+
+    syncFromLocation();
+    window.addEventListener("popstate", syncFromLocation);
+    return () => window.removeEventListener("popstate", syncFromLocation);
+  }, []);
 
   const featuredProjectIds = useMemo(() => {
     return new Set(
@@ -164,6 +160,7 @@ export default function ProjectsPage() {
     });
 
     const qs = sp.toString();
+    setSearchParamsRaw(qs);
     router.replace(qs ? `/projects?${qs}` : "/projects");
   }
 
@@ -265,10 +262,6 @@ export default function ProjectsPage() {
 
   return (
     <main className="min-h-dvh px-5 py-8">
-      <Suspense fallback={null}>
-        <SearchParamsBridge onParamsChange={handleParamsChange} />
-      </Suspense>
-
       <header className="ui-section mt-0 ui-stack">
         <p className="ui-eyebrow">PROJECTS</p>
         <h1 className="page-title mt-2 text-white">
