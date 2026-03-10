@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PROJECTS, ProjectStatus, Project } from "../../lib/projects";
 import { ProjectFilters } from "../../components/ProjectFilters";
@@ -44,13 +44,34 @@ const MOBILE_PROJECTS_PER_PAGE = 3;
 const MAX_FEATURED_PROJECTS = 3;
 type ThumbVariant = "clean" | "classic";
 
+function SearchParamsBridge({
+  onParamsChange,
+}: {
+  onParamsChange: (next: string) => void;
+}) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    onParamsChange(searchParams.toString());
+  }, [searchParams, onParamsChange]);
+
+  return null;
+}
+
 export default function ProjectsPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const isMobile = useIsMobile();
 
   const perPage = isMobile ? MOBILE_PROJECTS_PER_PAGE : DESKTOP_PROJECTS_PER_PAGE;
   const columns = isMobile ? 1 : 2;
+  const [searchParamsRaw, setSearchParamsRaw] = useState("");
+  const searchParams = useMemo(
+    () => new URLSearchParams(searchParamsRaw),
+    [searchParamsRaw]
+  );
+  const handleParamsChange = useCallback((next: string) => {
+    setSearchParamsRaw((prev) => (prev === next ? prev : next));
+  }, []);
 
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<ProjectStatus | "all">("all");
@@ -62,10 +83,7 @@ export default function ProjectsPage() {
   // ✅ Move 11 enhancement: remember what they last opened (for CTA personalization)
   const [lastOpened, setLastOpened] = useState<Project | null>(null);
 
-  const pageFromUrl = Number(searchParams.get("page") ?? "1");
-  const [page, setPage] = useState<number>(
-    Number.isFinite(pageFromUrl) && pageFromUrl > 0 ? pageFromUrl : 1
-  );
+  const [page, setPage] = useState<number>(1);
 
   const featuredProjectIds = useMemo(() => {
     return new Set(
@@ -247,6 +265,10 @@ export default function ProjectsPage() {
 
   return (
     <main className="min-h-dvh px-5 py-8">
+      <Suspense fallback={null}>
+        <SearchParamsBridge onParamsChange={handleParamsChange} />
+      </Suspense>
+
       <header className="ui-section mt-0 ui-stack">
         <p className="ui-eyebrow">PROJECTS</p>
         <h1 className="page-title mt-2 text-white">
