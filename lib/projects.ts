@@ -46,7 +46,7 @@ export type Project = {
 
   // Image support
   coverImage?: ProjectCoverImage; // legacy single image
-  images?: ProjectCoverImage[];   // gallery support (preferred)
+  images?: ProjectCoverImage[];   // first image is used as the project thumbnail
 
   featured?: boolean;
 
@@ -88,11 +88,9 @@ export const projects: Project[] = [
       "Outcome 3",
     ],
 
-    // Preferred image method
+    // Project thumbnail
     images: [
-      { src: "/projects/project-id/cover.jpg", alt: "Main preview image" },
-      { src: "/projects/project-id/shot-1.jpg", alt: "Secondary screen" },
-      { src: "/projects/project-id/shot-2.jpg", alt: "Another screen" },
+      { src: "/projects/project-id/cover.jpg", alt: "Project preview image" },
     ],
 
     // OR single image fallback
@@ -162,14 +160,11 @@ export const projects: Project[] = [
       "Modular structure for future pages and content growth",
     ],
 
-    // Preferred gallery approach
-    // images: [
-    //   { src: "/projects/broadcast-mode/cover.jpg", alt: "Home screen" },
-    //   { src: "/projects/broadcast-mode/shot-1.jpg", alt: "Projects modal" },
-    //   { src: "/projects/broadcast-mode/shot-2.jpg", alt: "Project details modal" },
-    // ],
+    images: [
+      { src: "/static/no-signal.png", alt: "Broadcast Mode preview placeholder" },
+    ],
 
-    // previewHref: "/projects/broadcast-mode/preview.jpg",
+    previewHref: "/static/no-signal.png",
     // ctaLabel: "Open Preview",
 
     behindTheBuild: {
@@ -215,11 +210,8 @@ export const projects: Project[] = [
       "Custom backend management system",
     ],
 
-    // Preferred gallery approach
     images: [
       { src: "/projects/tactic-app/tacticFitnessLogo.jpg", alt: "Tactic Fitness Logo" },
-      // { src: "/projects/tactic-app/shot-1.jpg", alt: "Dashboard" },
-      // { src: "/projects/tactic-app/shot-2.jpg", alt: "Workout detail" },
     ],
 
     previewHref: "/projects/tactic-app/embedded-workout-video.png",
@@ -266,11 +258,8 @@ export const projects: Project[] = [
       "SEO optimization",
     ],
 
-    // Preferred gallery approach
     images: [
       { src: "/projects/full-time-burgers/fullTimeBurgers.png", alt: "Full Time Burgers Logo" },
-      { src: "/projects/full-time-burgers/shot-1.jpg", alt: "Menu section" },
-      { src: "/projects/full-time-burgers/shot-2.jpg", alt: "Mobile layout" },
     ],
 
     previewHref: "/projects/full-time-burgers/ftPrevHref.png",
@@ -313,23 +302,19 @@ export const projects: Project[] = [
       "Created a new visual identity",
     ],
 
-    // Preferred gallery approach
     images: [
-      { src: "/projects/emergence-financial-corp/efcHP.png", alt: "Landing page hero" },
-      { src: "/projects/emergence-financial-corp/shot-1.jpg", alt: "Services section" },
-      { src: "/projects/emergence-financial-corp/shot-2.jpg", alt: "Contact section" },
+      { src: "/projects/efc/efcHomePage.png", alt: "Landing page hero" },
     ],
 
-    // Optional preview link if you have it
-    // previewHref: "/projects/emergence-financial-corp/preview.jpg",
-    // ctaLabel: "Open Preview",
+    previewHref: "/projects/emergence-financial-corp/efcPrevHref.png",
+    ctaLabel: "Visit Site",
 
     behindTheBuild: {
       body:
         "This project is still in progress. I’m leading project management, design, and build. The site is Squarespace for easy updates, plus custom code for interaction and layout control. Since the client had no existing branding, I created a new visual identity aligned with their values and audience.",
     },
 
-    href: "",
+    href: "https://www.efc-la.com/",
   },
 
   {
@@ -361,11 +346,8 @@ export const projects: Project[] = [
       "Scalable layout for future inventory growth",
     ],
 
-    // Preferred gallery approach
     images: [
       { src: "/projects/cpg-rentals/cpgHomeLogo.png", alt: "CPG Rentals homepage" },
-      // { src: "/projects/cpg-rentals/shot-1.jpg", alt: "Inventory categories" },
-      // { src: "/projects/cpg-rentals/shot-2.jpg", alt: "Inquiry form flow" },
     ],
 
     previewHref: "/projects/cpg-rentals/cpgPrevHref.png",
@@ -408,11 +390,8 @@ export const projects: Project[] = [
       "Balanced immersion with usability",
     ],
 
-    // Preferred gallery approach
     images: [
       { src: "/projects/built-by-tyler-3DPort/welcomesecss.png", alt: "3D portfolio home scene" },
-      // { src: "/projects/3d-portfolio/shot-1.jpg", alt: "Case study transition" },
-      // { src: "/projects/3d-portfolio/shot-2.jpg", alt: "3D interaction detail" },
     ],
 
     previewHref: "/projects/built-by-tyler-3DPort/3DPortPrevHref.png",
@@ -455,11 +434,8 @@ export const projects: Project[] = [
       "Flexible sections for campaigns and updates",
     ],
 
-    // Preferred gallery approach
     images: [
       { src: "/projects/tactic-website/tacticFitness.png", alt: "Tactic website homepage" },
-      // { src: "/projects/tactic-website/shot-1.jpg", alt: "Programs section" },
-      // { src: "/projects/tactic-website/shot-2.jpg", alt: "Mobile CTA section" },
     ],
 
     previewHref: "/projects/tactic-website/tfWebPrevHref.png",
