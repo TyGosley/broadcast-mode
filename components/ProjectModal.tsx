@@ -179,7 +179,7 @@ export function ProjectModal({ project, onClose }: Props) {
             </p>
 
             {project.type?.length ? (
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 {project.type.map((t) => (
                   <span
                     key={t}
@@ -234,8 +234,8 @@ export function ProjectModal({ project, onClose }: Props) {
 
             {project.stack?.length ? (
               <div className="ui-panel-inset rounded-2xl p-4">
-                <p className="ui-eyebrow">STACK</p>
-                <div className="mt-2 flex flex-wrap gap-2">
+                <p className="ui-eyebrow text-center">STACK</p>
+                <div className="mt-2 flex flex-wrap justify-center gap-2">
                   {project.stack.map((s) => (
                     <span
                       key={s}
@@ -249,7 +249,7 @@ export function ProjectModal({ project, onClose }: Props) {
             ) : null}
 
             {/* CTA */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap justify-center gap-3">
               {project.href ? (
                 <a
                   href={project.href}
