@@ -276,7 +276,7 @@ export const projects: Project[] = [
     id: "emergence-financial-corp",
     title: "Emergence Financial Corporation",
     summary:
-      "A landing page for a financial firm, showcasing services, team, and contact information with a clean, professional design.",
+      "A landing page for a financial firm, showcasing services, team, and contact information with a clean, professional design.  Iteration 1 focused on establishing a strong visual identity and clear messaging for the new brand. Future iterations will expand the site to having user logins, client portals, and the ability to upload and manage financial documents.",
 
     client: "Emergence Financial Corporation",
     year: "2025",
@@ -303,7 +303,7 @@ export const projects: Project[] = [
     ],
 
     images: [
-      { src: "/projects/efc/efcHomePage.png", alt: "Landing page hero" },
+      { src: "/projects/emergence-financial-corp/efcHomePage.png", alt: "Landing page hero" },
     ],
 
     previewHref: "/projects/emergence-financial-corp/efcPrevHref.png",

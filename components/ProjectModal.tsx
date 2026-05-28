@@ -116,6 +116,8 @@ export function ProjectModal({ project, onClose }: Props) {
       ? "border-[#00F3FF]/70 bg-[#00F3FF]/30 text-[#DEE6FF]"
       : "border-[#5F368C]/80 bg-[#5F368C]/50 text-[#E9CCFF]";
   const previewSrc = project.previewHref || "/static/no-signal.png";
+  const primaryCtaLabel =
+    project.ctaLabel ?? (project.status === "live" ? "Visit Site" : "Open Project");
 
   return (
     <div
@@ -255,7 +257,7 @@ export function ProjectModal({ project, onClose }: Props) {
                   rel="noreferrer"
                   className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-gradient-to-r from-[#00F3FF]/50 via-[#FF0080]/42 to-[#FFB800]/42 px-5 py-3 text-sm font-semibold text-white transition hover:from-[#00F3FF]/64 hover:via-[#FF0080]/56 hover:to-[#FFB800]/56"
                 >
-                  Open Live Project
+                  {primaryCtaLabel}
                 </a>
               ) : (
                 <span className="ui-btn-secondary rounded-xl px-5 py-3 text-sm text-white/70">
