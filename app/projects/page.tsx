@@ -42,7 +42,6 @@ function safeYearNum(y?: string) {
 const DESKTOP_PROJECTS_PER_PAGE = 4;
 const MOBILE_PROJECTS_PER_PAGE = 3;
 const MAX_FEATURED_PROJECTS = 3;
-type ThumbVariant = "clean" | "classic";
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -60,7 +59,6 @@ export default function ProjectsPage() {
   const [status, setStatus] = useState<ProjectStatus | "all">("all");
   const [tag, setTag] = useState<string>("all");
   const [openId, setOpenId] = useState<string | null>(null);
-  const [thumbVariant, setThumbVariant] = useState<ThumbVariant>("clean");
   const [pageInput, setPageInput] = useState<string>("1");
 
   // ✅ Move 11 enhancement: remember what they last opened (for CTA personalization)
@@ -313,39 +311,10 @@ export default function ProjectsPage() {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
-          <span className="ui-eyebrow text-white/55">CARD STYLE</span>
-          <div className="ui-panel-inset inline-flex p-1">
-            <button
-              type="button"
-              onClick={() => setThumbVariant("clean")}
-              aria-pressed={thumbVariant === "clean"}
-              className={[
-                "min-h-10 rounded-lg px-3 py-1.5 transition",
-                thumbVariant === "clean"
-                  ? "bg-white/15 text-white"
-                  : "text-white/65 hover:text-white/85",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00F3FF]/70",
-              ].join(" ")}
-            >
-              Clean
-            </button>
-            <button
-              type="button"
-              onClick={() => setThumbVariant("classic")}
-              aria-pressed={thumbVariant === "classic"}
-              className={[
-                "min-h-10 rounded-lg px-3 py-1.5 transition",
-                thumbVariant === "classic"
-                  ? "bg-white/15 text-white"
-                  : "text-white/65 hover:text-white/85",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF0080]/70",
-              ].join(" ")}
-            >
-              Classic CD/Cassette
-            </button>
-          </div>
-        </div>
+        {/*
+          Card style toggle intentionally hidden.
+          Project cards use the default clean thumbnail style.
+        */}
       </header>
 
       {/* Great Move 10B: Featured strip */}
@@ -363,7 +332,6 @@ export default function ProjectsPage() {
                 key={p.id}
                 project={p}
                 onOpen={openProject}
-                thumbVariant={thumbVariant}
               />
             ))}
           </div>
