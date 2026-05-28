@@ -291,10 +291,10 @@ export const projects: Project[] = [
 
     client: "Emergence Financial Corporation",
     year: "2025",
-    status: "in-progress",
+    status: "live",
     format: "cd",
     type: ["Financial Site", "Brand", "Responsive UI"],
-    // featured: true,
+    featured: true,
 
     role: "Project Manager, Web Design + Build",
     stack: ["Squarespace", "HTML", "CSS", "JavaScript", "SEO Optimization"],
